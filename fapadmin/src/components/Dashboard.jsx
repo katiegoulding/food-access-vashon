@@ -1,5 +1,5 @@
 import React from "react";
-import {Bar} from 'react-chartjs-2';
+import Plot from 'react-plotly.js';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -11,21 +11,17 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <div>
-                <Bar
-                    data={this.state.chartData}
-                    options={{
-                        legend: {
-                            position: "bottom"
-                        },
-                        responsive: true,
-                        height: "750px",
-                        title:{
-                            display: true,
-                            text:"cupcakeIpsum",
-                            fontSize: 25,
-                            fontFamily: "Avenir Next"
-                        },
-                    }}
+                <Plot
+                    data={[
+                    {
+                        x: ['giraffes', 'orangutans', 'monkeys'],
+                        y: [20, 14, 23],
+                        type: 'bar'
+                        
+                    },
+                    ]}
+                    layout={ {width: 320, height: 240, title: 'A Plot'} }
+                />
                 />
             </div>
         )

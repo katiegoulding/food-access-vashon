@@ -6,22 +6,27 @@ export default class DataInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "",
+            dist: "",
+            org: "",
+            dollar: "",
             body: ""
         }
-        //this.handleChange = this.handleChange.bind(this);
+        this.handleChangeDist = this.handleChangeDist.bind(this);
+        this.handleChangeOrg = this.handleChangeOrg.bind(this);
+        this.handleChangeDollar = this.handleChangeDollar.bind(this);
+
+    }
+    handleChangeDist(evt) {
+        this.setState({dist: evt.target.value});
     }
 
     handleChangeOrg(evt) {
-        this.setState({value: evt.target.value});
-    }
-
-    handleChangeDist(evt) {
-        this.setState({value: evt.target.value});
+        this.setState({org: evt.target.value});
     }
 
     handleChangeDollar(evt) {
-        this.setState({value: evt.target.value});
+        console.log(evt.target.value);
+        this.setState({dollar: evt.target.value});
     }
     
     handleSubmit(evt) {
@@ -36,7 +41,7 @@ export default class DataInput extends React.Component {
                     <div>
                     <label>
                         Distribution or Redemption:  
-                        <select value={this.state.value} onChange={this.handleChangeDist}>
+                        <select value={this.state.dist} onChange={this.handleChangeDist}>
                             <option value="distribution">Distribution</option>
                             <option value="redemption">Redemption</option>
                         </select>
@@ -46,7 +51,7 @@ export default class DataInput extends React.Component {
                     <div>
                         <label>
                             Partner Organization:
-                            <select value={this.state.value} onChange={this.handleChangeOrg}>
+                            <select value={this.state.org} onChange={this.handleChangeOrg}>
                                 <option value="foodbank">Food Bank</option>
                                 <option value="dove">DoVE</option>
                                 <option value="vcc">Vashon Community Care</option>
@@ -62,8 +67,7 @@ export default class DataInput extends React.Component {
                         <label>
                             Dollar Amount:
                             </label>
-
-                            <input type="text" value={this.state.value} onChange={this.handleChangeDollar} />
+                            <input type="text" value={this.state.dollar} onChange={this.handleChangeDollar} />
                     </div>
                     <input type="submit" value="Submit" />
                 </form>
