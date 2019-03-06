@@ -1,4 +1,5 @@
 import React from "react";
+import DataInput from "./DataInput";
 import { Link, Redirect } from "react-router-dom";
 import constants from "./constants";
 import firebase from 'firebase/app'
@@ -23,6 +24,8 @@ export default class MainActivity extends React.Component {
         return (
             <div>
                 <h1>Main Screen</h1>
+                <DataInput/>
+                <Dashboard chartData={this.state.chartData} />
 
                 <button
                     type="submit"
@@ -31,6 +34,6 @@ export default class MainActivity extends React.Component {
                     Sign Out
                 </button>
             </div >
-        )
+        );
     }
 }
