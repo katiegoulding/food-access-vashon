@@ -2,34 +2,37 @@ import React from "react";
 import DataInput from "./DataInput";
 import { Link, Redirect } from "react-router-dom";
 import constants from "./constants";
-import Dashboard from "./Dashboard";
-
-
+import firebase from 'firebase/app'
+import 'firebase/auth';
+import 'firebase/database';
 export default class MainActivity extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: "",        
-            chartData: {
-                labels: [],
-                datasets:[
-                  {
-                    label:'Partner Orgs',
-                    data:[],
-                    backgroundColor:[
-                    ]
-                  }
-                ]
+
+    componentDidMount() {
+        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                this.props.history.push(constants.routes.logIn)
             }
-        }
+        });
     }
-    
+
+    handleSignOut() {
+        firebase.auth().signOut()
+            .then(this.props.history.push(constants.routes.logIn))
+    };
+
     render() {
         return (
             <div>
                 <h1>Main Screen</h1>
                 <DataInput/>
                 <Dashboard chartData={this.state.chartData} />
+
+                <button
+                    type="submit"
+                    className="btn btn-danger col-1"
+                    onClick={() => this.handleSignOut()}>
+                    Sign Out
+                </button>
             </div >
         );
     }
