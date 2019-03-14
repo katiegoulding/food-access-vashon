@@ -27,7 +27,7 @@ export default class MainActivity extends React.Component {
             <div>
                 <h1>Main Screen</h1>
                 <DataInput />
-                {/* <Dashboard chartData={this.state.chartData} /> */}
+                <Dashboard />
 
                 <button
                     type="submit"
