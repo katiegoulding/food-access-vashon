@@ -9,6 +9,8 @@ import constants from "./components/constants";
 
 import MainActivity from "./components/MainActivity.jsx";
 import LogInActivity from "./components/LogInActivity.jsx";
+import CreateAccount from "./components/CreateAccount.jsx";
+import AccountRecovery from "./components/AccountRecovery.jsx";
 
 class App extends Component {
   render() {
@@ -17,6 +19,8 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path={constants.routes.logIn} component={LogInActivity} />
+            <Route path={constants.routes.createAccount} component={CreateAccount} />
+            <Route path={constants.routes.accountRecovery} component={AccountRecovery} />
             <Route path={constants.routes.dash} component={MainActivity} />
           </Switch>
         </Router>

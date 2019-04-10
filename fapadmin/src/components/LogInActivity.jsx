@@ -72,6 +72,8 @@ export default class LogInActivity extends React.Component {
                         </form>
                     </div>
                 </div>
+                <p><Link to={constants.routes.accountRecovery}>Forgot password?</Link></p> 
+                <p>Don't yet have an account? <Link to={constants.routes.createAccount}>Sign Up!</Link></p>
             </div >
         )
     }
