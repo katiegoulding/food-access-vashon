@@ -6,13 +6,27 @@ import constants from "./constants";
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import 'firebase/database';
+import NavigationBar from "./NavigationBar";
 
 export default class MainActivity extends React.Component {
 
+
+    constructor(props) { 
+        super(props)
+        this.state = {
+            user: undefined
+        }
+    }
+
     componentDidMount() {
+        // Does this need to get saved as a variable ?
         this.authUnsub = firebase.auth().onAuthStateChanged(user => {
             if (!user) {
                 this.props.history.push(constants.routes.logIn)
+            } else {
+                this.setState({
+                    user
+                })
             }
         });
     }
@@ -25,10 +39,8 @@ export default class MainActivity extends React.Component {
     render() {
         return (
             <div>
-                <h1>Main Screen</h1>
                 <DataInput />
                 <Dashboard />
-
                 <button
                     type="submit"
                     className="btn btn-danger col-1"
