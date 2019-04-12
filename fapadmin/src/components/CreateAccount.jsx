@@ -40,6 +40,9 @@ export default class CreateAccount extends React.Component {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pw)
                 .then(user => user.updateProfile({
                     firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    role: this.state.role,
+                    org: this.state.orgm
                 }))
                 .catch(err => this.setState({errorMessage: err.message})
                 );
