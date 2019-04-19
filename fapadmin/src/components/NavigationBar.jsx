@@ -17,7 +17,7 @@ export default class NavigationBar extends React.Component {
         return (
             <div>
                 <Link to={"/dash/ViewData"} className="navButton"> View Data </Link>
-                <Link to={"/dash/CreateBux"} className="navButton"> Create Bux </Link>
+                <Link to={"/dash/CreateBucks"} className="navButton"> Create Bucks </Link>
                 <Link to={"/dash/ManageAcounts"} className="navButton"> Manage Accounts </Link>
                 <Link to={"/dash/Scan"} className="navButton"> Scan </Link>
             </div>

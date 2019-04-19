@@ -9,7 +9,6 @@ import QrReader from 'react-qr-reader'
 
 export default class MainActivity extends React.Component {
 
-
     constructor(props) { 
         super(props)
         this.state = {
@@ -39,6 +38,7 @@ export default class MainActivity extends React.Component {
             })
         }
     }
+    
     handleError = (err) => {
         console.error(err)
         this.setState({
