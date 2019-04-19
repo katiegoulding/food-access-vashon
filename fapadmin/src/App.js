@@ -11,6 +11,8 @@ import MainActivity from "./components/MainActivity.jsx";
 import LogInActivity from "./components/LogInActivity.jsx";
 import CreateAccount from "./components/CreateAccount.jsx";
 import AccountRecovery from "./components/AccountRecovery.jsx";
+import ManageAccount from "./components/ManageAccount.jsx";
+import EditAccount from "./components/EditAccount.jsx";
 
 class App extends Component {
   render() {
@@ -22,6 +24,8 @@ class App extends Component {
             <Route path={constants.routes.createAccount} component={CreateAccount} />
             <Route path={constants.routes.accountRecovery} component={AccountRecovery} />
             <Route path={constants.routes.dash} component={MainActivity} />
+            <Route path={constants.routes.manageaccount} component={ManageAccount} />
+            <Route path={constants.routes.editaccount} component={EditAccount} />
           </Switch>
         </Router>
       </div>

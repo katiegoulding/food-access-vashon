@@ -4,5 +4,7 @@ export default {
         dash: "/dash",
         createAccount: "/signup",
         accountRecovery: "/recover",
+        editaccount: "/edit",
+        manageaccount: "/manage",
     }
 }

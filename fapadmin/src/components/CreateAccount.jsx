@@ -38,21 +38,21 @@ export default class CreateAccount extends React.Component {
             this.setState({errorMessage: "Passwords do not match"})
         } else {
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pw)
-                .then(user => user.updateProfile({
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    role: this.state.role,
-                    org: this.state.orgm
-                }))
-                .catch(err => this.setState({errorMessage: err.message})
-                );
+                // .then(user => user.updateProfile({
+                //     firstName: this.state.firstName,
+                //     lastName: this.state.lastName,
+                //     role: this.state.role,
+                //     org: this.state.org,
+                // }))
+                // .catch(err => this.setState({errorMessage: err.message})
+                // );
             
         // firebase.auth().onAuthStateChanged(user => {
         //     if(this.state.currentUser) {
         //         this.props.history.push(constants.routes.general);
         //     }
         // })
-        }
+        };
     }
 
     render() {
@@ -72,8 +72,8 @@ export default class CreateAccount extends React.Component {
                                     id="firstName"
                                     type="text"
                                     className="form-control"
-                                    v={this.state.firstName}
-                                    onInput={evt => this.setState({firstName: evt.target.v})}
+                                    value={this.state.firstName}
+                                    onInput={evt => this.setState({firstName: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -86,8 +86,8 @@ export default class CreateAccount extends React.Component {
                                     id="lastName"
                                     type="text"
                                     className="form-control"
-                                    v={this.state.lastName}
-                                    onInput={evt => this.setState({lastName: evt.target.v})}
+                                    value={this.state.lastName}
+                                    onInput={evt => this.setState({lastName: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -100,8 +100,8 @@ export default class CreateAccount extends React.Component {
                                     id="role"
                                     type="select"
                                     className="form-control"
-                                    v={this.state.role}
-                                    onInput={evt => this.setState({role: evt.target.v})}
+                                    value={this.state.role}
+                                    onInput={evt => this.setState({role: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -114,8 +114,8 @@ export default class CreateAccount extends React.Component {
                                     id="org"
                                     type="text"
                                     className="form-control"
-                                    v={this.state.org}
-                                    onInput={evt => this.setState({org: evt.target.v})}
+                                    value={this.state.org}
+                                    onInput={evt => this.setState({org: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -129,8 +129,8 @@ export default class CreateAccount extends React.Component {
                                     type="email"
                                     className="form-control"
                                     placeholder="Enter your email address"
-                                    v={this.state.email}
-                                    onInput={evt => this.setState({email: evt.target.v})}
+                                    value={this.state.email}
+                                    onInput={evt => this.setState({email: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -144,8 +144,8 @@ export default class CreateAccount extends React.Component {
                                     type="password"
                                     className="form-control"
                                     placeholder="enter your password"
-                                    v={this.state.pw}
-                                    onInput={(evt) => this.setState({pw: evt.target.v})}
+                                    value={this.state.pw}
+                                    onInput={(evt) => this.setState({pw: evt.target.value})}
                                 />
                             </div>
                         </div>
@@ -159,8 +159,8 @@ export default class CreateAccount extends React.Component {
                                     type="password"
                                     className="form-control"
                                     placeholder="confirm your password"
-                                    v={this.state.pw_confirm}
-                                    onInput={(evt) => this.setState({pw_confirm: evt.target.v})}
+                                    value={this.state.pw_confirm}
+                                    onInput={(evt) => this.setState({pw_confirm: evt.target.value})}
                                 />
                             </div>
                         </div>
