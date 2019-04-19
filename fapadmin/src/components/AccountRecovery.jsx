@@ -16,6 +16,21 @@ export default class AccountRecovery extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+            this.setState({
+                currentUser: user, 
+            });            
+            // if(this.state.currentUser === null) {
+            //     this.props.history.push(constants.routes.logIn);
+            // }
+        });  
+    }
+
+    componentWillUnmount() {
+        this.authUnsub();
+    }
+
     handlePasswordReset(email) {
         let auth = firebase.auth();
         console.log("before");

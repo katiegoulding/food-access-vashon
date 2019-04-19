@@ -14,12 +14,28 @@ export default class ManageAccount extends React.Component {
             org: "",
             role: "",
             date_added: "",
+            type: "",
             errorMessage: undefined
         }
     }    
+
+    componentDidMount() {
+        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+            this.setState({
+                currentUser: user, 
+            });            
+            // if(this.state.currentUser === null) {
+            //     this.props.history.push(constants.routes.logIn);
+            // }
+        });  
+    }
+
+    componentWillUnmount() {
+        this.authUnsub();
+    }
     
     handleChange(evt) {
-        this.setState({state: evt.target.value});
+        this.setState({type: evt.target.value});
     }
 
     render() {
