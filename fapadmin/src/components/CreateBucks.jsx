@@ -1,41 +1,40 @@
-import React from 'react'
-import BuckSetListItem from './BuckSetListItem.jsx'
+import React from 'react';
+import ViewBucks from './ViewBucks';
 
 export default class CreateBucks extends React.Component {
 
-    createBuckSet() {
-        return "hello"
+    constructor(props) {
+        super(props)
     }
 
+    render() {
+        return (
+            <div> 
+                <form>
+                    <label>
+                        Name of Buck Set:
+                        <input type="text" name="buck set name" />
+                    </label>
+                    <p>Organization Buck Counts</p>
+                    <label>
+                        Dove
+                        <input type="text" name="DOVE buck number" />
+                    </label>
+                    <label>
+                        VYFS
+                        <input type="text" name="VYFS buck number" />
+                    </label>
+                    <label>
+                        La Comunidad
+                        <input type="text" name="La Comunidad buck number" />
+                    </label>
+                    <label>
+                        Vashon Household
+                        <input type="text" name="Vashon Household buck number" />
+                    </label>
 
-
-
-    render () {
-        let localBuckSet = [{title: "2018-2019 Buck Set", subtitle: "Created on 12/23/17 by Juniper R."}, 
-            {title: "2017-2018 Buck Set", subtitle: "Created on 6/6/15 by August C."}, 
-            {title: "2016-2017 Buck Set", subtitle: "Created on 8/14/13 by Katie G."}]
-        
-            return(
-            <div>
-                <button onClick={this.createBuckSet} type="submit">
-                    Create New Buck Set
-                </button>
-
-                <h2>Existing VIGA Farm Buck Sets</h2>
-
-                <div>
-                    {
-                        //for each item in the data provided, map will create a BuckSetListItem
-                        //that has the respective title and subtitle
-                        localBuckSet.map(
-                            element => {
-                                return (
-                                    <BuckSetListItem key={element.title + element.subtitle} data={element}/>
-                                )
-                            }
-                        )
-                    }
-                </div>
+                    <input type="submit" value="Submit" />
+                </form>
             </div>
         )
     }

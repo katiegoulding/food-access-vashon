@@ -4,7 +4,8 @@ export default {
         dash: {
             base: "/dash",
             viewData: "/dash/ViewData",
-            createBucks: "/dash/CreateBucks"
+            createBucks: "/dash/CreateBucks",
+            viewBucks: "/dash/ViewBucks"
         },
     }
 }

@@ -8,14 +8,20 @@ export default class NavigationBar extends React.Component {
         super(props)
     }
 
+
+
     render() {
         // const { user } = this.props
         // examine the credentials and display the appropriate information
         // let tier = user.tier
         // const { tier } = user
         // https://firebase.google.com/docs/auth/admin/custom-claims
+        let divStyle = {
+            paddingBottom: "20px"
+        }
+
         return (
-            <div>
+            <div style={divStyle}>
                 <Link to={"/dash/ViewData"} className="navButton"> View Data </Link>
                 <Link to={"/dash/CreateBucks"} className="navButton"> Create Bucks </Link>
                 <Link to={"/dash/ManageAcounts"} className="navButton"> Manage Accounts </Link>
