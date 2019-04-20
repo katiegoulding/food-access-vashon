@@ -23,7 +23,7 @@ export default class MainActivity extends React.Component {
         // Does this need to get saved as a variable ?
         this.authUnsub = firebase.auth().onAuthStateChanged(user => {
             if (!user) {
-                this.props.history.push(constants.routes.logIn)
+                this.props.history.push(constants.routes.base)
             } else {
                 this.setState({
                     user
@@ -49,7 +49,7 @@ export default class MainActivity extends React.Component {
 
     handleSignOut() {
         firebase.auth().signOut()
-            .then(this.props.history.push(constants.routes.logIn))
+            .then(this.props.history.push(constants.routes.base))
     };
 
 

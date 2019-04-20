@@ -25,7 +25,6 @@ export default class DataInput extends React.Component {
     }
 
     handleChangeDollar(evt) {
-        console.log(evt.target.value);
         this.setState({dollar: evt.target.value});
     }
     

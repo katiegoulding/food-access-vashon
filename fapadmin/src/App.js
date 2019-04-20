@@ -10,7 +10,12 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import 'firebase/database';
 import LogInActivity from "./components/LogInActivity.jsx";
+import CreateAccount from "./components/CreateAccount.jsx";
+import AccountRecovery from "./components/AccountRecovery.jsx";
+import ManageAccount from "./components/ManageAccount.jsx";
+import EditAccount from "./components/EditAccount.jsx";
 import MainView from './components/MainView';
+import MainActivity from './components/MainActivity';
 
 class App extends Component {
   
@@ -24,7 +29,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-          this.props.history.push(constants.routes.logIn)
+          this.props.history.push(constants.routes.base)
       } else {
           this.setState({
               user
@@ -38,9 +43,13 @@ class App extends Component {
       <div className="App">
         <Router>
           <Switch>
-            {/* want to show navbar if they're logged in */}
             <Route exact path={constants.routes.base} component={LogInActivity} />
             {this.state.user && <Route path={constants.routes.base} component={MainView} />}
+            <Route path={constants.routes.editaccount} component={EditAccount} />
+            <Route path={constants.routes.createAccount} component={CreateAccount} />
+            <Route path={constants.routes.accountRecovery} component={AccountRecovery} />
+            <Route path={constants.routes.dash} component={MainActivity} />
+            <Route path={constants.routes.manageaccount} component={ManageAccount} />
           </Switch>
         </Router>
       </div>
