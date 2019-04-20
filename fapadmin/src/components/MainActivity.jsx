@@ -31,8 +31,9 @@ export default class MainActivity extends React.Component {
             }
         });
     }
-
-    handleScan = (data) => {
+  
+    handleScan = data => {
+        data = JSON.parse(data)
         if (data) {
             this.setState({
                 result: data,
@@ -51,8 +52,11 @@ export default class MainActivity extends React.Component {
             .then(this.props.history.push(constants.routes.logIn))
     };
 
+
     render() {
         let scanner;
+
+
         if (this.state.legacyMode) {
             scanner = <QrReader
                 delay={300}
