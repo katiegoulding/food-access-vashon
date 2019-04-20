@@ -22,7 +22,7 @@ export default class AccountRecovery extends React.Component {
                 currentUser: user, 
             });            
             // if(this.state.currentUser === null) {
-            //     this.props.history.push(constants.routes.logIn);
+            //     this.props.history.push(constants.routes.base);
             // }
         });  
     }

@@ -17,6 +17,7 @@ export default class Dashboard extends React.Component {
         return (
             <div>
                 <Plot
+                    // consider putting this on the backend, so its only retrieved by an authenticated API call
                     data={[
                     {
                         x: ['VYFS', 'IFCH', 'Community Dinner', 'VCCC', 'Senior Center', 'DOVE', 'La Communidad', 'VHH', 'Food Bank'],

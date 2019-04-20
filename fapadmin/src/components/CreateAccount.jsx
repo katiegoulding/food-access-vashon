@@ -171,7 +171,7 @@ export default class CreateAccount extends React.Component {
                         </button>
                     </div>
                 </form>
-                <p>Already have an account? <Link to={constants.routes.logIn}>Sign in</Link></p>
+                <p>Already have an account? <Link to={constants.routes.base}>Sign in</Link></p>
 
             </div>
         );
