@@ -1,6 +1,9 @@
 export default {
     routes: {
-        logIn: "/",
-        dash: "/dash",
+        base: "/",
+        dash: {
+            base: "/dash",
+            viewData: "/dash/ViewData"
+        },
     }
 }
