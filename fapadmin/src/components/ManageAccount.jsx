@@ -10,13 +10,16 @@ export default class ManageAccount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: "",
+            filter: "",
             name: "",
             org: "",
             role: "",
             date_added: "",
-            type: "",
             errorMessage: undefined
         }
+
+        this.handleChange = this.handleChange.bind(this);
     }    
 
     componentDidMount() {
@@ -35,7 +38,7 @@ export default class ManageAccount extends React.Component {
     }
     
     handleChange(evt) {
-        this.setState({type: evt.target.value});
+        this.setState({value: evt.target.value});
     }
 
     render() {
@@ -43,19 +46,12 @@ export default class ManageAccount extends React.Component {
             <div>
                 <h1>Manage Accounts</h1> 
                 <p>Arrange by: </p>
-                <select value={this.state.org} onChange={this.handleChange}>
+                <select value={this.state.value} onChange={this.handleChange}>
                     <option value="name">Name</option>
                     <option value="org">Organization</option>
                     <option value="role">Role</option>
                     <option value="date_added">Date Added</option>
                 </select>   
-                <p>Filter by: </p>
-                <select value={this.state.org} onChange={this.handleChange}>
-                    <option value="name">Name</option>
-                    <option value="org">Organization</option>
-                    <option value="role">Role</option>
-                    <option value="date_added">Date Added</option>
-                </select>
             
                 <table align="center">
                     <tr>

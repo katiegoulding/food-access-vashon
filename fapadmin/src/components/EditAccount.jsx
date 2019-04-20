@@ -101,20 +101,20 @@ export default class EditAccount extends React.Component {
                 <Plot
                     data={[
                     {
-                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
-                        y: [0.62, 0.63, 0.29, 0.79, 0.84, 0.65, 0.45, 0.81, 0.50],
+                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+                        y: [0.63, 0.29, 0.79, 0.84, 0.65, 0.45, 0.81, 0.50],
                         type: 'bar',
                         name: 'Market'                                          
                     },
                     {
-                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
-                        y: [0.7, 0.75, 0.73, 0.96, 0.99, 0.47, 0.64, 0.69, 0.72],
+                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+                        y: [0.75, 0.73, 0.96, 0.99, 0.47, 0.64, 0.69, 0.72],
                         type: 'bar',
                         name: 'Stand'                       
                     },
                     {
-                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
-                        y: [0.694, 0.802, 0.46, 0.71, 0.98, 0.685, 0.567, 0.988, 0],
+                        x: ['February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'],
+                        y: [0.802, 0.46, 0.71, 0.98, 0.685, 0.567, 0.988, 0],
                         type: 'bar',
                         name: 'Other'                       
                     },
