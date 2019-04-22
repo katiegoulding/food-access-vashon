@@ -1,17 +1,19 @@
 import React from "react";
-import DataInput from "./DataInput";
-import Dashboard from "./Dashboard"
-import constants from "./constants";
-import firebase from 'firebase/app'
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import QrReader from 'react-qr-reader'
 
-export default class MainActivity extends React.Component {
 
-    state = {
-        result: 'No result',
-        legacyMode: false,
+export default class Scan extends React.Component {
+
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            result: 'No result',
+            legacyMode: false,
+        }
     }
 
     handleScan = data => {
@@ -22,30 +24,15 @@ export default class MainActivity extends React.Component {
             })
         }
     }
-    handleError = err => {
+    handleError = (err) => {
         console.error(err)
         this.setState({
             legacyMode: true
         })
     }
 
-    componentDidMount() {
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                this.props.history.push(constants.routes.logIn)
-            }
-        });
-    }
-
-    handleSignOut() {
-        firebase.auth().signOut()
-            .then(this.props.history.push(constants.routes.logIn))
-    };
-
-
     render() {
         let scanner;
-
 
         if (this.state.legacyMode) {
             scanner = <QrReader
@@ -55,7 +42,6 @@ export default class MainActivity extends React.Component {
                 style={{ width: '20%', margin: 'auto' }}
                 legacyMode
             />
-
         } else {
             scanner = <QrReader
                 delay={300}
@@ -68,21 +54,11 @@ export default class MainActivity extends React.Component {
 
         return (
             <div>
-                <h1>Main Screen</h1>
+                <h1>SCAN SCAN SCAN</h1>
                 <div>
                     {scanner}
                     <p>Results: {this.state.result}</p>
                 </div>
-
-                <DataInput />
-                <Dashboard />
-
-                <button
-                    type="submit"
-                    className="btn btn-danger col-1"
-                    onClick={() => this.handleSignOut()}>
-                    Sign Out
-                </button>
             </div >
         );
     }

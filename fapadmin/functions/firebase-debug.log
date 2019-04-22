@@ -1,0 +1,26 @@
+[debug] [2019-04-21T09:34:32.660Z] ----------------------------------------------------------------------
+[debug] [2019-04-21T09:34:32.663Z] Command:       /usr/local/bin/node /usr/local/bin/firebase functions:shell
+[debug] [2019-04-21T09:34:32.663Z] CLI Version:   6.6.0
+[debug] [2019-04-21T09:34:32.664Z] Platform:      darwin
+[debug] [2019-04-21T09:34:32.664Z] Node Version:  v10.15.0
+[debug] [2019-04-21T09:34:32.665Z] Time:          Sun Apr 21 2019 02:34:32 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-04-21T09:34:32.665Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-04-21T09:34:32.681Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-04-21T09:34:32.682Z] > authorizing via signed-in user
+[debug] [2019-04-21T09:34:32.682Z] [iam] checking project fapadmin-97af8 for permissions ["firebase.projects.get"]
+[debug] [2019-04-21T09:34:32.686Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8:testIamPermissions  
+
+[debug] [2019-04-21T09:34:32.926Z] <<< HTTP RESPONSE 200
+[info] i  functions: Preparing to emulate functions.
+[debug] [2019-04-21T09:34:34.344Z] Fetching environment
+[debug] [2019-04-21T09:34:34.348Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8  
+ 
+[debug] [2019-04-21T09:34:34.988Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-21T09:34:34.989Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/766068690399:getServerAppConfig  
+ 
+[debug] [2019-04-21T09:34:35.132Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-21T09:34:35.132Z] Starting @google-cloud/functions-emulator
+[debug] [2019-04-21T09:34:37.181Z] Parsing function triggers
+[info] ✔  functions: helloWorld
+[info] ✔  functions: changeRole

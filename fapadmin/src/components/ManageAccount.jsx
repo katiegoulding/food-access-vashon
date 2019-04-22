@@ -4,6 +4,7 @@ import constants from "./constants";
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import 'firebase/database';
+import AccountList from './AccountList'
 
 export default class ManageAccount extends React.Component {
 
@@ -20,77 +21,82 @@ export default class ManageAccount extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
-    }    
-
-    componentDidMount() {
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-            this.setState({
-                currentUser: user, 
-            });            
-            // if(this.state.currentUser === null) {
-            //     this.props.history.push(constants.routes.base);
-            // }
-        });  
     }
 
-    componentWillUnmount() {
-        this.authUnsub();
-    }
-    
+    // componentDidMount() {
+    //     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+    //         this.setState({
+    //             currentUser: user, 
+    //         });            
+    //         // if(this.state.currentUser === null) {
+    //         //     this.props.history.push(constants.routes.base);
+    //         // }
+    //     });  
+    // }
+
+    // componentWillUnmount() {
+    //     this.authUnsub();
+    // }
+
     handleChange(evt) {
-        this.setState({value: evt.target.value});
+        this.setState({ value: evt.target.value });
     }
 
     render() {
+
+        let accountRef = firebase.database().ref('/users/');
+
         return (
-            
+
             <div>
-                <h1>Manage Accounts</h1> 
+                <h1>Manage Accounts</h1>
                 <p>Arrange by: </p>
                 <select value={this.state.value} onChange={this.handleChange}>
                     <option value="name">Name</option>
                     <option value="org">Organization</option>
                     <option value="role">Role</option>
                     <option value="date_added">Date Added</option>
-                </select>   
-            
-                <table align="center">
+                </select>
+
+                <AccountList accountRef={accountRef} />
+
+                {/* <table align="center">
                     <tr>
                         <th>Name</th>
-                        <th>Organization</th> 
+                        <th>Organization</th>
                         <th>Role</th>
                         <th>Date Added</th>
                         <th></th>
                     </tr>
                     <tr>
                         <td>Rob</td>
-                        <td>Rob's Farm</td> 
+                        <td>Rob's Farm</td>
                         <td>Farmer</td>
                         <td>04/13/2019</td>
-                        <td><Link to={constants.routes.editaccount}> edit </Link></td>
+                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
                     </tr>
                     <tr>
                         <td>Amanda</td>
-                        <td>Plum Forest</td> 
+                        <td>Plum Forest</td>
                         <td>Farmer</td>
                         <td>04/12/2019</td>
-                        <td><Link to={constants.routes.editaccount}> edit </Link></td>
+                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
                     </tr>
                     <tr>
                         <td>Juniper</td>
-                        <td>FAP</td> 
+                        <td>FAP</td>
                         <td>Admin</td>
                         <td>04/10/2019</td>
-                        <td><Link to={constants.routes.editaccount}> edit </Link></td>
+                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
                     </tr>
                     <tr>
                         <td>Heidi</td>
-                        <td>DOVE</td> 
+                        <td>DOVE</td>
                         <td>Caseworker</td>
                         <td>04/10/2019</td>
-                        <td><Link to={constants.routes.editaccount}> edit </Link></td>
+                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
                     </tr>
-                </table>
+                </table> */}
             </div >
         )
     }

@@ -52,10 +52,36 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 
 });
 
-exports.createProfile = functions.auth.user().onCreate((user) => {
-    return admin.database().ref(`/users/${user.uid}`).set({
-        email: user.email
+exports.changeRole = functions.https.onCall((data, context) => {
+    // get user and add admin custom claim
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        return admin.auth().setCustomUserClaims(user.uid, {
+            role: data.role
+        })
+    }).then(() => {
+        return {
+            message: `Success! ${data.email} has been made a ${data.role}.`
+        }
+    }).catch(err => {
+        return err;
     });
+});
+
+exports.deleteUser = functions.https.onCall((data, context) => {
+    // get user and add admin custom claim
+    return admin.auth().getUserByEmail(data.email).then(user => {
+        return admin.auth().deleteUser(user.uid);
+    }).then(() => {
+        return {
+            message: `Success! ${data.email} has been made a deleted.`
+        }
+    }).catch(err => {
+        return err;
+    });
+});
+
+exports.deleteData = functions.auth.user().onDelete((user) => {
+    return admin.database().ref('/users/{user.uid}').deleteData;
 });
 
 function safelyParseJSON(response, json) {
