@@ -1,10 +1,8 @@
 import React from 'react'
+import Dashboard from './Dashboard';
 
 export default class ViewData extends React.Component {
-    
-    constructor(props) {
-        super(props)
-    }
+
 
     render() {
         // const { user } = this.props
@@ -14,7 +12,8 @@ export default class ViewData extends React.Component {
         // https://firebase.google.com/docs/auth/admin/custom-claims
         return (
             <div>
-                View Data
+                <h1>DATA DATA DATA</h1>
+                <Dashboard />
             </div>
         )
     }

@@ -2,12 +2,13 @@ export default {
     routes: {
         createAccount: "/signup",
         accountRecovery: "/recover",
-        editaccount: "/edit",
-        manageaccount: "/manage",
         base: "/",
         dash: {
             base: "/dash",
-            viewData: "/dash/ViewData"
-        },
+            viewData: "/dash/ViewData",
+            scan: "/dash/Scan",
+            manageAccount: "/dash/manage",
+            editAccount: "/dash/manage/edit"
+        }
     }
 }

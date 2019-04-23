@@ -1,0 +1,34 @@
+[debug] [2019-04-23T22:09:25.289Z] ----------------------------------------------------------------------
+[debug] [2019-04-23T22:09:25.292Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2019-04-23T22:09:25.292Z] CLI Version:   6.6.0
+[debug] [2019-04-23T22:09:25.292Z] Platform:      darwin
+[debug] [2019-04-23T22:09:25.292Z] Node Version:  v10.15.0
+[debug] [2019-04-23T22:09:25.297Z] Time:          Tue Apr 23 2019 15:09:25 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-04-23T22:09:25.297Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-04-23T22:09:25.311Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-04-23T22:09:25.311Z] > authorizing via signed-in user
+[debug] [2019-04-23T22:09:25.311Z] [iam] checking project fapadmin-97af8 for permissions ["firebase.projects.get"]
+[debug] [2019-04-23T22:09:25.313Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-04-23T22:09:25.314Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-04-23T22:09:25.586Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-23T22:09:25.595Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8:testIamPermissions  
+
+[debug] [2019-04-23T22:09:25.909Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-23T22:09:25.910Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8  
+ 
+[debug] [2019-04-23T22:09:26.231Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/antonzheng/Documents/capstone/food-access-vashon/fapadmin'...
+[info] 
+[info] i  functions: Preparing to emulate functions.
+[debug] [2019-04-23T22:09:26.873Z] Fetching environment
+[debug] [2019-04-23T22:09:26.876Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/766068690399:getServerAppConfig  
+ 
+[debug] [2019-04-23T22:09:27.004Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-23T22:09:27.005Z] Starting @google-cloud/functions-emulator
+[debug] [2019-04-23T22:09:28.043Z] Parsing function triggers
+[info] ✔  functions: changeRole: http://localhost:5000/fapadmin-97af8/us-central1/changeRole
+[info] ✔  functions: deleteUser: http://localhost:5000/fapadmin-97af8/us-central1/deleteUser
+[info] ✔  functions: helloWorld: http://localhost:5000/fapadmin-97af8/us-central1/helloWorld

@@ -9,29 +9,11 @@ import QrReader from 'react-qr-reader'
 
 export default class MainActivity extends React.Component {
 
-
-    constructor(props) { 
-        super(props)
-        this.state = {
-            result: 'No result',
-            legacyMode: false,
-            user: undefined
-        }
+    state = {
+        result: 'No result',
+        legacyMode: false,
     }
 
-    componentDidMount() {
-        // Does this need to get saved as a variable ?
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                this.props.history.push(constants.routes.base)
-            } else {
-                this.setState({
-                    user
-                })
-            }
-        });
-    }
-  
     handleScan = data => {
         data = JSON.parse(data)
         if (data) {
@@ -40,16 +22,24 @@ export default class MainActivity extends React.Component {
             })
         }
     }
-    handleError = (err) => {
+    handleError = err => {
         console.error(err)
         this.setState({
             legacyMode: true
         })
     }
 
+    componentDidMount() {
+        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                this.props.history.push(constants.routes.logIn)
+            }
+        });
+    }
+
     handleSignOut() {
         firebase.auth().signOut()
-            .then(this.props.history.push(constants.routes.base))
+            .then(this.props.history.push(constants.routes.logIn))
     };
 
 
@@ -86,6 +76,7 @@ export default class MainActivity extends React.Component {
 
                 <DataInput />
                 <Dashboard />
+
                 <button
                     type="submit"
                     className="btn btn-danger col-1"
