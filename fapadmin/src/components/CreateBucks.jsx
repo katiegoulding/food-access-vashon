@@ -4,6 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
+
 export default class CreateBucks extends React.Component {
 
     constructor(props) {
@@ -20,26 +21,27 @@ export default class CreateBucks extends React.Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
-  
-
+    // (found online from Mozilla documentation) takes any url and a json object and will post the object to the url
     postData = (url = ``, data = {}) => {
     // Default options are marked with *
+        console.log('body stringified = ', JSON.stringify(data))
         return fetch(url, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // no-cors, cors, *same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             credentials: "same-origin", // include, *same-origin, omit
             headers: {
+                Accept: '*/*',
                 "Content-Type": "application/json",
-                // "Content-Type": "application/x-www-form-urlencoded",
             },
             redirect: "follow", // manual, *follow, error
-            referrer: "no-referrer", // no-referrer, *client
+            referrer: "no-referrer", // no-referrer, *client,
+            mode: "no-cors", //cross origin requests: it's okay to communicate from localhost to Google
             body: JSON.stringify(data), // body data type must match "Content-Type" header
         })
-        .then(response => response.json()); // parses JSON response into native Javascript objects 
+        .then(response => console.log('response = ', response)); // parses JSON response into native Javascript objects 
     }
 
+    // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
     postVoucherData(organization, count, ids) {
         let updates = {}
 
@@ -58,6 +60,7 @@ export default class CreateBucks extends React.Component {
         return firebase.database().ref().update(updates)
     }
 
+    // on submit of the Create Voucher form the function saves given data to Firebase and calls postData to Google Cloud Function to generate pdf
     handleSubmit(_event) {
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
         console.log('handle submit is getting fired')
@@ -78,23 +81,8 @@ export default class CreateBucks extends React.Component {
         )
         Promise.all([promise1, promise2, promise3, promise4]).then(
             doesPass => {
-                //call passed successfully to firebase
-                // console.log("firebase call successful")
-                // console.log('firebase.functions() = ', firebase.functions())
-                // let createVoucherPdf = firebase.functions().httpsCallable('helloWorld')
-                // createVoucherPdf({ 
-                //     year: this.state.validYear,
-                //     ids
-                // }).then(function(result) {
-                // // Read result of the Cloud Function.
-                //     console.log("result of call to cloud function:", result)
-                // }).catch(
-                //     err => {
-                //         console.log('err on create pdf call = ', err)
-                //     }
-                // )
                 this.postData(
-                    'https://us-central1-fapadmin-97af8.cloudfunctions.net/helloWorld',
+                    'https://us-central1-fapadmin-97af8.cloudfunctions.net/createVouchersTest3',
                     body
                 ).then(
                     data => {
