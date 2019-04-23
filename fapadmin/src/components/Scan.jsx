@@ -39,7 +39,7 @@ export default class Scan extends React.Component {
                 delay={300}
                 onError={this.handleError}
                 onScan={this.handleScan}
-                style={{ width: '20%', margin: 'auto' }}
+                style={{ width: '50%', margin: 'auto' }}
                 legacyMode
             />
         } else {
@@ -47,7 +47,7 @@ export default class Scan extends React.Component {
                 delay={300}
                 onError={this.handleError}
                 onScan={this.handleScan}
-                style={{ width: '20%', margin: 'auto' }}
+                style={{ width: '50%', margin: 'auto' }}
             />
         }
 
