@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://katiegoulding.github.io/food-access-vashon/",
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-loader": "^8.0.5",
     "chart.js": "^2.7.3",
     "downloadjs": "^1.4.7",
