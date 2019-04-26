@@ -6,6 +6,7 @@
   "dependencies": {
     "babel-loader": "^8.0.5",
     "chart.js": "^2.7.3",
+    "downloadjs": "^1.4.7",
     "firebase": "^5.8.4",
     "gh-pages": "^2.0.1",
     "plotly.js": "^1.45.2",

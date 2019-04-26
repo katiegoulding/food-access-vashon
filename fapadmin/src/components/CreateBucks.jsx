@@ -4,6 +4,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
+import download from 'downloadjs'
 
 export default class CreateBucks extends React.Component {
 
@@ -38,7 +39,12 @@ export default class CreateBucks extends React.Component {
             mode: "no-cors", //cross origin requests: it's okay to communicate from localhost to Google
             body: JSON.stringify(data), // body data type must match "Content-Type" header
         })
-        .then(response => console.log('response = ', response)); // parses JSON response into native Javascript objects 
+        .then((response) => {console.log('response = ', response)})
+        .catch(
+            err => {
+                console.log('error = ', err);
+            }
+        ) // parses JSON response into native Javascript objects 
     }
 
     // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
@@ -60,7 +66,8 @@ export default class CreateBucks extends React.Component {
         return firebase.database().ref().update(updates)
     }
 
-    // on submit of the Create Voucher form the function saves given data to Firebase and calls postData to Google Cloud Function to generate pdf
+    // on submit of the Create Voucher form the function saves given data to 
+    // Firebase and calls postData to Google Cloud Function to generate pdf
     handleSubmit(_event) {
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
         console.log('handle submit is getting fired')
@@ -76,31 +83,33 @@ export default class CreateBucks extends React.Component {
             year: this.state.validYear,
             ids
         }
+
         console.log(
             'body = ', body
         )
+
         Promise.all([promise1, promise2, promise3, promise4]).then(
             doesPass => {
+                // make call to Google Cloud function
                 this.postData(
                     'https://us-central1-fapadmin-97af8.cloudfunctions.net/createVouchersTest3',
                     body
                 ).then(
                     data => {
-                        console.log('data = ', data)
+                        console.log('data = ', data);
                     }
                 ).catch(
                     err => {
-                        console.log('err = ', err)
+                        console.log('err = ', err);
                     }
                 )
             }
         ).catch(
             err => {
-                console.log("Error on firebase request", err)
+                console.log("Error on firebase request", err);
             }
         )
         console.log('firebase.functions() = ', firebase.functions())
-
     }
 
     handleChange(event) {
