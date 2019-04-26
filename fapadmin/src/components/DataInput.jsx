@@ -17,18 +17,17 @@ export default class DataInput extends React.Component {
 
     }
     handleChangeDist(evt) {
-        this.setState({dist: evt.target.value});
+        this.setState({ dist: evt.target.value });
     }
 
     handleChangeOrg(evt) {
-        this.setState({org: evt.target.value});
+        this.setState({ org: evt.target.value });
     }
 
     handleChangeDollar(evt) {
-        console.log(evt.target.value);
-        this.setState({dollar: evt.target.value});
+        this.setState({ dollar: evt.target.value });
     }
-    
+
     handleSubmit(evt) {
         evt.preventDefault();
     }
@@ -39,15 +38,15 @@ export default class DataInput extends React.Component {
                 <h1>Input Data</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div>
-                    <label>
-                        Distribution or Redemption:  
+                        <label>
+                            Distribution or Redemption:
                         <select value={this.state.dist} onChange={this.handleChangeDist}>
-                            <option value="distribution">Distribution</option>
-                            <option value="redemption">Redemption</option>
-                        </select>
-                    </label>
+                                <option value="distribution">Distribution</option>
+                                <option value="redemption">Redemption</option>
+                            </select>
+                        </label>
                     </div>
-                    
+
                     <div>
                         <label>
                             Partner Organization:
@@ -67,12 +66,12 @@ export default class DataInput extends React.Component {
                         <label>
                             Dollar Amount:
                             </label>
-                            <input type="text" value={this.state.dollar} onChange={this.handleChangeDollar} />
+                        <input type="text" value={this.state.dollar} onChange={this.handleChangeDollar} />
                     </div>
                     <input type="submit" value="Submit" />
                 </form>
             </div>
         )
     }
-    
+
 }

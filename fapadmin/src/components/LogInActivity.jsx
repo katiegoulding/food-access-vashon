@@ -12,6 +12,7 @@ export default class LogInActivity extends React.Component {
         this.state = {
             email: "",
             pw: "",
+            role: "",
             errorMessage: undefined
         }
     }
@@ -20,7 +21,7 @@ export default class LogInActivity extends React.Component {
         //listen for auth change
         this.authUnsub = firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                this.props.history.push('/dash')
+                this.props.history.push(constants.routes.dash.base)
             }
         });
     }
@@ -72,6 +73,8 @@ export default class LogInActivity extends React.Component {
                         </form>
                     </div>
                 </div>
+                <p><Link to={constants.routes.accountRecovery}>Forgot password?</Link></p>
+                <p>Don't yet have an account? <Link to={constants.routes.createAccount}>Sign Up!</Link></p>
             </div >
         )
     }
