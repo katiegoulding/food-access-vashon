@@ -22,6 +22,7 @@ export default class MainActivity extends React.Component {
             })
         }
     }
+    
     handleError = err => {
         console.error(err)
         this.setState({

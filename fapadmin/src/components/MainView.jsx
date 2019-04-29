@@ -1,5 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import MainActivity from "./MainActivity.jsx";
+import BucksLanding from "./BucksLanding";
 import NavigationBar from './NavigationBar';
 import constants from "./constants";
 import firebase from 'firebase/app'
@@ -7,8 +9,10 @@ import 'firebase/auth';
 import 'firebase/database';
 import Scan from './Scan';
 import ViewData from './ViewData';
-import ManageAccount from './ManageAccount'
-import EditAccount from './EditAccount'
+import ManageAccount from './ManageAccount';
+import EditAccount from './EditAccount';
+import CreateBucks from './CreateBucks.jsx';
+import ViewBucks from './ViewBucks.jsx'
 
 export default class MainView extends React.Component {
 
@@ -46,8 +50,10 @@ export default class MainView extends React.Component {
         ];
         let adminUI = [
             <Route exact path={constants.routes.dash.base} component={Scan} />,
-            <Route path={constants.routes.dash.viewData} component={ViewData} />,
-            <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />
+            <Route path={constants.routes.dash.bucksLanding} component={BucksLanding} />,
+            <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />,
+            <Route path={constants.routes.dash.viewBucks} component={ViewBucks} />,
+            <Route path={constants.routes.dash.createBucks} component={CreateBucks} />
         ];
 
         let ui;
