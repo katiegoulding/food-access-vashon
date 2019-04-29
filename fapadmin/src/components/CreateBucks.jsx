@@ -16,11 +16,14 @@ export default class CreateBucks extends React.Component {
             vyfsCount: 1,
             lacomunidadCount: 1,
             vashonhouseholdCount: 1,
-            validYear: 2018
+            validYear: 2018,
+            buckSetName: ""
         }
     }
 
-    // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
+    // takes organization name, voucher count, and a list of ids and saves them in the
+    // Firebase Realtime database
+    // TODO: need to validate prior to form submission: check that buck set name is unique
     postVoucherData(organization, count, ids) {
         let updates = {}
 
@@ -28,7 +31,10 @@ export default class CreateBucks extends React.Component {
             let voucherData = {
                 organization,
                 createdOn: new String(new Date()),
-                year: this.state.validYear
+                handedOutOn: "",
+                redeemedOn: "",
+                year: this.state.validYear,
+                buckSetName: this.state.buckSetName
             }
 
             let newVoucherKey = firebase.database().ref().child('vouchers').push().key
@@ -44,6 +50,18 @@ export default class CreateBucks extends React.Component {
     handleSubmit() {
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
         console.log('handle submit is getting fired')
+
+        //HOW
+        let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount
+        let buckSetRef = firebase.database().ref().child('buckSets')
+        let newSetRef = buckSetRef.push();
+        newSetRef.set({
+            name: this.state.buckSetName,
+            createdOn: new String(new Date()),
+            year: this.state.validYear,
+            voucherCount: sum
+            //createdBy: this.props.username
+        });
 
         //post the data, wait on each one to resolve
         let ids = []
@@ -62,6 +80,8 @@ export default class CreateBucks extends React.Component {
             console.log(id);
         });
         
+        // Call the google cloud function to generate the PDF
+        // TODO: factor out this section and handle async
         Promise.all([promise1, promise2, promise3, promise4]).then(
             doesPass => {
                 axios.post(`https://us-central1-fapadmin-97af8.cloudfunctions.net/helloWorld`, body, {
@@ -100,7 +120,11 @@ export default class CreateBucks extends React.Component {
                 <form onSubmit={evt => this.handleSubmit()}>
                     <label>
                         Name of Buck Set:
-                        <input type="text" name="buck set name" />
+                        <input 
+                            type="text"
+                            name="buckSetName"
+                            value={this.state.buckSetName}
+                            onInput={evt => this.setState({ buckSetName: evt.target.value })}/>
                     </label>
                     <label>
                         Valid Year

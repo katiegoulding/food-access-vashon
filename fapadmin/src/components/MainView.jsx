@@ -19,7 +19,9 @@ export default class MainView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            role: ''
+            userId: '',
+            role: '',
+            username: ''
         }
     }
 
@@ -35,7 +37,9 @@ export default class MainView extends React.Component {
             } else {
                 user.getIdTokenResult().then(idTokenResult => {
                     this.setState({
-                        role: idTokenResult.claims.role
+                        userId: user.uid,
+                        role: idTokenResult.claims.role,
+                        username: user.displayName
                     })
                 });
             }
@@ -43,16 +47,18 @@ export default class MainView extends React.Component {
     }
 
     render() {
-        let farmerUI = [<Route path={constants.routes.dash.base} component={Scan} />];
+        let farmerUI = [
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />
+        ];
         let cworkerUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />,
             <Route path={constants.routes.dash.viewData} component={ViewData} />
         ];
         let adminUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />,
             <Route path={constants.routes.dash.bucksLanding} component={BucksLanding} />,
             <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />,
-            <Route path={constants.routes.dash.viewBucks} component={ViewBucks} />,
+            <Route path={constants.routes.dash.base} render={() => (<ViewBucks username = {this.state.username}/> )} />,
             <Route path={constants.routes.dash.createBucks} component={CreateBucks} />
         ];
 
@@ -68,7 +74,7 @@ export default class MainView extends React.Component {
 
         return (
             <div>
-                <h1>FAP FAP FAP</h1>
+                <h1>Food Access Partnership</h1>
                 <NavigationBar role={this.state.role} />
                 <Router>
                     <Switch>

@@ -32,26 +32,32 @@ export default class CreateAccount extends React.Component {
 
     handleCreateAccount(evt) {
         evt.preventDefault();
-        if (this.state.pw !== this.state.pw_confirm) {
+        if (this.state.pw !== this.state.pw_confirm) { // error case: passwords do not match
             this.setState({ errorMessage: "Passwords do not match" })
-        } else if (this.state.displayName === "") {
+        } else if (this.state.displayName === "") { // error case: no display name given
             this.setState({
                 errorMessage: "Enter Display Name"
             });
             return;
-        } else if (this.state.pw.length < 6) {
+        } else if (this.state.pw.length < 6) { // error case: password is less than six characters
             this.setState({
                 errorMessage: "Password must be at least six characters"
             });
             return;
-        } else {
+        } else { //it's working, make the account
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pw).then((Response) => {
+                var changeRole = firebase.functions().httpsCallable('changeRole');
+                changeRole({ email: this.state.email, role: this.state.role }).then(result => {
+                    console.log(result);
+                });
+
                 return firebase.database().ref(`/users/${Response.user.uid}`).set({
                     firstName: this.state.firstName,
                     lastName: this.state.lastName,
                     email: Response.user.email,
                     role: this.state.role,
-                    org: this.state.org
+                    org: this.state.org,
+                    voucherList: ""
                 }).catch(err => this.setState({
                     errorMessage: err.message
                 }));
