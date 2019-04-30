@@ -45,19 +45,25 @@ export default class CreateAccount extends React.Component {
             });
             return;
         } else {
-            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pw).then((Response) => {
-                return firebase.database().ref(`/users/${Response.user.uid}`).set({
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: Response.user.email,
-                    role: this.state.role,
-                    org: this.state.org
+            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pw)
+                .then(async (Response) => {
+                    try {
+                        return firebase.database().ref(`/users/${Response.user.uid}`).set({
+                            firstName: this.state.firstName,
+                            lastName: this.state.lastName,
+                            email: Response.user.email,
+                            role: this.state.role,
+                            org: this.state.org
+                        });
+                    }
+                    catch (err) {
+                        return this.setState({
+                            errorMessage: err.message
+                        });
+                    }
                 }).catch(err => this.setState({
                     errorMessage: err.message
                 }));
-            }).catch(err => this.setState({
-                errorMessage: err.message
-            }));
         };
     }
 

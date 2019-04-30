@@ -7,12 +7,12 @@ export default class BucksLanding extends React.Component {
     constructor(props) {
         super(props)
         this.toggleShowCreateBucks = this.toggleShowCreateBucks.bind(this)
-        this.state = { 
+        this.state = {
             showCreateBucks: false
         }
     }
 
-    toggleShowCreateBucks (_event) {
+    toggleShowCreateBucks(_event) {
         this.setState({
             showCreateBucks: true
         })
@@ -21,15 +21,15 @@ export default class BucksLanding extends React.Component {
 
     render() {
         return (
-            <div> 
+            <div>
                 {!this.state.showCreateBucks
-                    && 
+                    &&
                     <button onClick={this.toggleShowCreateBucks} type="submit">
                         Create New Buck Set
                     </button>
                 }
                 {
-                    this.state.showCreateBucks ?  <CreateBucks/> : <ViewBucks/>
+                    this.state.showCreateBucks ? <CreateBucks /> : <ViewBucks />
                 }
             </div>
         )
