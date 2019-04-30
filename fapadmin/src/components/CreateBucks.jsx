@@ -4,7 +4,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import download from 'downloadjs'
 import axios from 'axios'
 
 export default class CreateBucks extends React.Component {
@@ -16,7 +15,9 @@ export default class CreateBucks extends React.Component {
             vyfsCount: 1,
             lacomunidadCount: 1,
             vashonhouseholdCount: 1,
-            validYear: 2018
+            validYear: 2018,
+            loading: false,
+            errors: null
         }
     }
 
@@ -41,7 +42,7 @@ export default class CreateBucks extends React.Component {
 
     // On submit of the Create Voucher form the function saves given data to
     // Firebase and calls postData to Google Cloud Function to generate pdf
-    handleSubmit() {
+    handleSubmit = (evt) => {
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
         console.log('handle submit is getting fired')
 
@@ -52,20 +53,23 @@ export default class CreateBucks extends React.Component {
         let promise3 = this.postVoucherData('lacomunidad', lacomunidadCount, ids)
         let promise4 = this.postVoucherData('vashonhousehold', vashonhouseholdCount, ids)
 
-        let body = {
+        let data = {
             Year: this.state.validYear,
             ids
         }
 
-        console.log('body stringified = ', JSON.stringify(body))
-        body.ids.forEach((id) => {
+        console.log('data stringified = ', JSON.stringify(data))
+        data.ids.forEach((id) => {
             console.log(id);
         });
 
         Promise.all([promise1, promise2, promise3, promise4]).then(
             doesPass => {
-                axios.post(`https://us-central1-fapadmin-97af8.cloudfunctions.net/helloWorld`, body, {
-                    responseType: 'blob', //Force to receive data in a Blob Format
+                axios({
+                    method: 'post',
+                    url: `https://us-central1-fapadmin-97af8.cloudfunctions.net/helloWorld/`,
+                    data: data,
+                    responseType: 'blob' //Force to receive data in a Blob Format
                 })
                     .then(response => {
                         //Create a Blob from the PDF Stream
@@ -81,9 +85,20 @@ export default class CreateBucks extends React.Component {
                         link.setAttribute('download', 'file.pdf');
                         document.body.appendChild(link);
                         link.click();
+                        // remove
+                        link.parentNode.removeChild(link);
+
+                        this.setState({
+                            loading: false
+                        });
                     })
                     .catch(error => {
-                        console.log(error);
+                        error.json().then((json) => {
+                            this.setState({
+                                errors: json,
+                                loading: false
+                            });
+                        })
                     });
             }
         ).catch(
@@ -92,12 +107,24 @@ export default class CreateBucks extends React.Component {
             }
         )
         console.log('firebase.functions() = ', firebase.functions())
+
+        evt.preventDefault();
+
     }
 
     render() {
+        const { loading, errors } = this.state;
         return (
             <div>
-                <form onSubmit={evt => this.handleSubmit()}>
+                <form onSubmit={evt => this.handleSubmit(evt)}>
+                    {(errors)
+                        ? (<div className="form-group">
+                            <div className="alert alert-danger"><strong>Error!</strong> {errors.message || 'Something went wrong.'}</div>
+                        </div>
+                        )
+                        : null
+                    }
+
                     <label>
                         Name of Buck Set:
                         <input type="text" name="buck set name" />
@@ -155,7 +182,7 @@ export default class CreateBucks extends React.Component {
                         />
                     </label>
                     <br />
-                    <input type="submit" value="Submit" />
+                    <button disabled={loading} className="btn btn-primary">{(loading) ? 'Downloading...' : 'Download'}</button>
                 </form>
             </div>
         )

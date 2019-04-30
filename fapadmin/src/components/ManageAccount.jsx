@@ -59,44 +59,6 @@ export default class ManageAccount extends React.Component {
                 </select>
 
                 <AccountList accountRef={accountRef} />
-
-                {/* <table align="center">
-                    <tr>
-                        <th>Name</th>
-                        <th>Organization</th>
-                        <th>Role</th>
-                        <th>Date Added</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>Rob</td>
-                        <td>Rob's Farm</td>
-                        <td>Farmer</td>
-                        <td>04/13/2019</td>
-                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
-                    </tr>
-                    <tr>
-                        <td>Amanda</td>
-                        <td>Plum Forest</td>
-                        <td>Farmer</td>
-                        <td>04/12/2019</td>
-                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
-                    </tr>
-                    <tr>
-                        <td>Juniper</td>
-                        <td>FAP</td>
-                        <td>Admin</td>
-                        <td>04/10/2019</td>
-                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
-                    </tr>
-                    <tr>
-                        <td>Heidi</td>
-                        <td>DOVE</td>
-                        <td>Caseworker</td>
-                        <td>04/10/2019</td>
-                        <td><Link to={constants.routes.dash.editAccount}> edit </Link></td>
-                    </tr>
-                </table> */}
             </div >
         )
     }
