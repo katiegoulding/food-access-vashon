@@ -53,9 +53,8 @@ export default class CreateBucks extends React.Component {
 
         //HOW
         let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount
-        let buckSetRef = firebase.database().ref().child('buckSets')
-        let newSetRef = buckSetRef.push();
-        newSetRef.set({
+        let buckSetRef = firebase.database().ref('buckSets/' + this.state.buckSetName)
+        buckSetRef.update({
             name: this.state.buckSetName,
             createdOn: new String(new Date()),
             year: this.state.validYear,
