@@ -1,34 +1,66 @@
-[debug] [2019-04-23T22:09:25.289Z] ----------------------------------------------------------------------
-[debug] [2019-04-23T22:09:25.292Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] [2019-04-23T22:09:25.292Z] CLI Version:   6.6.0
-[debug] [2019-04-23T22:09:25.292Z] Platform:      darwin
-[debug] [2019-04-23T22:09:25.292Z] Node Version:  v10.15.0
-[debug] [2019-04-23T22:09:25.297Z] Time:          Tue Apr 23 2019 15:09:25 GMT-0700 (Pacific Daylight Time)
-[debug] [2019-04-23T22:09:25.297Z] ----------------------------------------------------------------------
+[debug] [2019-04-30T23:16:34.309Z] ----------------------------------------------------------------------
+[debug] [2019-04-30T23:16:34.310Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2019-04-30T23:16:34.311Z] CLI Version:   6.7.2
+[debug] [2019-04-30T23:16:34.311Z] Platform:      darwin
+[debug] [2019-04-30T23:16:34.311Z] Node Version:  v10.15.1
+[debug] [2019-04-30T23:16:34.311Z] Time:          Tue Apr 30 2019 16:16:34 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-04-30T23:16:34.311Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2019-04-23T22:09:25.311Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2019-04-23T22:09:25.311Z] > authorizing via signed-in user
-[debug] [2019-04-23T22:09:25.311Z] [iam] checking project fapadmin-97af8 for permissions ["firebase.projects.get"]
-[debug] [2019-04-23T22:09:25.313Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2019-04-23T22:09:25.314Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
- <request body omitted>
-[debug] [2019-04-23T22:09:25.586Z] <<< HTTP RESPONSE 200
-[debug] [2019-04-23T22:09:25.595Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8:testIamPermissions  
+[debug] [2019-04-30T23:16:34.319Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-04-30T23:16:34.319Z] > authorizing via signed-in user
+[debug] [2019-04-30T23:16:34.320Z] [iam] checking project fapadmin-97af8 for permissions ["firebase.projects.get"]
+[debug] [2019-04-30T23:16:34.321Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8:testIamPermissions  
 
-[debug] [2019-04-23T22:09:25.909Z] <<< HTTP RESPONSE 200
-[debug] [2019-04-23T22:09:25.910Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8  
+[debug] [2019-04-30T23:16:36.599Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-30T23:16:36.601Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8  
  
-[debug] [2019-04-23T22:09:26.231Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-30T23:16:36.749Z] <<< HTTP RESPONSE 200
 [info] 
-[info] === Serving from '/Users/antonzheng/Documents/capstone/food-access-vashon/fapadmin'...
+[info] === Serving from '/Users/augustcarow/Desktop/food-access-vashon/fapadmin'...
 [info] 
-[info] i  functions: Preparing to emulate functions.
-[debug] [2019-04-23T22:09:26.873Z] Fetching environment
-[debug] [2019-04-23T22:09:26.876Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/766068690399:getServerAppConfig  
+[debug] [2019-04-30T23:16:37.259Z] Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/logs'
+    at Object.mkdirSync (fs.js:753:3)
+    at Object.assertLogsPath (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/emulator/logs.js:65:10)
+    at new Controller (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/cli/controller.js:77:32)
+    at FunctionsEmulator.start (/usr/local/lib/node_modules/firebase-tools/lib/functionsEmulator.js:102:23)
+    at Object.start (/usr/local/lib/node_modules/firebase-tools/lib/serve/functions.js:7:33)
+    at /usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:15:23
+    at arrayMap (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:639:23)
+    at Function.map (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:9556:14)
+    at _serve (/usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:13:26)
+    at Command.module.exports.Command.description.option.option.option.option.before.action [as _action] (/usr/local/lib/node_modules/firebase-tools/lib/commands/serve.js:55:12)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2019-04-30T23:25:26.159Z] ----------------------------------------------------------------------
+[debug] [2019-04-30T23:25:26.161Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2019-04-30T23:25:26.162Z] CLI Version:   6.7.2
+[debug] [2019-04-30T23:25:26.162Z] Platform:      darwin
+[debug] [2019-04-30T23:25:26.162Z] Node Version:  v10.15.1
+[debug] [2019-04-30T23:25:26.162Z] Time:          Tue Apr 30 2019 16:25:26 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-04-30T23:25:26.162Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-04-30T23:25:26.173Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-04-30T23:25:26.173Z] > authorizing via signed-in user
+[debug] [2019-04-30T23:25:26.173Z] [iam] checking project fapadmin-97af8 for permissions ["firebase.projects.get"]
+[debug] [2019-04-30T23:25:26.175Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8:testIamPermissions  
+
+[debug] [2019-04-30T23:25:26.344Z] <<< HTTP RESPONSE 200
+[debug] [2019-04-30T23:25:26.346Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/fapadmin-97af8  
  
-[debug] [2019-04-23T22:09:27.004Z] <<< HTTP RESPONSE 200
-[debug] [2019-04-23T22:09:27.005Z] Starting @google-cloud/functions-emulator
-[debug] [2019-04-23T22:09:28.043Z] Parsing function triggers
-[info] ✔  functions: changeRole: http://localhost:5000/fapadmin-97af8/us-central1/changeRole
-[info] ✔  functions: deleteUser: http://localhost:5000/fapadmin-97af8/us-central1/deleteUser
-[info] ✔  functions: helloWorld: http://localhost:5000/fapadmin-97af8/us-central1/helloWorld
+[debug] [2019-04-30T23:25:26.509Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/augustcarow/Desktop/food-access-vashon/fapadmin'...
+[info] 
+[debug] [2019-04-30T23:25:27.247Z] Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/logs'
+    at Object.mkdirSync (fs.js:753:3)
+    at Object.assertLogsPath (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/emulator/logs.js:65:10)
+    at new Controller (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/cli/controller.js:77:32)
+    at FunctionsEmulator.start (/usr/local/lib/node_modules/firebase-tools/lib/functionsEmulator.js:102:23)
+    at Object.start (/usr/local/lib/node_modules/firebase-tools/lib/serve/functions.js:7:33)
+    at /usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:15:23
+    at arrayMap (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:639:23)
+    at Function.map (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:9556:14)
+    at _serve (/usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:13:26)
+    at Command.module.exports.Command.description.option.option.option.option.before.action [as _action] (/usr/local/lib/node_modules/firebase-tools/lib/commands/serve.js:55:12)
+[error] 
+[error] Error: An unexpected error has occurred.

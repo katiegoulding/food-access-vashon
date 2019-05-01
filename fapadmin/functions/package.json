@@ -10,10 +10,8 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.2.0",
-    "pdfmake": "^0.1.54"
+    "firebase-functions": "^2.2.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

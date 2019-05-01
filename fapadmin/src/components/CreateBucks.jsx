@@ -4,7 +4,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import download from 'downloadjs'
 import axios from 'axios'
 
 export default class CreateBucks extends React.Component {
@@ -47,20 +46,27 @@ export default class CreateBucks extends React.Component {
 
     // On submit of the Create Voucher form the function saves given data to
     // Firebase and calls postData to Google Cloud Function to generate pdf
-    handleSubmit() {
+    handleSubmit = (event) => {
+        event.preventDefault()
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
-        console.log('handle submit is getting fired')
-
-        //HOW
         let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount
-        let buckSetRef = firebase.database().ref('buckSets/' + this.state.buckSetName)
-        buckSetRef.update({
-            name: this.state.buckSetName,
-            createdOn: new String(new Date()),
-            year: this.state.validYear,
-            voucherCount: sum
-            //createdBy: this.props.username
-        });
+        const promiseFromFirebase = firebase.database().ref().child('buckSets/' + this.state.buckSetName).update(
+            {
+                name: this.state.buckSetName,
+                createdOn: new String(new Date()),
+                year: this.state.validYear,
+                voucherCount: sum
+            }
+        )
+        promiseFromFirebase.then(
+            data => {
+                console.log('Buckset upload passed')
+            }
+        ).catch(
+            err => {
+                console.log('Buckset upload failed with: ', err)
+            }
+        )
 
         //post the data, wait on each one to resolve
         let ids = []
@@ -111,12 +117,14 @@ export default class CreateBucks extends React.Component {
             }
         )
         console.log('firebase.functions() = ', firebase.functions())
+
+        //evt.preventDefault();
     }
 
     render() {
         return (
             <div>
-                <form onSubmit={evt => this.handleSubmit()}>
+                <form onSubmit={this.handleSubmit}>
                     <label>
                         Name of Buck Set:
                         <input 
