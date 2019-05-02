@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'semantic-ui/dist/semantic.min.css';
 
 // Initialize Firebase
 var config = {
