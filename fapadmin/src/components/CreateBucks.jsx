@@ -1,12 +1,15 @@
 import React from 'react';
-import ViewBucks from './ViewBucks';
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
 import axios from 'axios'
+import { withRouter } from "react-router";
+import constants from "./constants";
+import { Redirect } from 'react-router'
+import FormSuccess from './FormSuccess';
 
-export default class CreateBucks extends React.Component {
+class CreateBucks extends React.Component {
 
     constructor(props) {
         super(props)
@@ -17,7 +20,8 @@ export default class CreateBucks extends React.Component {
             vashonhouseholdCount: 1,
             validYear: 2018,
             loading: false,
-            errors: null
+            errors: null, 
+            redirectBoolean: false
         }
     }
 
@@ -45,7 +49,8 @@ export default class CreateBucks extends React.Component {
     handleSubmit = (evt) => {
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
         console.log('handle submit is getting fired')
-
+        evt.preventDefault()
+        // evt.stopPropagation()
         //post the data, wait on each one to resolve
         let ids = []
         let promise1 = this.postVoucherData('dove', doveCount, ids)
@@ -87,10 +92,10 @@ export default class CreateBucks extends React.Component {
                         link.click();
                         // remove
                         link.parentNode.removeChild(link);
-
                         this.setState({
                             loading: false
                         });
+                        this.props.history.push(constants.routes.dash.formSuccess)
                     })
                     .catch(error => {
                         error.json().then((json) => {
@@ -108,12 +113,12 @@ export default class CreateBucks extends React.Component {
         )
         console.log('firebase.functions() = ', firebase.functions())
 
-        evt.preventDefault();
-
     }
 
     render() {
         const { loading, errors } = this.state;
+        const { formRedirect } = this.state
+    
         return (
             <div>
                 <form onSubmit={evt => this.handleSubmit(evt)}>
@@ -189,3 +194,5 @@ export default class CreateBucks extends React.Component {
     }
 
 }
+
+export default withRouter(CreateBucks)

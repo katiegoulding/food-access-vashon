@@ -1,5 +1,6 @@
 import React from 'react'
 import BuckSetListItem from './BuckSetListItem.jsx'
+import { Header } from 'semantic-ui-react'
 
 export default class ViewBucks extends React.Component {
 
@@ -10,7 +11,7 @@ export default class ViewBucks extends React.Component {
         
             return(
             <div>
-                <h2>Existing VIGA Farm Buck Sets</h2>
+                <Header as='h2'>Existing Farm Buck Sets</Header>
                 <div>
                     {
                         //for each item in the data provided, map will create a BuckSetListItem

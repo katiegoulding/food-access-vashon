@@ -1,6 +1,7 @@
 import React from 'react';
 import ViewBucks from './ViewBucks';
 import CreateBucks from './CreateBucks';
+import { Button } from 'semantic-ui-react'
 
 export default class BucksLanding extends React.Component {
 
@@ -24,9 +25,7 @@ export default class BucksLanding extends React.Component {
             <div>
                 {!this.state.showCreateBucks
                     &&
-                    <button onClick={this.toggleShowCreateBucks} type="submit">
-                        Create New Buck Set
-                    </button>
+                    <Button content='Create New Buck Set' onClick={this.toggleShowCreateBucks} />
                 }
                 {
                     this.state.showCreateBucks ? <CreateBucks /> : <ViewBucks />
