@@ -3,28 +3,57 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Container, Header } from 'semantic-ui-react'
+import { Container, Header, Divider, Button } from 'semantic-ui-react'
 
 export default class FormSuccess extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            doveCount: 0,
+            vyfsCount: 0,
+            lacomunidadCount: 0,
+            validYear: 0
+        }
+    }
+
     render() {
         return(
-            <div>
-                <Header as='h1'>Success!</Header>
-                <Header as='h1'>"2018-2019 Buck Set"</Header>
+            <div class="ui raised very padded text container segment ten wide column">
+                <Header as='h1' textAlign="left">
+                    Success!
+                    <Header.Subheader>"{this.state.validYear} Buck Set" Created</Header.Subheader>
+                </Header>
+                <Header as='h5' color='grey' textAlign="left">BUCK ALLOCATION</Header>
+                <table class="ui very basic table">
 
-                <Container>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-                    Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla
-                    consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
-                    In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede
-                    link mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean
-                    vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac,
-                    enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla
-                    ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.
-                    Curabitur ullamcorper ultricies nisi.
-                </Container>
+                    <tbody>
+                        <tr>
+                        <td>Dove</td>
+                        <td>150 bucks</td>
+                        <td>$300.00</td>
+                        </tr>
+                        <tr>
+                        <td>VYFS: LatinX</td>
+                        <td>250 bucks</td>
+                        <td>$500.00</td>
+                        </tr>
+                        <tr>
+                        <td>La Comunidad</td>
+                        <td>325 bucks</td>
+                        <td>$750.00</td>
+                        </tr>
+                        <tr>
+                        <td>Vashon Island Senior Center</td>
+                        <td>50 bucks</td>
+                        <td>$100.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {/* should have a divider here */}
+                    <Header as='h5' color='grey' textAlign="left">EXPIRATION DATE</Header>
+
+                <Button content='Create New Buck Set'/>
             </div>
         )
     }

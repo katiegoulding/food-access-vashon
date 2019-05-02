@@ -72,7 +72,7 @@ export default class MainView extends React.Component {
 
         return (
             <div>
-                <h1>FAP FAP FAP</h1>
+                <h1>Food Access Partnership Dashbboard</h1>
                 <NavigationBar role={this.state.role} />
                 <Router>
                     <Switch>

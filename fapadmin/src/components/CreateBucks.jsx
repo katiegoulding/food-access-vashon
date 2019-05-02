@@ -20,8 +20,8 @@ class CreateBucks extends React.Component {
             vashonhouseholdCount: 1,
             validYear: 2018,
             loading: false,
-            errors: null, 
-            redirectBoolean: false
+            errors: null
+            //redirectBoolean: false
         }
     }
 
@@ -95,7 +95,9 @@ class CreateBucks extends React.Component {
                         this.setState({
                             loading: false
                         });
-                        this.props.history.push(constants.routes.dash.formSuccess)
+                        const { toggleShowCreateBucks } = this.props
+                        toggleShowCreateBucks()
+                        
                     })
                     .catch(error => {
                         error.json().then((json) => {
@@ -117,8 +119,7 @@ class CreateBucks extends React.Component {
 
     render() {
         const { loading, errors } = this.state;
-        const { formRedirect } = this.state
-    
+
         return (
             <div>
                 <form onSubmit={evt => this.handleSubmit(evt)}>
