@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { Container, Divider, Header } from 'semantic-ui-react'
 
 
 export default class NavigationBar extends React.Component {
@@ -38,7 +39,13 @@ export default class NavigationBar extends React.Component {
 
         return (
             <div>
-                {ui}
+                <Container>
+                    {ui}
+                </Container>
+                <Container>
+                    <Header as="h1">Welcome to the dashboard</Header>
+                    <Divider hidden/>
+                </Container>
             </div>
         )
     }

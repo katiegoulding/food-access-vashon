@@ -3,7 +3,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Container, Header, Divider, Button } from 'semantic-ui-react'
+import { Container, Header, Divider, Button, Grid } from 'semantic-ui-react'
 
 export default class FormSuccess extends React.Component {
 
@@ -19,9 +19,11 @@ export default class FormSuccess extends React.Component {
 
     render() {
         return(
-            <div class="ui raised very padded text container segment ten wide column">
+            <Grid.Column width={8}>
+            <div class="ui raised very padded container segment">
                 <Header as='h1' textAlign="left">
                     Success!
+                    {/* This should be the buck set name */}
                     <Header.Subheader>"{this.state.validYear} Buck Set" Created</Header.Subheader>
                 </Header>
                 <Header as='h5' color='grey' textAlign="left">BUCK ALLOCATION</Header>
@@ -55,6 +57,7 @@ export default class FormSuccess extends React.Component {
 
                 <Button content='Create New Buck Set'/>
             </div>
+            </Grid.Column>
         )
     }
 }
