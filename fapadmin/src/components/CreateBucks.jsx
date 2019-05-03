@@ -1,14 +1,16 @@
 import React from 'react';
-import ViewBucks from './ViewBucks';
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Dropdown, Input, Header, Button, Icon, Divider, Grid, Segment } from 'semantic-ui-react'
+import { Dropdown, Input, Header, Button, Icon, Divider, Grid, Segment, Container } from 'semantic-ui-react'
 import axios from 'axios'
+import { withRouter } from "react-router";
+import constants from "./constants";
+import { Redirect } from 'react-router'
+import FormSuccess from './FormSuccess';
 
-
-export default class CreateBucks extends React.Component {
+export class CreateBucks extends React.Component {
 
     constructor(props) {
         super(props)
@@ -48,6 +50,8 @@ export default class CreateBucks extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault()
         const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
+        console.log('handle submit is getting fired')
+        event.preventDefault()
 
         let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount
         
@@ -59,6 +63,7 @@ export default class CreateBucks extends React.Component {
                 voucherCount: sum
             }
         )
+        
         promiseFromFirebase.then(
             data => {
                 console.log('Buckset upload passed')
@@ -109,10 +114,12 @@ export default class CreateBucks extends React.Component {
                         link.click();
                         // remove
                         link.parentNode.removeChild(link);
-
                         this.setState({
                             loading: false
                         });
+                        const { toggleShowCreateBucks } = this.props
+                        toggleShowCreateBucks()
+                        
                     })
                     .catch(error => {
                         error.json().then((json) => {
@@ -129,6 +136,7 @@ export default class CreateBucks extends React.Component {
             }
         )
         console.log('firebase.functions() = ', firebase.functions())
+
     }
 
     render() {
@@ -136,8 +144,9 @@ export default class CreateBucks extends React.Component {
         let sum = (this.state.doveCount + this.state.vyfsCount + this.state.lacomunidadCount + this.state.vashonhouseholdCount)
  
         return (
-            <div class="ui raised very padded text container segment">
-            
+            <Grid.Column width={8}>
+            <div class="ui raised very padded container segment">
+
             <form onSubmit={this.handleSubmit}>
                     {(errors)
                         ? (<div className="form-group">
@@ -149,29 +158,27 @@ export default class CreateBucks extends React.Component {
 
                 <Divider hidden />
                 
-                <div class="ui stackable two column centered grid">
-                    <div class="two column centered row">
-                        <div class="column">  
-                            <Input 
-                                transparent
-                                size='massive'
-                                placeholder="Set Name" 
-                                name="buckSetName" 
-                                type="text" 
-                                value={this.state.buckSetName}
-                                onInput={evt => this.setState({ buckSetName: evt.target.value })}
-                            />
-                            <Divider />
-                        </div> 
-                    </div>
-                </div>
+                <Container>
+                    <Input 
+                        textAlign='left'
+                        transparent
+                        size='massive'
+                        placeholder="Set Name" 
+                        name="buckSetName" 
+                        type="text" 
+                        value={this.state.buckSetName}
+                        onInput={evt => this.setState({ buckSetName: evt.target.value })}
+                    />
+                    <Divider />
+                </Container>
 
                 <Divider hidden />
 
                 {/* TODO: Set params on input boxes to not go below 0 */}
+                {/* TODO: Make font consistent between form and success */}
                 <Header size='medium'>Buck Allocation</Header>
 
-                  <Grid stackable centered rows={2}>
+                  <Grid stackable rows={2}>
                     <Grid.Row>
                         <Segment basic>
                             <Input 
@@ -217,22 +224,17 @@ export default class CreateBucks extends React.Component {
                         </Segment>
                     </Grid.Row>
                 </Grid>
-
-                <div class="ui stackable two column centered grid">
-                    <div class="two column centered row">
-                        <div class="column">  
-                            <Divider />
-                        </div> 
-                    </div>
-                </div>
                 
-                <Header size='medium'>Distribution Total</Header>
-                <Header size="large">${2 * sum}</Header>
-
+                <Divider horizontal>TOTAL</Divider>
+                <Header size="large" textAlign='center'>${2 * sum}</Header>
+                <Divider hidden />
+                
                 {(loading) ? <Button loading color='blue'>Generate Set</Button> : <Button color='blue'>Generate Set</Button>}
                 </form>
-            </div>
-
+                </div>
+                </Grid.Column>
         )
     }
 }
+
+export default withRouter(CreateBucks)

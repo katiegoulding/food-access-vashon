@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+import 'semantic-ui-css/semantic.min.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import 'semantic-ui/dist/semantic.min.css';
 
 // Initialize Firebase
 var config = {

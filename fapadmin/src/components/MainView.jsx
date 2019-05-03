@@ -13,6 +13,7 @@ import ManageAccount from './ManageAccount';
 import EditAccount from './EditAccount';
 import CreateBucks from './CreateBucks.jsx';
 import ViewBucks from './ViewBucks.jsx'
+import FormSuccess from './FormSuccess.jsx'
 
 export default class MainView extends React.Component {
 
@@ -43,7 +44,9 @@ export default class MainView extends React.Component {
     }
 
     render() {
-        let farmerUI = [<Route path={constants.routes.dash.base} component={Scan} />];
+        let farmerUI = [
+            <Route path={constants.routes.dash.base} component={Scan} />
+        ];
         let cworkerUI = [
             <Route exact path={constants.routes.dash.base} component={Scan} />,
             <Route path={constants.routes.dash.viewData} component={ViewData} />
@@ -53,7 +56,8 @@ export default class MainView extends React.Component {
             <Route path={constants.routes.dash.bucksLanding} component={BucksLanding} />,
             <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />,
             <Route path={constants.routes.dash.viewBucks} component={ViewBucks} />,
-            <Route path={constants.routes.dash.createBucks} component={CreateBucks} />
+            <Route path={constants.routes.dash.createBucks} component={CreateBucks} />,
+            <Route path={constants.routes.dash.formSuccess} component={FormSuccess} />
         ];
 
         let ui;
@@ -68,7 +72,7 @@ export default class MainView extends React.Component {
 
         return (
             <div>
-                <h1>FAP FAP FAP</h1>
+                <h1>Food Access Partnership Dashbboard</h1>
                 <NavigationBar role={this.state.role} />
                 <Router>
                     <Switch>

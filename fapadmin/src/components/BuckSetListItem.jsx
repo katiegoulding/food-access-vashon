@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react'
 
 export default class BuckSetListItem extends React.Component {
     
@@ -6,10 +7,20 @@ export default class BuckSetListItem extends React.Component {
         const {title, subtitle} = this.props.data
 
         return(
-            <div>
-                <p className="title">{title}</p>
-                <p className="subtitle">{subtitle}</p>
-                <button>View</button>
+            <div class="ui fluid card">
+                <div class="content">
+                    <a class="header">{title}</a>
+                    <div class="meta">
+                        <span class="date">{subtitle}</span>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <button class="ui button">Preview</button>
+                    <button class="ui button">Edit</button>
+                    <a>
+                        <i class="trash alternate icon"></i>
+                    </a>
+                </div>
             </div>
         )
     }

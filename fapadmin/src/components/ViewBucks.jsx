@@ -1,5 +1,6 @@
 import React from 'react'
 import BuckSetListItem from './BuckSetListItem.jsx'
+import { Header, Container, Grid } from 'semantic-ui-react'
 
 export default class ViewBucks extends React.Component {
 
@@ -9,9 +10,10 @@ export default class ViewBucks extends React.Component {
             {title: "2016-2017 Buck Set", subtitle: "Created on 8/14/13 by Katie G."}]
         
             return(
-            <div>
-                <h2>Existing VIGA Farm Buck Sets</h2>
-                <div>
+            <Grid.Column width={6}>
+                <Container>
+                <Header as='h2'>Existing Farm Buck Sets</Header>
+                <div class="ui cards">
                     {
                         //for each item in the data provided, map will create a BuckSetListItem
                         //that has the respective title and subtitle
@@ -24,7 +26,8 @@ export default class ViewBucks extends React.Component {
                         )
                     }
                 </div>
-            </div>
+                </Container>
+            </Grid.Column>
         )
     }
 

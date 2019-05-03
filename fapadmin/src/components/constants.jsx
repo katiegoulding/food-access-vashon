@@ -11,7 +11,8 @@ export default {
             viewBucks: "/dash/ViewBucks",
             scan: "/dash/Scan",
             manageAccount: "/dash/manage",
-            editAccount: "/dash/manage/edit"
+            editAccount: "/dash/manage/edit",
+            formSuccess: "/dash/formSuccess"
         }
     }
 }
