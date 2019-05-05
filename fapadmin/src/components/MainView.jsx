@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import MainActivity from "./MainActivity.jsx";
 import BucksLanding from "./BucksLanding";
 import NavigationBar from './NavigationBar';
@@ -14,6 +14,7 @@ import EditAccount from './EditAccount';
 import CreateBucks from './CreateBucks.jsx';
 import ViewBucks from './ViewBucks.jsx'
 import FormSuccess from './FormSuccess.jsx'
+import { Grid, Container, Divider, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
 export default class MainView extends React.Component {
 
@@ -71,14 +72,44 @@ export default class MainView extends React.Component {
         }
 
         return (
-            <div>
-                <h1>Food Access Partnership Dashbboard</h1>
-                <NavigationBar role={this.state.role} />
-                <Router>
-                    <Switch>
-                        {ui}
-                    </Switch>
-                </Router>
+            <div>   
+                <Grid.Column>
+                <Container>
+
+                    <Header as='h2' textAlign="left">
+                        FAP
+                    </Header>
+                </Container>
+                </Grid.Column>
+
+                <Sidebar.Pushable as={Segment}>
+                <Sidebar
+                    as={Menu}
+                    animation='push'
+                    icon='labeled'
+                    inverted
+                    onHide={this.handleSidebarHide}
+                    vertical
+                    visible="true"
+                    width='thin'
+                >
+                    <Menu.Item as={Link} to={constants.routes.dash.viewBucks}><Icon name="line graph" /> View Data</Menu.Item>
+                    <Menu.Item as={Link} to={constants.routes.dash.manageAccount}><Icon name="settings" />Manage Data</Menu.Item>
+                    <Menu.Item as={Link} to={constants.routes.dash.base}><Icon name="camera"/>Scan</Menu.Item>
+                    <Menu.Item as={Link} to={constants.routes.dash.bucksLanding}><Icon name="money bill alternate" />Create Bucks</Menu.Item>
+
+                </Sidebar>
+            
+                <Sidebar.Pusher>
+                    <Segment basic>
+                        <Router>
+                            <Switch>
+                                {ui}
+                            </Switch>
+                        </Router>
+                    </Segment>
+                </Sidebar.Pusher>
+                </Sidebar.Pushable> 
 
                 <button
                     type="submit"

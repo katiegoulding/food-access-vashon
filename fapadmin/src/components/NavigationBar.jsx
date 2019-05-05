@@ -3,17 +3,16 @@ import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { Container, Divider, Header } from 'semantic-ui-react'
+import { Container, Divider, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
 
 export default class NavigationBar extends React.Component {
 
 
-
     render() {
         let farmerUI = [];
-        let cworkerUI = [
-            <Link to={constants.routes.dash.base} className="navButton"> Scan </Link>,
+        let cworkerUI = [         
+            <Link to={constants.routes.dash.base} className="navButton">Scan</Link>,            
             <Link to={constants.routes.dash.viewData} className="navButton"> View Data </Link>
         ];
         let adminUI = [
