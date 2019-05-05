@@ -21,11 +21,11 @@ export default class BucksLanding extends React.Component {
         this.toggleShowCreateBucks = this.toggleShowCreateBucks.bind(this)
     }
 
-    handleChange (newState) {
+    handleChange(newState) {
         this.setState(newState)
     }
 
-    toggleShowCreateBucks (_event) {
+    toggleShowCreateBucks(_event) {
         this.setState({
             showCreateBucks: !this.state.showCreateBucks
         })
@@ -33,36 +33,36 @@ export default class BucksLanding extends React.Component {
 
     render() {
         return (
-            
+
             <div>
                 <Grid centered>
-                <Grid.Row>
-                    {
-                        this.state.showCreateBucks ?
-                            <CreateBucks 
-                                toggleShowCreateBucks={this.toggleShowCreateBucks}
-                                handleChange={this.handleChange}
-                                buckSetName={this.state.buckSetName}
-                                username={this.props.username}
-                                doveCount={this.state.doveCount}
-                                vyfsCount={this.state.vyfsCount}
-                                lacomunidadCount={this.state.lacomunidadCount}
-                                vashonhouseholdCount={this.state.vashonhouseholdCount}
-                                validYear={this.state.validYear}
-                            />
-                            : 
-                            <FormSuccess 
-                                toggleShowCreateBucks={this.toggleShowCreateBucks}
-                                buckSetName={this.state.buckSetName}
-                                doveCount={this.state.doveCount}
-                                vyfsCount={this.state.vyfsCount}
-                                lacomunidadCount={this.state.lacomunidadCount}
-                                vashonhouseholdCount={this.state.vashonhouseholdCount}
-                                validYear={this.state.validYear}
-                            />
-                    }
-                    <ViewBucks/>
-                </Grid.Row>
+                    <Grid.Row>
+                        {
+                            this.state.showCreateBucks ?
+                                <CreateBucks
+                                    toggleShowCreateBucks={this.toggleShowCreateBucks}
+                                    handleChange={this.handleChange}
+                                    buckSetName={this.state.buckSetName}
+                                    username={this.props.username}
+                                    doveCount={this.state.doveCount}
+                                    vyfsCount={this.state.vyfsCount}
+                                    lacomunidadCount={this.state.lacomunidadCount}
+                                    vashonhouseholdCount={this.state.vashonhouseholdCount}
+                                    validYear={this.state.validYear}
+                                />
+                                :
+                                <FormSuccess
+                                    toggleShowCreateBucks={this.toggleShowCreateBucks}
+                                    buckSetName={this.state.buckSetName}
+                                    doveCount={this.state.doveCount}
+                                    vyfsCount={this.state.vyfsCount}
+                                    lacomunidadCount={this.state.lacomunidadCount}
+                                    vashonhouseholdCount={this.state.vashonhouseholdCount}
+                                    validYear={this.state.validYear}
+                                />
+                        }
+                        <ViewBucks />
+                    </Grid.Row>
                 </Grid>
             </div>
         )

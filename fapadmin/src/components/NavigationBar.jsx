@@ -44,7 +44,7 @@ export default class NavigationBar extends React.Component {
                 </Container>
                 <Container>
                     <Header as="h1">Welcome to the dashboard</Header>
-                    <Divider hidden/>
+                    <Divider hidden />
                 </Container>
             </div>
         )
