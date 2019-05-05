@@ -20,7 +20,8 @@ export default class MainView extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            role: ''
+            role: '',
+            username: 'JOHN DOE TEST USERNAME'
         }
     }
 
@@ -44,20 +45,20 @@ export default class MainView extends React.Component {
     }
 
     render() {
+        // TODO: Set userId in state
         let farmerUI = [
-            <Route path={constants.routes.dash.base} component={Scan} />
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />
         ];
         let cworkerUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />,
             <Route path={constants.routes.dash.viewData} component={ViewData} />
         ];
         let adminUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
-            <Route path={constants.routes.dash.bucksLanding} component={BucksLanding} />,
+            <Route exact path={constants.routes.dash.base} render={() => (<Scan role = {this.state.role} userId = {this.state.userId}/> )} />,
+            <Route path={constants.routes.dash.bucksLanding} component={() => <BucksLanding username = {this.state.username} />} />,
             <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />,
-            <Route path={constants.routes.dash.viewBucks} component={ViewBucks} />,
-            <Route path={constants.routes.dash.createBucks} component={CreateBucks} />,
-            <Route path={constants.routes.dash.formSuccess} component={FormSuccess} />
+            <Route path={constants.routes.dash.base} render={() => (<ViewData/> )} />,
+            <Route path={constants.routes.dash.createBucks} render={() => (<CreateBucks username = {this.state.username}/> )} />
         ];
 
         let ui;
