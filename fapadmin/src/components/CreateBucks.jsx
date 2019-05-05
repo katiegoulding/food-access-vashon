@@ -1,23 +1,20 @@
 import React from 'react';
-import ViewBucks from './ViewBucks';
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
+import { Input, Header, Button, Icon, Divider, Grid, Segment, Container } from 'semantic-ui-react'
 import axios from 'axios'
+import { withRouter } from "react-router";
+import FormSuccess from './FormSuccess';
 
-export default class CreateBucks extends React.Component {
+export class CreateBucks extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            doveCount: 1,
-            vyfsCount: 1,
-            lacomunidadCount: 1,
-            vashonhouseholdCount: 1,
-            validYear: 2018,
             loading: false,
-            errors: null
+            complete: false
         }
     }
 
@@ -29,7 +26,7 @@ export default class CreateBucks extends React.Component {
             let voucherData = {
                 organization,
                 createdOn: new String(new Date()),
-                year: this.state.validYear
+                year: this.props.validYear
             }
 
             let newVoucherKey = firebase.database().ref().child('vouchers').push().key
@@ -42,10 +39,35 @@ export default class CreateBucks extends React.Component {
 
     // On submit of the Create Voucher form the function saves given data to
     // Firebase and calls postData to Google Cloud Function to generate pdf
-    handleSubmit = (evt) => {
-        const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.state
-        console.log('handle submit is getting fired')
+    handleSubmit = (event) => {
+        event.preventDefault()
+        const { doveCount, vyfsCount, lacomunidadCount, vashonhouseholdCount } = this.props
+        event.preventDefault()
 
+        let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount
+        
+        const promiseFromFirebase = firebase.database().ref().child('buckSets/' + this.props.buckSetName).update(
+            {
+                name: this.props.buckSetName,
+                createdOn: new String(new Date()),
+                createdBy: this.props.username,
+                year: this.props.validYear,
+                doveCount: this.props.doveCount,
+                vyfsCount: this.props.vyfsCount,
+                lacomunidadCount: this.props.lacomunidadCount,
+                vashonhouseholdCount: this.props.vashonhouseholdCount,
+            }
+        )
+        
+        promiseFromFirebase.then(
+            data => {
+                console.log('Buckset upload passed')
+            }
+        ).catch(
+            err => {
+                console.log('Buckset upload failed with: ', err)
+            }
+        )
         //post the data, wait on each one to resolve
         let ids = []
         let promise1 = this.postVoucherData('dove', doveCount, ids)
@@ -54,7 +76,7 @@ export default class CreateBucks extends React.Component {
         let promise4 = this.postVoucherData('vashonhousehold', vashonhouseholdCount, ids)
 
         let data = {
-            Year: this.state.validYear,
+            Year: this.props.validYear,
             ids
         }
 
@@ -87,13 +109,18 @@ export default class CreateBucks extends React.Component {
                         link.click();
                         // remove
                         link.parentNode.removeChild(link);
-
                         this.setState({
+                            complete: true,
                             loading: false
                         });
+                        const { toggleShowCreateBucks } = this.props
+                        console.log('toggleShowCreateBucks is about to get called')
+                        toggleShowCreateBucks()
+                        
                     })
                     .catch(error => {
                         error.json().then((json) => {
+                            console.log('Error = ', error)
                             this.setState({
                                 errors: json,
                                 loading: false
@@ -108,15 +135,16 @@ export default class CreateBucks extends React.Component {
         )
         console.log('firebase.functions() = ', firebase.functions())
 
-        evt.preventDefault();
-
     }
 
     render() {
         const { loading, errors } = this.state;
+        let sum = (this.props.doveCount + this.props.vyfsCount + this.props.lacomunidadCount + this.props.vashonhouseholdCount)
+
         return (
-            <div>
-                <form onSubmit={evt => this.handleSubmit(evt)}>
+            <Grid.Column width={8}>
+            <div class="ui raised very padded container segment">
+            <form onSubmit={this.handleSubmit}>
                     {(errors)
                         ? (<div className="form-group">
                             <div className="alert alert-danger"><strong>Error!</strong> {errors.message || 'Something went wrong.'}</div>
@@ -125,67 +153,85 @@ export default class CreateBucks extends React.Component {
                         : null
                     }
 
-                    <label>
-                        Name of Buck Set:
-                        <input type="text" name="buck set name" />
-                    </label>
-                    <label>
-                        Valid Year
-                        <input
-                            type="number"
-                            name="validYear"
-                            value={this.state.validYear}
-                            onInput={evt => this.setState({ validYear: evt.target.value })} />
-                    </label>
-                    <p>Organization Buck Counts</p>
-                    <label>
-                        Dove
-                        <input
-                            type="number"
-                            name="doveCount"
-                            placeholder="number of bucks"
-                            value={this.state.doveCount}
-                            onInput={evt => this.setState({ doveCount: evt.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        VYFS
-                        <input
-                            type="number"
-                            name="vyfsCount"
-                            placeholder="number of bucks"
-                            value={this.state.vyfsCount}
-                            onInput={evt => this.setState({ vyfsCount: evt.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        La Comunidad
-                        <input
-                            type="number"
-                            name="lacomunidadCount"
-                            placeholder="number of bucks"
-                            value={this.state.lacomunidadCount}
-                            onInput={evt => this.setState({ lacomunidadCount: evt.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Vashon Household
-                        <input
-                            type="number"
-                            name="vashonhouseholdCount"
-                            placeholder="number of bucks"
-                            value={this.state.vashonhouseholdCount}
-                            onInput={evt => this.setState({ vashonhouseholdCount: evt.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <button disabled={loading} className="btn btn-primary">{(loading) ? 'Downloading...' : 'Download'}</button>
+                <Divider hidden />
+                
+                <Container>
+                    <Input 
+                        textAlign='left'
+                        transparent
+                        size='massive'
+                        placeholder="Set Name" 
+                        name="buckSetName" 
+                        type="text" 
+                        value={this.props.buckSetName}
+                        onInput={evt => this.props.handleChange({ buckSetName: evt.target.value })}
+                    />
+                    <Divider />
+                </Container>
+
+                <Divider hidden />
+
+                {/* TODO: Set params on input boxes to not go below 0 */}
+                {/* TODO: Make font consistent between form and success */}
+                <Header size='medium'>Buck Allocation</Header>
+
+                  <Grid stackable rows={2}>
+                    <Grid.Row>
+                        <Segment basic>
+                            <Input 
+                                    label='DOVE' 
+                                    type="number"
+                                    value={this.props.doveCount}
+                                    placeholder="0"
+                                    onInput={evt => this.props.handleChange({ doveCount: Number(evt.target.value) })}  
+                                />
+                        </Segment>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Segment basic>
+                            <Input 
+                                    label='VYFS' 
+                                    type="number"
+                                    value={this.props.vyfsCount}
+                                    placeholder="0"
+                                    onInput={evt => this.props.handleChange({ vyfsCount: Number(evt.target.value) })}  
+                                />
+                        </Segment>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Segment basic>
+                            <Input 
+                                label='La Communidad' 
+                                type="number"
+                                value={this.props.lacomunidadCount}
+                                placeholder="0"
+                                onInput={evt => this.props.handleChange({ lacomunidadCount: Number(evt.target.value) })}  
+                            />
+                        </Segment>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Segment basic>
+                            <Input 
+                                label='Vashon Household' 
+                                type="number"
+                                value={this.props.vashonhouseholdCount}
+                                placeholder="0"
+                                onInput={evt => this.props.handleChange({ vashonhouseholdCount: Number(evt.target.value) })}  
+                            />
+                        </Segment>
+                    </Grid.Row>
+                </Grid>
+                
+                <Divider horizontal>TOTALS</Divider>
+                <Header size="large" textAlign='center'>${2 * sum}.00</Header>
+                <Header size="large" textAlign='center'>{sum * 1} bucks</Header>
+                <Divider hidden />
+                {(loading) ? <Button loading color='blue'>Generate Set</Button> : <Button color='blue'>Generate Set</Button>}
                 </form>
-            </div>
+                </div>
+                </Grid.Column>
         )
     }
-
 }
+
+export default withRouter(CreateBucks)
