@@ -3,8 +3,8 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Statistic, Header, Button, Divider, Grid, Segment, Container, Form, Message } from 'semantic-ui-react'
-import axios from 'axios'
+import { Statistic, Header, Button, Divider, Grid, Segment, Container, Form, Message } from 'semantic-ui-react';
+import axios from 'axios';
 import { withRouter } from "react-router";
 
 export class CreateBucks extends React.Component {
@@ -193,7 +193,7 @@ export class CreateBucks extends React.Component {
     }
 
     render() {
-        const { loading, errorMessage, hasError } = this.state;
+        const { loading, errorMessage } = this.state;
         let sum = (this.props.doveCount + this.props.vyfsCount + this.props.lacomunidadCount + this.props.vashonhouseholdCount)
 
         return (
