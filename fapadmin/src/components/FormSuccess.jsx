@@ -15,6 +15,7 @@ export default class FormSuccess extends React.Component {
 
     render() {
         return(
+            <Grid.Column width={8}>
             <div class="ui raised very padded container segment">
                 <Header as='h1' textAlign="left">
                     Success!
@@ -51,6 +52,7 @@ export default class FormSuccess extends React.Component {
 
                 <Button content='Create New Buck Set'/>
             </div>
+            </Grid.Column>
         )
     }
 }
