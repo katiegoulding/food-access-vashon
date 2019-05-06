@@ -5,7 +5,6 @@ import firebase from 'firebase/app'
 
 export default class ViewBucks extends React.Component {
 
-
     constructor(props) {
         super(props)
         this.state = {

@@ -35,7 +35,7 @@ export default class BucksLanding extends React.Component {
         return (
             
             <div>
-                <Grid centered>
+                <Grid stackable centered>
                 <Grid.Row>
                     {
                         this.state.showCreateBucks ?
