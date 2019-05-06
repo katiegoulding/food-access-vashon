@@ -156,7 +156,7 @@ export class CreateBucks extends React.Component {
                 <Divider hidden />
                 
                 <Container>
-                    <Input 
+                    <Input fluid
                         textAlign='left'
                         transparent
                         size='massive'
@@ -178,7 +178,8 @@ export class CreateBucks extends React.Component {
                   <Grid stackable rows={2}>
                     <Grid.Row>
                         <Segment basic>
-                            <Input 
+                            <Input fluid
+                                    size='small'
                                     label='DOVE' 
                                     type="number"
                                     value={this.props.doveCount}
@@ -189,7 +190,8 @@ export class CreateBucks extends React.Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Segment basic>
-                            <Input 
+                            <Input fluid
+                                    size='small'
                                     label='VYFS' 
                                     type="number"
                                     value={this.props.vyfsCount}
@@ -200,7 +202,8 @@ export class CreateBucks extends React.Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Segment basic>
-                            <Input 
+                            <Input fluid
+                                size='small'
                                 label='La Communidad' 
                                 type="number"
                                 value={this.props.lacomunidadCount}
@@ -211,7 +214,8 @@ export class CreateBucks extends React.Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Segment basic>
-                            <Input 
+                            <Input fluid
+                                size='small'
                                 label='Vashon Household' 
                                 type="number"
                                 value={this.props.vashonhouseholdCount}
