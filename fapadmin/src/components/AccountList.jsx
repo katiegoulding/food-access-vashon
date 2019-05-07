@@ -36,13 +36,15 @@ export default class AccountList extends React.Component {
 
     let accts = [];
     this.state.accountSnapshot.forEach(acctSnapshot => {
-      accts.push(
-        <Account
-          key={acctSnapshot.key}
-          acctSnapshot={acctSnapshot}
-          acctRef={this.props.accountRef}
-        />
-      );
+      if (this.props.user.email !== acctSnapshot.val().email) {
+        accts.push(
+          <Account
+            key={acctSnapshot.key}
+            acctSnapshot={acctSnapshot}
+            acctRef={this.props.accountRef}
+          />
+        );
+      }
     });
 
     return (

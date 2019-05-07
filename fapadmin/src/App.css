@@ -12,3 +12,26 @@ body,
 .ui.sidebar.visible ~ .pusher {
   width: calc(100% - 350px);
 }
+
+a.item::before {
+  background: white !important;
+}
+
+.header {
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.sidebarItem {
+  margin: 5px 5px;
+  font-size: 14px !important;
+  border-radius: 20px !important;
+}
+
+.sidebarItem.active {
+  color: white !important;
+  background-image: linear-gradient(
+    to bottom right,
+    #505c86,
+    #404e67
+  ) !important;
+}

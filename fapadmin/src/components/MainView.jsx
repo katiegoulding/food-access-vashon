@@ -162,7 +162,7 @@ export default class MainView extends React.Component {
           width="wide"
           style={{ height: "100%" }}
         >
-          <Menu.Header>
+          <Menu.Header className={"header"}>
             {/* TODO: */}
             {/* <Image src={logo} size="small" /> */}
             <div
@@ -173,16 +173,40 @@ export default class MainView extends React.Component {
               FAP LOGO GOES HERE
             </div>
           </Menu.Header>
-          <Menu.Item as={Link} to={constants.routes.dash.viewBucks}>
+          <Menu.Item
+            as={Link}
+            to={constants.routes.dash.viewBucks}
+            active={
+              this.props.location.pathname === constants.routes.dash.viewBucks
+            }
+          >
             View Data
           </Menu.Item>
-          <Menu.Item as={Link} to={constants.routes.dash.manageAccount}>
+          <Menu.Item
+            as={Link}
+            to={constants.routes.dash.manageAccount}
+            active={
+              this.props.location.pathname ===
+              constants.routes.dash.manageAccount
+            }
+          >
             Manage Data
           </Menu.Item>
-          <Menu.Item as={Link} to={constants.routes.dash.base}>
+          <Menu.Item
+            as={Link}
+            to={constants.routes.dash.base}
+            active={this.props.location.pathname === constants.routes.dash.base}
+          >
             Scan
           </Menu.Item>
-          <Menu.Item as={Link} to={constants.routes.dash.bucksLanding}>
+          <Menu.Item
+            as={Link}
+            to={constants.routes.dash.bucksLanding}
+            active={
+              this.props.location.pathname ===
+              constants.routes.dash.bucksLanding
+            }
+          >
             Create Bucks
           </Menu.Item>
         </Sidebar>

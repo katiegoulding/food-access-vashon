@@ -57,7 +57,10 @@ export default class ManageAccount extends React.Component {
               raised
             >
               <Container>
-                <AccountList accountRef={accountRef} />
+                <AccountList
+                  user={this.state.currentUser}
+                  accountRef={accountRef}
+                />
               </Container>
             </Segment>
           </Grid.Column>
