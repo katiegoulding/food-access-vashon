@@ -14,7 +14,10 @@ export default class FormSuccess extends React.Component {
     }
 
     render() {
+        const { toggleShowCreateBucks } = this.props
+
         return(
+            <Grid.Column width={8}>
             <div class="ui raised very padded container segment">
                 <Header as='h1' textAlign="left">
                     Success!
@@ -46,11 +49,16 @@ export default class FormSuccess extends React.Component {
                         </tr>
                     </tbody>
                 </table>
-                {/* should have a divider here */}
-                    <Header as='h5' color='grey' textAlign="left">{this.props.validYear}</Header>
+                <Header as='h5' color='grey' textAlign="left">EXPIRATION DATE</Header>
+                <p>{this.props.validYear}</p>
 
+                <Divider hidden />
+                
                 <Button content='Create New Buck Set'/>
+
+                {/* <Button content='Create New Buck Set' onClick={() => toggleShowCreateBucks()}/> */}
             </div>
+            </Grid.Column>
         )
     }
 }

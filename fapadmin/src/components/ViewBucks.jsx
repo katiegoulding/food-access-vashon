@@ -1,10 +1,9 @@
-import React from 'react'
-import BuckSetListItem from './BuckSetListItem.jsx'
-import { Header, Container, Grid } from 'semantic-ui-react'
-import firebase from 'firebase/app'
+import React from "react";
+import BuckSetListItem from "./BuckSetListItem.jsx";
+import { Header, Container, Grid } from "semantic-ui-react";
+import firebase from "firebase/app";
 
 export default class ViewBucks extends React.Component {
-
 
     constructor(props) {
         super(props)
@@ -17,13 +16,21 @@ export default class ViewBucks extends React.Component {
         let firebaseBuckSet = []
 
         let buckSetsRef = firebase.database().ref('buckSets')
-        buckSetsRef.on('child_added', (snapshot) => {
+        buckSetsRef.orderByChild('createdOn').on('child_added', (snapshot) => {
             const value = snapshot.val()
             // sort by newest
-            firebaseBuckSet.unshift({
+            firebaseBuckSet.push({
                 title: value.name,
-                subtitle: value.createBy
+                subtitle: value.createdBy
             })
+            this.setState({
+                firebaseBuckSet
+            })
+        });
+        buckSetsRef.orderByChild('createdOn').on('child_removed', (snapshot) => {
+            const value = snapshot.val()
+            // filter out the removed item and force another render
+            firebaseBuckSet = firebaseBuckSet.filter(el => !(el.title === value.name && el.subtitle === value.createdBy))
             this.setState({
                 firebaseBuckSet
             })
@@ -33,9 +40,9 @@ export default class ViewBucks extends React.Component {
 
     render () {
             return (
-            <Grid.Column width={6}>
+            <Grid.Column width={4}>
                 <Container>
-                <Header as='h2'>Existing Farm Buck Sets</Header>
+                <Header as='h2'>Existing Buck Sets</Header>
                 <div class="ui cards">
                     {
                         //for each item in the data provided, map will create a BuckSetListItem
