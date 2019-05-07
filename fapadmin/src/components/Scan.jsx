@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-
+import { Header, Container, Grid, Segment } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -53,13 +53,29 @@ export default class Scan extends React.Component {
     }
 
     return (
-      <div>
-        <h1>SCAN SCAN SCAN</h1>
-        <div>
-          {scanner}
-          <p>Results: {this.state.result}</p>
-        </div>
-      </div>
+      // <div>
+      //   {scanner}
+      //   <p>Results: {this.state.result}</p>
+      // </div>
+      <Grid centered>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <Segment
+              style={{
+                "padding-top": "30px",
+                "padding-right": "40px",
+                "padding-left": "40px"
+              }}
+              raised
+            >
+              <Container>
+                {scanner}
+                <p>Results: {this.state.result}</p>
+              </Container>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }

@@ -164,8 +164,15 @@ export class CreateBucks extends React.Component {
       this.props.vashonhouseholdCount;
 
     return (
-      <Grid.Column width={8}>
-        <div class="ui raised very padded container segment">
+      <Grid.Column width={10}>
+        <Segment
+          raised
+          style={{
+            "padding-top": "30px",
+            "padding-right": "40px",
+            "padding-left": "40px"
+          }}
+        >
           <form onSubmit={this.handleSubmit}>
             {errors ? (
               <div className="form-group">
@@ -279,7 +286,7 @@ export class CreateBucks extends React.Component {
               <Button color="blue">Generate Set</Button>
             )}
           </form>
-        </div>
+        </Segment>
       </Grid.Column>
     );
   }

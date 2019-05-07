@@ -14,5 +14,10 @@ export default {
       editAccount: "/dash/manage/edit",
       formSuccess: "/dash/formSuccess"
     }
+  },
+  variables: {
+    colors: {
+      bodyBG: "#EFF0F3"
+    }
   }
 };

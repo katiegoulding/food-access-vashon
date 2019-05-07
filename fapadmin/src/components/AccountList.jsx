@@ -46,7 +46,7 @@ export default class AccountList extends React.Component {
     });
 
     return (
-      <Table celled>
+      <Table celled unstackable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>

@@ -47,10 +47,16 @@ export default class ManageAccount extends React.Component {
     return (
       <Grid centered>
         <Grid.Row>
-          <Grid.Column width={8}>
-            <Segment padded="very" raised>
+          <Grid.Column width={16}>
+            <Segment
+              style={{
+                "padding-top": "30px",
+                "padding-right": "40px",
+                "padding-left": "40px"
+              }}
+              raised
+            >
               <Container>
-                <Header as="h2">Manage Accounts</Header>
                 <AccountList accountRef={accountRef} />
               </Container>
             </Segment>
