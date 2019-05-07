@@ -1,7 +1,7 @@
-import React from 'react'
-import BuckSetListItem from './BuckSetListItem.jsx'
-import { Header, Container, Grid } from 'semantic-ui-react'
-import firebase from 'firebase/app'
+import React from "react";
+import BuckSetListItem from "./BuckSetListItem.jsx";
+import { Header, Container, Grid } from "semantic-ui-react";
+import firebase from "firebase/app";
 
 export default class ViewBucks extends React.Component {
 

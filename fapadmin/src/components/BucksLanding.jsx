@@ -1,29 +1,34 @@
-import React from 'react';
-import ViewBucks from './ViewBucks';
-import CreateBucks from './CreateBucks';
-import { Button, Grid } from 'semantic-ui-react'
-import FormSuccess from './FormSuccess';
+import React from "react";
+import ViewBucks from "./ViewBucks";
+import CreateBucks from "./CreateBucks";
+import { Button, Grid } from "semantic-ui-react";
+import FormSuccess from "./FormSuccess";
 
 export default class BucksLanding extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showCreateBucks: true,
+      buckSetName: "",
+      doveCount: 0,
+      vyfsCount: 0,
+      lacomunidadCount: 0,
+      vashonhouseholdCount: 0,
+      validYear: ""
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.toggleShowCreateBucks = this.toggleShowCreateBucks.bind(this);
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            showCreateBucks: true,
-            buckSetName: '',
-            doveCount: 0,
-            vyfsCount: 0,
-            lacomunidadCount: 0,
-            vashonhouseholdCount: 0,
-            validYear: '',
-        }
-        this.handleChange = this.handleChange.bind(this)
-        this.toggleShowCreateBucks = this.toggleShowCreateBucks.bind(this)
-    }
+  handleChange(newState) {
+    this.setState(newState);
+  }
 
-    handleChange (newState) {
-        this.setState(newState)
-    }
+  toggleShowCreateBucks(_event) {
+    this.setState({
+      showCreateBucks: !this.state.showCreateBucks
+    });
+  }
 
     toggleShowCreateBucks (_event) {
         this.setState({
