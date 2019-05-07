@@ -21,7 +21,7 @@ export default class BuckSetListItem extends React.Component {
     deleteBuckSet = () => {
         let key = this.props.data.title
         if(key != '') {
-            let buckSetRef = firebase.database().ref('buckSets/')
+            let buckSetRef = firebase.database().ref('buckSets/' + key)
             buckSetRef.remove()
             .then(() =>{
                 console.log("Remove succeeded.")
@@ -67,9 +67,9 @@ export default class BuckSetListItem extends React.Component {
                                 open={this.deleteModalOpen} 
                                 onClose={this.close}
                                 closeIcon >
-                            <Modal.Header>Delete VIGA Buck Set</Modal.Header>
+                            <Modal.Header>Are you sure you want to delete "{title}" Buck Set?</Modal.Header>
                             <Modal.Content>
-                                <p>Are you sure you want to delete "{title}" Buck Set?</p>
+                                <p>Doing so will mark all VIGA bucks generated for this set as inactive</p>
                             </Modal.Content>
                             <Modal.Actions>
                                 <Button color="red" onClick={() => this.deleteBuckSet()}  content='Delete' />

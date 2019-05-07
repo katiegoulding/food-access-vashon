@@ -5,9 +5,9 @@ import "firebase/functions"
 import 'firebase/database';
 import { Statistic, Header, Button, Divider, Grid, Label, Form, Message } from 'semantic-ui-react';
 import axios from 'axios';
-import { withRouter } from "react-router";
+//import { withRouter } from "react-router";
 
-export class CreateBucks extends React.Component {
+export default  class CreateBucks extends React.Component {
 
     constructor(props) {
         super(props)
@@ -215,8 +215,9 @@ export class CreateBucks extends React.Component {
                 <Form.Input 
                         required
                         fluid 
-                        label='Valid Year' 
+                        label='Expiration Date' 
                         placeholder="ie: 2018" 
+                        type='date'
                         value={this.props.validYear}
                         onInput={evt => this.props.handleChange({ validYear: (evt.target.value) })} 
                     /> 
@@ -293,4 +294,4 @@ export class CreateBucks extends React.Component {
     }
 }
 
-export default withRouter(CreateBucks)
+//export default withRouter(CreateBucks)

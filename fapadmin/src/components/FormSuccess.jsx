@@ -14,6 +14,8 @@ export default class FormSuccess extends React.Component {
     }
 
     render() {
+        const { toggleShowCreateBucks } = this.props
+
         return(
             <Grid.Column width={8}>
             <div class="ui raised very padded container segment">
@@ -48,11 +50,13 @@ export default class FormSuccess extends React.Component {
                     </tbody>
                 </table>
                 <Header as='h5' color='grey' textAlign="left">EXPIRATION DATE</Header>
-                <Header as='h2' textAlign="left">{this.props.validYear}</Header>
+                <p>{this.props.validYear}</p>
 
                 <Divider hidden />
-
+                
                 <Button content='Create New Buck Set'/>
+
+                {/* <Button content='Create New Buck Set' onClick={() => toggleShowCreateBucks()}/> */}
             </div>
             </Grid.Column>
         )
