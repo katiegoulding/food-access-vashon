@@ -47,8 +47,10 @@ export default class FormSuccess extends React.Component {
                         </tr>
                     </tbody>
                 </table>
-                {/* should have a divider here */}
-                    <Header as='h5' color='grey' textAlign="left">{this.props.validYear}</Header>
+                <Header as='h5' color='grey' textAlign="left">EXPIRATION DATE</Header>
+                <Header as='h2' textAlign="left">{this.props.validYear}</Header>
+
+                <Divider hidden />
 
                 <Button content='Create New Buck Set'/>
             </div>

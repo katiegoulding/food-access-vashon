@@ -3,7 +3,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Statistic, Header, Button, Divider, Grid, Segment, Container, Form, Message } from 'semantic-ui-react';
+import { Statistic, Header, Button, Divider, Grid, Label, Form, Message } from 'semantic-ui-react';
 import axios from 'axios';
 import { withRouter } from "react-router";
 
@@ -208,7 +208,7 @@ export class CreateBucks extends React.Component {
                         size="huge"
                         placeholder="Buck Set Name" 
                         value={this.props.buckSetName}
-                        onInput={evt => this.props.handleChange({ buckSetName: evt.target.value })} /> 
+                        onInput={evt => this.props.handleChange({ buckSetName: evt.target.value })} />
 
                 <Divider hidden/>
 
@@ -216,7 +216,10 @@ export class CreateBucks extends React.Component {
                         required
                         fluid 
                         label='Valid Year' 
-                        placeholder="ie: 2018"  /> 
+                        placeholder="ie: 2018" 
+                        value={this.props.validYear}
+                        onInput={evt => this.props.handleChange({ validYear: (evt.target.value) })} 
+                    /> 
 
                 <Header as='h5' color='grey' textAlign="left">BUCK ALLOCATION</Header>
 

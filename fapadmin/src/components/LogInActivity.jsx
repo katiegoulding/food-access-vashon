@@ -71,6 +71,7 @@ export default class LogInActivity extends React.Component {
                 />
 
                 <Form.Input 
+                    required
                     id="email"
                     label="Email"
                     placeholder='Email'
@@ -80,6 +81,7 @@ export default class LogInActivity extends React.Component {
                 />
 
                 <Form.Input
+                    required
                     id="pw"
                     label="Password"
                     placeholder='Password'

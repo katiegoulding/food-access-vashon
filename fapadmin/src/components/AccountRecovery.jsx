@@ -4,7 +4,7 @@ import constants from "./constants";
 import firebase from 'firebase/app'
 import 'firebase/auth';
 import 'firebase/database';
-import ManageAccount from "./ManageAccount";
+import { Form } from 'semantic-ui-react';
 
 export default class AccountRecovery extends React.Component {
 
@@ -48,8 +48,13 @@ export default class AccountRecovery extends React.Component {
     render() {
         return (
             <div>
-                <ManageAccount />
+                <Form onSubmit={evt => this.handlePasswordReset(evt)}>
                 <h1>Reset Password</h1> 
+
+                
+
+                </Form>
+                
                 <form onSubmit={evt => this.handlePasswordReset(evt)}>
                     <div className="col-md-4 mx-auto">  
                         <label htmlFor="email">Email: </label>
