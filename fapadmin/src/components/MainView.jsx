@@ -18,7 +18,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-  Image
+  Button
 } from "semantic-ui-react";
 import logo from "../FAPLogo.png";
 
@@ -208,6 +208,16 @@ export default class MainView extends React.Component {
             }
           >
             Create Bucks
+          </Menu.Item>
+          <Menu.Item>
+            <Button
+              icon
+              labelPosition="left"
+              onClick={() => this.handleSignOut()}
+            >
+              <Icon name="sign out" />
+              Sign Out
+            </Button>
           </Menu.Item>
         </Sidebar>
 
