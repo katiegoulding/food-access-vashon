@@ -1,6 +1,6 @@
 import React from "react";
 import BuckSetListItem from "./BuckSetListItem.jsx";
-import { Header, Container, Grid } from "semantic-ui-react";
+import { Header, Container, Grid, Card } from "semantic-ui-react";
 import firebase from "firebase/app";
 
 export default class ViewBucks extends React.Component {
@@ -40,10 +40,10 @@ export default class ViewBucks extends React.Component {
 
     render () {
             return (
-            <Grid.Column width={4}>
+            <Grid.Column width={6}>
                 <Container>
                 <Header as='h2'>Existing Buck Sets</Header>
-                <div class="ui cards">
+                <Card.Group>
                     {
                         //for each item in the data provided, map will create a BuckSetListItem
                         //that has the respective title and subtitle
@@ -55,7 +55,7 @@ export default class ViewBucks extends React.Component {
                             }
                         )
                     }
-                </div>
+                </Card.Group>
                 </Container>
             </Grid.Column>
         )

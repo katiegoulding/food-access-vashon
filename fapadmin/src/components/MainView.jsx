@@ -248,6 +248,7 @@ export default class MainView extends React.Component {
                 </Header.Subheader>
               </Header.Content>
             </Header>
+            
           </Title>
           <Container
             style={{

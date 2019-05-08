@@ -1,9 +1,10 @@
 import React from 'react';
-import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Container, Header, Divider, Button, Grid } from 'semantic-ui-react'
+import constants from "./constants";
+import { Link } from "react-router-dom";
+import { Statistic, Header, Divider, Button, Grid } from 'semantic-ui-react'
 
 export default class FormSuccess extends React.Component {
 
@@ -14,7 +15,8 @@ export default class FormSuccess extends React.Component {
     }
 
     render() {
-        const { toggleShowCreateBucks } = this.props
+        //const { toggleShowCreateBucks } = this.props
+        let sum = this.props.doveCount + this.props.vyfsCount + this.props.lacomunidadCount + this.props.vashonhouseholdCount
 
         return(
             <Grid.Column width={8}>
@@ -53,10 +55,22 @@ export default class FormSuccess extends React.Component {
                 <p>{this.props.validYear}</p>
 
                 <Divider hidden />
-                
-                <Button content='Create New Buck Set'/>
 
-                {/* <Button content='Create New Buck Set' onClick={() => toggleShowCreateBucks()}/> */}
+                <Statistic.Group widths='two'>
+                    <Statistic>
+                        <Statistic.Value>{sum * 1}</Statistic.Value>
+                        <Statistic.Label>VIGA Bucks</Statistic.Label>
+                    </Statistic>
+                    <Statistic>
+                        <Statistic.Value>${2 * sum}.00</Statistic.Value>
+                        <Statistic.Label>Dollars</Statistic.Label>
+                    </Statistic>
+                </Statistic.Group>
+                
+                <Divider hidden />
+
+                <Button content='Create New Buck Set'/>
+                
             </div>
             </Grid.Column>
         )

@@ -196,7 +196,7 @@ export default class CreateBucks extends React.Component {
         let sum = (this.props.doveCount + this.props.vyfsCount + this.props.lacomunidadCount + this.props.vashonhouseholdCount)
 
         return (
-            <Grid.Column width={8}>
+            <Grid.Column width={10}>
             <div class="ui raised very padded container segment">
 
             <Form onSubmit={this.handleSubmit} loading={loading} error={errorMessage}>
@@ -214,8 +214,9 @@ export default class CreateBucks extends React.Component {
                 <Form.Input 
                         required
                         fluid 
-                        label='Valid Year' 
+                        label='Expiration Date' 
                         placeholder="ie: 2018" 
+                        type="date"
                         value={this.props.validYear}
                         onInput={evt => this.props.handleChange({ validYear: (evt.target.value) })} 
                     /> 
@@ -277,7 +278,7 @@ export default class CreateBucks extends React.Component {
 
                 <Divider hidden />
 
-                {(loading) ? <Button loading color='blue'>Generate Set</Button> : <Button color='blue'>Generate Set</Button>}
+                {<Button color='blue'>Generate Set</Button>}
                 
                 <Message
                     error
