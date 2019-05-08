@@ -1,12 +1,11 @@
 import React from "react";
 import firebase from "firebase";
-import { Table } from "semantic-ui-react";
+import { Table, Icon } from "semantic-ui-react";
 
 export default class Account extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      edit: false,
       role: ""
     };
   }
@@ -19,37 +18,41 @@ export default class Account extends React.Component {
     this.props.acctRef.child(this.props.acctSnapshot.key).remove();
   }
 
-  handleEdit() {
-    this.setState({
-      edit: true
-    });
-  }
-
-  handleNewEdit(evt) {
-    evt.preventDefault();
-    console.log("this happened");
-    // var user = firebase.auth().currentUser;
+  handleApprove() {
+    let acct = this.props.acctSnapshot.val();
     this.props.acctRef.child(this.props.acctSnapshot.key).update({
-      role: evt.target.value
+      approved: true
     });
-    console.log(this.props.acctSnapshot.val().email);
-    console.log(evt.target.value);
     var changeRole = firebase.functions().httpsCallable("changeRole");
     changeRole({
-      email: this.props.acctSnapshot.val().email,
-      role: evt.target.value
+      email: acct.email,
+      role: acct.role
     }).then(result => {
       console.log(result);
-    });
-    this.setState({
-      role: evt.target.value,
-      edit: false
     });
   }
 
   render() {
     // let user = firebase.auth().currentUser;
     let acct = this.props.acctSnapshot.val();
+    let appEl;
+
+    if (acct.approved) {
+      appEl = (
+        <Table.Cell>
+          <Icon name="checkmark" />
+          Approved
+        </Table.Cell>
+      );
+    } else {
+      appEl = (
+        <Table.Cell>
+          <Icon name="attention" />
+          Requires Approval
+        </Table.Cell>
+      );
+    }
+
     return (
       <Table.Row>
         <Table.Cell>
@@ -57,39 +60,24 @@ export default class Account extends React.Component {
         </Table.Cell>
         <Table.Cell>{acct.email}</Table.Cell>
         <Table.Cell>{acct.org}</Table.Cell>
-        <Table.Cell>
-          {this.state.edit ? (
-            <select
-              value={this.state.role === "" ? acct.role : this.state.role}
-              onChange={evt => this.handleNewEdit(evt)}
-              type="submit"
-            >
-              <option value="farmer">Farmer</option>
-              <option value="caseworker">Caseworker</option>
-              <option value="admin">Admin</option>
-            </select>
-          ) : (
-            acct.role
+        <Table.Cell>{acct.role}</Table.Cell>
+        {appEl}
+        <Table.Cell textAlign="right">
+          {acct.approved ? null : (
+            <Icon
+              name="check circle"
+              ref="ebutt"
+              className="approve"
+              onClick={() => this.handleApprove()}
+              size="large"
+            />
           )}
-        </Table.Cell>
-        <Table.Cell />
-        <Table.Cell>
-          <button
-            disabled={this.state.edit}
-            ref="ebutt"
-            className="btn btn-primary remove"
-            onClick={() => this.handleEdit()}
-          >
-            EDIT
-          </button>
-        </Table.Cell>
-        <Table.Cell>
-          <button
-            className="btn btn-danger remove"
+          <Icon
             onClick={() => this.handlePurge()}
-          >
-            DELETE
-          </button>
+            name="user delete"
+            className="delete"
+            size="large"
+          />
         </Table.Cell>
       </Table.Row>
     );

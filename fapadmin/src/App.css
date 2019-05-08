@@ -35,3 +35,13 @@ a.item::before {
     #404e67
   ) !important;
 }
+
+.delete:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.approve:hover {
+  color: green;
+  cursor: pointer;
+}
