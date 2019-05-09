@@ -4,13 +4,13 @@ import { Header, Container, Grid, Card } from "semantic-ui-react";
 import firebase from "firebase/app";
 
 export default class ViewBucks extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firebaseBuckSet: []
+    };
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            firebaseBuckSet: []
-        }
-    }
 
     componentDidMount() {
         let firebaseBuckSet = []
@@ -60,5 +60,4 @@ export default class ViewBucks extends React.Component {
             </Grid.Column>
         )
     }
-
 }

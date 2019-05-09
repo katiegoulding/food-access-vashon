@@ -18,7 +18,7 @@ import {
   Menu,
   Segment,
   Sidebar,
-  Image
+  Button
 } from "semantic-ui-react";
 import logo from "../FAPLogo.png";
 
@@ -242,7 +242,7 @@ export default class MainView extends React.Component {
             style={{
               width: "100%",
               padding: "50px",
-              height: "80%",
+              height: "calc(100% - 220px)  !important",
               "background-color": "#eff0f3"
             }}
           >
