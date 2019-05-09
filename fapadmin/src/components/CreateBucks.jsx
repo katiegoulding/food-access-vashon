@@ -329,9 +329,6 @@ export default class CreateBucks extends React.Component {
               <Button color="blue">Generate Set</Button>
             )}
 
-<<<<<<< HEAD
-export default withRouter(CreateBucks)
-=======
             <Message
               error
               header={errorMessage}
@@ -343,4 +340,3 @@ export default withRouter(CreateBucks)
     );
   }
 }
->>>>>>> 82cb1d32f667bd8d086f011327cd7045e42dfe5c

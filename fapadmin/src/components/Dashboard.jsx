@@ -1,7 +1,6 @@
 import React from "react";
 import Plot from 'react-plotly.js';
 import Chart from "react-google-charts";
-import Plot from "react-plotly.js";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
