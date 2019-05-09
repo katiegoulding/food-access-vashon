@@ -3,7 +3,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth';
 import "firebase/functions"
 import 'firebase/database';
-import { Statistic, Header, Button, Divider, Grid, Label, Form, Message } from 'semantic-ui-react';
+import { Statistic, Header, Button, Divider, Grid, Form, Message, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 
 export default class CreateBucks extends React.Component {
@@ -197,8 +197,16 @@ export default class CreateBucks extends React.Component {
 
         return (
             <Grid.Column width={10}>
-            <div class="ui raised very padded container segment">
+            {/* <div class="ui raised very padded container segment"> */}
 
+            <Segment
+                raised
+                // style={{
+                // "padding-top": "30px",
+                // "padding-right": "40px",
+                // "padding-left": "40px"
+                // }}
+            >
             <Form onSubmit={this.handleSubmit} loading={loading} error={errorMessage}>
                 <Form.Input 
                         required
@@ -287,8 +295,8 @@ export default class CreateBucks extends React.Component {
                     />
 
                 </Form>
-                </div>
-                </Grid.Column>
+                </Segment>
+            </Grid.Column>
         )
     }
 }

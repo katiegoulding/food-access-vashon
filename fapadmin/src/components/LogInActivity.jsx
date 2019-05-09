@@ -19,21 +19,9 @@ export default class LogInActivity extends React.Component {
         }
     }
 
-  componentWillUnmount() {
-    this.authUnsub();
-  }
-
-  handleSignIn(evt) {
-    evt.preventDefault();
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.pw)
-      .catch(err =>
-        this.setState({
-          errorMessage: err.message
-        })
-      );
-  }
+    componentWillUnmount() {
+        this.authUnsub();
+    }
 
     handleSignIn(evt) {
         evt.preventDefault();

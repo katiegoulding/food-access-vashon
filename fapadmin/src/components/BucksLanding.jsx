@@ -1,7 +1,7 @@
 import React from "react";
 import ViewBucks from "./ViewBucks";
 import CreateBucks from "./CreateBucks";
-import { Button, Grid } from "semantic-ui-react";
+import { Grid, Container } from "semantic-ui-react";
 import FormSuccess from "./FormSuccess";
 
 export default class BucksLanding extends React.Component {
@@ -38,8 +38,7 @@ export default class BucksLanding extends React.Component {
 
     render() {
         return (
-            
-            <div>
+            <Container>
                 <Grid stackable centered>
                 <Grid.Row>
                     {
@@ -69,7 +68,7 @@ export default class BucksLanding extends React.Component {
                     <ViewBucks/>
                 </Grid.Row>
                 </Grid>
-            </div>
+            </Container>
         )
     }
 

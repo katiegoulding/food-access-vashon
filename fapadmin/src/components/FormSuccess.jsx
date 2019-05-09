@@ -4,7 +4,7 @@ import "firebase/functions"
 import 'firebase/database';
 import constants from "./constants";
 import { Link } from "react-router-dom";
-import { Statistic, Header, Divider, Button, Grid } from 'semantic-ui-react'
+import { Statistic, Header, Divider, Button, Grid, Segment} from 'semantic-ui-react'
 
 export default class FormSuccess extends React.Component {
 
@@ -19,8 +19,15 @@ export default class FormSuccess extends React.Component {
         let sum = this.props.doveCount + this.props.vyfsCount + this.props.lacomunidadCount + this.props.vashonhouseholdCount
 
         return(
-            <Grid.Column width={8}>
-            <div class="ui raised very padded container segment">
+            <Grid.Column width={10}>
+                <Segment
+                    raised
+                    style={{
+                    "padding-top": "30px",
+                    "padding-right": "40px",
+                    "padding-left": "40px"
+                    }}
+                >
                 <Header as='h1' textAlign="left">
                     Success!
                     <Header.Subheader>"{this.props.buckSetName}" Buck Set Created</Header.Subheader>
@@ -51,6 +58,7 @@ export default class FormSuccess extends React.Component {
                         </tr>
                     </tbody>
                 </table>
+                
                 <Header as='h5' color='grey' textAlign="left">EXPIRATION DATE</Header>
                 <p>{this.props.validYear}</p>
 
@@ -71,7 +79,7 @@ export default class FormSuccess extends React.Component {
 
                 <Button content='Create New Buck Set'/>
                 
-            </div>
+            </Segment>
             </Grid.Column>
         )
     }
