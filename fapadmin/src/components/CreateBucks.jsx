@@ -1,19 +1,10 @@
-import React from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/functions";
-import "firebase/database";
-import {
-  Statistic,
-  Header,
-  Button,
-  Divider,
-  Grid,
-  Label,
-  Form,
-  Message
-} from "semantic-ui-react";
-import axios from "axios";
+import React from 'react';
+import firebase from 'firebase/app'
+import 'firebase/auth';
+import "firebase/functions"
+import 'firebase/database';
+import { Statistic, Header, Button, Divider, Grid, Form, Message, Segment } from 'semantic-ui-react';
+import axios from 'axios';
 
 export default class CreateBucks extends React.Component {
   constructor(props) {
@@ -220,54 +211,41 @@ export default class CreateBucks extends React.Component {
       this.props.lacomunidadCount +
       this.props.vashonhouseholdCount;
 
-    return (
-      <Grid.Column width={10}>
-        <div class="ui raised very padded container segment">
-          <Form
-            onSubmit={this.handleSubmit}
-            loading={loading}
-            error={errorMessage}
-          >
-            <Form.Input
-              required
-              fluid
-              transparent
-              size="huge"
-              placeholder="Buck Set Name"
-              value={this.props.buckSetName}
-              onInput={evt =>
-                this.props.handleChange({ buckSetName: evt.target.value })
-              }
-            />
+        return (
+            <Grid.Column width={10}>
+            {/* <div class="ui raised very padded container segment"> */}
 
-            <Divider hidden />
-
-            <Form.Input
-              required
-              fluid
-              label="Valid Year"
-              placeholder="ie: 2018"
-              value={this.props.validYear}
-              onInput={evt =>
-                this.props.handleChange({ validYear: evt.target.value })
-              }
-              type="date"
-            />
+            <Segment
+                raised
+                // style={{
+                // "padding-top": "30px",
+                // "padding-right": "40px",
+                // "padding-left": "40px"
+                // }}
+            >
+            <Form onSubmit={this.handleSubmit} loading={loading} error={errorMessage}>
+                <Form.Input 
+                        required
+                        fluid 
+                        transparent
+                        size="huge"
+                        placeholder="Buck Set Name" 
+                        value={this.props.buckSetName}
+                        onInput={evt => this.props.handleChange({ buckSetName: evt.target.value })} />
 
             <Header as="h5" color="grey" textAlign="left">
               BUCK ALLOCATION
             </Header>
 
-            <Form.Input
-              fluid
-              label="DOVE"
-              placeholder={0}
-              type="number"
-              onInput={evt =>
-                this.props.handleChange({ doveCount: Number(evt.target.value) })
-              }
-              min={0}
-            />
+            <Form.Input 
+                    required
+                    fluid 
+                    label='Expiration Date' 
+                    placeholder="ie: 2018" 
+                    type="date"
+                    value={this.props.validYear}
+                    onInput={evt => this.props.handleChange({ validYear: (evt.target.value) })} 
+                /> 
 
             <Form.Input
               fluid
@@ -321,22 +299,17 @@ export default class CreateBucks extends React.Component {
 
             <Divider hidden />
 
-            {loading ? (
-              <Button loading color="blue">
-                Generate Set
-              </Button>
-            ) : (
-              <Button color="blue">Generate Set</Button>
-            )}
+                {<Button color='blue'>Generate Set</Button>}
+                
+                <Message
+                    error
+                    header={errorMessage}
+                    content={"form not submitted"}
+                    />
 
-            <Message
-              error
-              header={errorMessage}
-              content={"form not submitted"}
-            />
-          </Form>
-        </div>
-      </Grid.Column>
-    );
-  }
+                </Form>
+                </Segment>
+            </Grid.Column>
+        )
+    }
 }

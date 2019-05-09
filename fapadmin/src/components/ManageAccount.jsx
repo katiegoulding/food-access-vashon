@@ -45,27 +45,23 @@ export default class ManageAccount extends React.Component {
     let accountRef = firebase.database().ref("/users/");
 
     return (
-      <Grid centered>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Segment
-              style={{
-                "padding-top": "30px",
-                "padding-right": "40px",
-                "padding-left": "40px"
-              }}
-              raised
-            >
-              <Container>
-                <AccountList
-                  user={this.state.currentUser}
-                  accountRef={accountRef}
-                />
-              </Container>
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Container>
+        <Segment
+          style={{
+            "padding-top": "30px",
+            "padding-right": "40px",
+            "padding-left": "40px"
+          }}
+          raised
+        >
+          <Container>
+            <AccountList
+              user={this.state.currentUser}
+              accountRef={accountRef}
+            />
+          </Container>
+        </Segment>
+      </Container>
     );
   }
 }

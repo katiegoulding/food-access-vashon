@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -53,8 +53,8 @@ export default class LogInActivity extends React.Component {
     const { loading, errorMessage } = this.state;
 
     return (
-      <Grid centered columns={1}>
-        <Grid.Column width={6}>
+      <Grid centered="true" middle columns={1}>
+        <Grid.Column width={6} verticalAlign="middle" textAlign="left">
           <Message
             attached
             header="Welcome to our site!"
