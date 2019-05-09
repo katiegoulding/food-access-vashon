@@ -153,14 +153,14 @@ export default class MainView extends React.Component {
     }
 
     return (
-      <Sidebar.Pushable as={Segment}>
+      <Sidebar.Pushable as={Segment} style={{ minHeight: "100vh !important" }}>
         <Sidebar
           as={Menu}
           animation="push"
           vertical
           visible="true"
           width="wide"
-          style={{ height: "100%" }}
+          style={{ minHeight: "100vh !important" }}
         >
           <Menu.Header className={"header"}>
             {/* TODO: */}
@@ -221,7 +221,7 @@ export default class MainView extends React.Component {
           </Menu.Item>
         </Sidebar>
 
-        <Sidebar.Pusher style={{ height: "100%" }}>
+        <Sidebar.Pusher style={{ minHeight: "100vh !important" }}>
           <Title>
             <Header
               size="huge"
@@ -263,7 +263,7 @@ export default class MainView extends React.Component {
             style={{
               width: "100%",
               padding: "50px",
-              height: "80%",
+              height: "calc(100% - 220px)  !important",
               "background-color": "#eff0f3"
             }}
           >
