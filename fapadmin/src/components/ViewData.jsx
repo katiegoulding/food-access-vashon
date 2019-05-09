@@ -1,5 +1,6 @@
 import React from "react";
 import Dashboard from "./Dashboard";
+import { Container } from 'semantic-ui-react';
 
 export default class ViewData extends React.Component {
   render() {
@@ -9,10 +10,10 @@ export default class ViewData extends React.Component {
     // const { tier } = user
     // https://firebase.google.com/docs/auth/admin/custom-claims
     return (
-      <div>
+      <Container>
         <h1>DATA DATA DATA</h1>
         <Dashboard />
-      </div>
+      </Container>
     );
   }
 }

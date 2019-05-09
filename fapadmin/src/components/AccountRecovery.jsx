@@ -1,11 +1,8 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
-import constants from "./constants";
 import firebase from 'firebase/app'
-import { Form } from 'semantic-ui-react';
+import { Form, Button } from 'semantic-ui-react';
 import "firebase/auth";
 import "firebase/database";
-import ManageAccount from "./ManageAccount";
 
 export default class AccountRecovery extends React.Component {
   constructor(props) {
@@ -21,9 +18,6 @@ export default class AccountRecovery extends React.Component {
       this.setState({
         currentUser: user
       });
-      // if(this.state.currentUser === null) {
-      //     this.props.history.push(constants.routes.base);
-      // }
     });
   }
 
@@ -42,38 +36,21 @@ export default class AccountRecovery extends React.Component {
     console.log("after");
   }
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
     render() {
-        return (
-            <div>
-                <Form onSubmit={evt => this.handlePasswordReset(evt)}>
-                <h1>Reset Password</h1> 
-
-                </Form>
-                
-                <form onSubmit={evt => this.handlePasswordReset(evt)}>
-                    <div className="col-md-4 mx-auto">  
-                        <label htmlFor="email">Email: </label>
-                        <input
-                            id="email"
-                            type="email"
-                            className="form-control"
-                            placeholder="Enter your email address"
-                            value={this.state.email}
-                            //onChange = {this.onChange}
-                            onInput={evt => this.setState({email: evt.target.value})}
-                        />
-                        </div>
-                        <div className="form-group">
-                            <button type="submit" className="btn btn-default">
-                                Reset
-                            </button>
-                        </div>
-                </form>  
-            </div >
+      return (
+        <Form onSubmit={evt => this.handlePasswordReset(evt)}>
+        <h1>Reset Password</h1> 
+          <Form.Input
+            required
+            id="email"
+            label='Email'
+            type="email"
+            placeholder="Enter your email address"
+            value={this.state.email}
+            onInput={evt => this.setState({email: evt.target.value})}
+          />
+          <Button type="submit" content='reset'/>
+        </Form>
         )
     }
 }

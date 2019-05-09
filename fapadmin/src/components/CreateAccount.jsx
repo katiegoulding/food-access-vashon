@@ -117,7 +117,7 @@ export default class CreateAccount extends React.Component {
 
     return (
       <Grid centered columns={1}>
-        <Grid.Column width={10}>
+        <Grid.Column width={10} verticalAlign="middle" textAlign="left">
           <Message
             attached
             header="Create an Account"

@@ -1,5 +1,6 @@
 import React from "react";
 import Plot from "react-plotly.js";
+import { Container } from "semantic-ui-react";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <Plot
           // consider putting this on the backend, so its only retrieved by an authenticated API call
           data={[
@@ -156,7 +157,7 @@ export default class Dashboard extends React.Component {
           ]}
           layout={{ title: "Pie" }}
         />
-      </div>
+      </Container>
     );
   }
 }

@@ -39,6 +39,8 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
             documentDefinition.content.push(qr);
         });
 
+        documentDefinition.append(pageMargins: [ 0, 0, 0, 0 ]);
+
         console.log(JSON.stringify(documentDefinition));
 
         const pdfDoc = pdfMake.createPdf(documentDefinition);
