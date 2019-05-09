@@ -19,10 +19,6 @@ a.item::before {
   background: white !important;
 }
 
-.header {
-  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
-}
-
 .sidebarItem {
   margin: 5px 5px;
   font-size: 14px !important;
