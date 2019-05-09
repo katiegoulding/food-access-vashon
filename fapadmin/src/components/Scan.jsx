@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import QrReader from 'react-qr-reader'
+import { Container, Divider, Header, Responsive, Grid, Segment } from 'semantic-ui-react'
 
 
 export default class Scan extends React.Component {
@@ -53,12 +54,29 @@ export default class Scan extends React.Component {
 
 
         return (
-            <div>
-                <h1>SCAN SCAN SCAN</h1>
-                <div>
+            <div>      
+                <Grid.Row>
+                <Segment raised fluid center>
+                    <Header as='h1'>
+                        Scan Your VIGA Voucher
+                    </Header>
+                    
                     {scanner}
                     <p>Results: {this.state.result}</p>
-                </div>
+                    
+                    <Divider />
+
+                    <Container textAlign="left">
+                        <Header as="h4">How To</Header>
+                        <p>
+                            To scan a VIGA Voucher, align the QR code on the voucher with the camera of your smartphone or desktop. 
+                        </p>
+                        <p>
+                            The camera will detect the QR code and will update the database about that voucher. 
+                        </p>
+                    </Container>
+                </Segment> 
+                </Grid.Row>
             </div >
         );
     }

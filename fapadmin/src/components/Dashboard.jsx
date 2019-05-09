@@ -1,5 +1,6 @@
 import React from "react";
 import Plot from 'react-plotly.js';
+import Chart from "react-google-charts";
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -13,9 +14,27 @@ export default class Dashboard extends React.Component {
 //        Plotly.d3.csv("../../../fap_history_data.csv", function(data{ processData(data)}));
 //   }
 
+
+
     render() {
+        const data = [
+            ["Organization", "Redemption", { role: "style" }, {role: "tooltip", "type" : "string", p : {html:true}}],
+            ["VYFS", 0.62, "#b87333", "tooltip text"],
+            ["DOVE", 0.63, "silver", "redemption: 12"],
+            ["La Comunidad", 0.29, "gold", "fapstone"],
+            ["Senior Center", 0.79, "color: #e5e4e2", "<insert poop emoji here>"] // CSS-style declaration
+        ];
         return (
+     
             <div>
+                <div className="App">
+                    <Chart
+                        chartType="ColumnChart"
+                        width="100%"
+                        height="400px"
+                        data={data}
+                    />
+                 </div>
                 <Plot
                     // consider putting this on the backend, so its only retrieved by an authenticated API call
                     data={[
