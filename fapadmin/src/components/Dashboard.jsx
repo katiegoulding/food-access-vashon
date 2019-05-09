@@ -1,18 +1,19 @@
 import React from "react";
 import Plot from 'react-plotly.js';
 import Chart from "react-google-charts";
+import Plot from "react-plotly.js";
 
 export default class Dashboard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            chartData: props.chartData,           
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      chartData: props.chartData
+    };
+  }
 
-//    makeplot() {
-//        Plotly.d3.csv("../../../fap_history_data.csv", function(data{ processData(data)}));
-//   }
+  //    makeplot() {
+  //        Plotly.d3.csv("../../../fap_history_data.csv", function(data{ processData(data)}));
+  //   }
 
 
 
@@ -125,21 +126,9 @@ export default class Dashboard extends React.Component {
                     },
                     ]}
                     layout={ {title: 'Redemption Rates', barmode: 'group', yaxis: {title: "Percent"}, xaxis: {title: "Partner Organizations"}} }
+                />
 
-                />
-                 <Plot
-                    data={[
-                    {
-                        values: [20, 30, 50],
-                        type: 'pie',
-                        labels: ['a', 'b', 'c']                                          
-                    },
-                    ]}
-                    layout={ {title: 'Pie' } }
-                
-                />
-          
-            </div>
-        )
-    }
+        </div>
+    );
+  }
 }

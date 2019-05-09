@@ -1,79 +1,85 @@
 import React from "react";
-import firebase from 'firebase';
+import firebase from "firebase";
+import { Table, Icon } from "semantic-ui-react";
 
 export default class Account extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            edit: false,
-            role: ""
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      role: ""
+    };
+  }
+
+  handlePurge() {
+    var deleteUser = firebase.functions().httpsCallable("deleteUser");
+    deleteUser({ email: this.props.acctSnapshot.val().email }).then(result => {
+      console.log(result);
+    });
+    this.props.acctRef.child(this.props.acctSnapshot.key).remove();
+  }
+
+  handleApprove() {
+    let acct = this.props.acctSnapshot.val();
+    this.props.acctRef.child(this.props.acctSnapshot.key).update({
+      approved: true
+    });
+    var changeRole = firebase.functions().httpsCallable("changeRole");
+    changeRole({
+      email: acct.email,
+      role: acct.role
+    }).then(result => {
+      console.log(result);
+    });
+  }
+
+  render() {
+    // let user = firebase.auth().currentUser;
+    let acct = this.props.acctSnapshot.val();
+    let appEl;
+
+    if (acct.approved) {
+      appEl = (
+        <Table.Cell>
+          <Icon name="checkmark" />
+          Approved
+        </Table.Cell>
+      );
+    } else {
+      appEl = (
+        <Table.Cell>
+          <Icon name="attention" />
+          Requires Approval
+        </Table.Cell>
+      );
     }
 
-    handlePurge() {
-        var deleteUser = firebase.functions().httpsCallable('deleteUser');
-        deleteUser({ email: this.props.acctSnapshot.val().email }).then(result => {
-            console.log(result);
-        });
-        this.props.acctRef.child(this.props.acctSnapshot.key).remove();
-    }
-
-    handleEdit() {
-        this.setState({
-            edit: true
-        });
-    }
-
-    handleNewEdit(evt) {
-        evt.preventDefault();
-        console.log("this happened");
-        // var user = firebase.auth().currentUser;
-        this.props.acctRef.child(this.props.acctSnapshot.key).update({
-            role: evt.target.value
-        });
-        console.log(this.props.acctSnapshot.val().email);
-        console.log(evt.target.value);
-        var changeRole = firebase.functions().httpsCallable('changeRole');
-        changeRole({ email: this.props.acctSnapshot.val().email, role: evt.target.value }).then(result => {
-            console.log(result);
-        });
-        this.setState({
-            role: evt.target.value,
-            edit: false
-        });
-    }
-
-    render() {
-        // let user = firebase.auth().currentUser;
-        let acct = this.props.acctSnapshot.val();
-        return (
-            <tr>
-                <th>{acct.firstName} {acct.lastName}</th>
-                <th>{acct.email}</th>
-                <th>{acct.org}</th>
-                <th>{this.state.edit ?
-                    <select value={this.state.role === "" ? acct.role : this.state.role} onChange={evt => this.handleNewEdit(evt)} type="submit">
-                        <option value="farmer">Farmer</option>
-                        <option value="caseworker">Caseworker</option>
-                        <option value="admin">Admin</option>
-                    </select> :
-                    acct.role}
-                </th>
-                <th></th>
-                <th>
-                    <button disabled={this.state.edit} ref="ebutt" className="btn btn-primary remove"
-                        onClick={() => this.handleEdit()}>
-                        EDIT
-                    </button>
-                </th>
-                <th>
-                    <button className="btn btn-danger remove"
-                        onClick={() => this.handlePurge()}>
-                        DELETE
-                    </button>
-                </th>
-            </tr>
-        );
-    }
-
+    return (
+      <Table.Row>
+        <Table.Cell>
+          {acct.firstName} {acct.lastName}
+        </Table.Cell>
+        <Table.Cell>{acct.email}</Table.Cell>
+        <Table.Cell>{acct.org}</Table.Cell>
+        <Table.Cell>{acct.role}</Table.Cell>
+        {appEl}
+        <Table.Cell textAlign="right">
+          {acct.approved ? null : (
+            <Icon
+              name="check circle"
+              ref="ebutt"
+              className="approve"
+              onClick={() => this.handleApprove()}
+              size="large"
+            />
+          )}
+          <Icon
+            onClick={() => this.handlePurge()}
+            name="user delete"
+            className="delete"
+            size="large"
+          />
+        </Table.Cell>
+      </Table.Row>
+    );
+  }
 }
