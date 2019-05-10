@@ -7,15 +7,18 @@ import "firebase/database";
 
 export default class Barrier extends React.Component {
 
-
     componentDidMount() {
-        //listen for auth change
         this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-          if (user) {
-            this.props.history.push(constants.routes.dash.base);
-          }
+            if (user) {
+                user.getIdTokenResult().then(idTokenResult => {
+                    if(idTokenResult.claims.role) {
+                        //push them on to the dashboard
+                        this.props.history.push(constants.routes.dash.base);
+                    }
+                });
+            }
         });
-      }
+    }
 
     render() {
         return ( 

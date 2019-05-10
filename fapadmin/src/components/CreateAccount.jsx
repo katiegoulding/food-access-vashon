@@ -25,7 +25,16 @@ export default class CreateAccount extends React.Component {
     //listen for auth change
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push(constants.routes.dash.base);
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role)
+          if(idTokenResult.claims.role) {
+              //push them on to the dashboard
+              this.props.history.push(constants.routes.dash.base);
+          } else {
+              //push them to the barrier page
+              this.props.history.push(constants.routes.barrier);
+          }
+        });
       }
     });
   }
@@ -55,39 +64,44 @@ export default class CreateAccount extends React.Component {
       });
       return;
     } else {
+      // auth.token.role == 'admin'
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.pw)
-        .then(async Response => {
+        .then(response => {
           try {
             this.setState({
               loading: true,
               errorMessage: ""
             });
+            console.log('response = ', response)
             return firebase
               .database()
-              .ref(`/users/${Response.user.uid}`)
+              .ref(`/users/${response.user.uid}`)
               .set({
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
-                email: Response.user.email,
+                email: this.state.email,
                 role: this.state.role,
                 org: this.state.org,
-                approved: false
+                approved: false  // TODO: Change this 
               });
           } catch (err) {
+            console.log('err on write to db = ', err)
             return this.setState({
               loading: false,
               errorMessage: err.message
             });
           }
         })
-        .catch(err =>
+        .catch(err => {
+          console.log('err on write to db = ', err)
           this.setState({
             loading: false,
             errorMessage: err.message
           })
-        );
+        }
+      );
     }
   }
 
@@ -168,7 +182,10 @@ export default class CreateAccount extends React.Component {
               htmlFor="role"
               value={this.state.role}
               options={roleOptions}
-              onChange={evt => this.setState({ role: evt.target.value })}
+              onChange={(evt, data) => {
+                this.setState({ role: data.value })
+              }
+              }
             />
 
             <Form.Select
@@ -176,7 +193,7 @@ export default class CreateAccount extends React.Component {
               htmlFor="organization"
               value={this.state.org}
               options={orgOptions}
-              onChange={evt => this.setState({ org: evt.target.value })}
+              onChange={(evt, data) => this.setState({ org: data.value })}
             />
 
             <Form.Input
@@ -213,6 +230,7 @@ export default class CreateAccount extends React.Component {
             />
 
             <Button type="submit">Create Account</Button>
+            
           </Form>
           <Message attached="bottom" info>
             <Icon name="help" />
