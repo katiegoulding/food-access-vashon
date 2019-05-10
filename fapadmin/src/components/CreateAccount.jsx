@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Message, Form, Button, Icon, Grid } from "semantic-ui-react";
+import { Message, Form, Button, Icon, Grid, Responsive } from "semantic-ui-react";
 
 export default class CreateAccount extends React.Component {
   constructor(props) {
@@ -91,6 +91,8 @@ export default class CreateAccount extends React.Component {
     }
   }
 
+  handleOnUpdate = (e, { width }) => this.setState({ width })
+
   render() {
     const roleOptions = [
       { key: "f", text: "Farmer", value: "farmer" },
@@ -114,10 +116,12 @@ export default class CreateAccount extends React.Component {
     ];
 
     const { loading, errorMessage } = this.state;
+    const { width } = this.state
+    const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
 
     return (
-      <Grid centered columns={1}>
-        <Grid.Column width={10} verticalAlign="middle" textAlign="left">
+      <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
           <Message
             attached
             header="Create an Account"
@@ -216,7 +220,7 @@ export default class CreateAccount extends React.Component {
             <Link to={constants.routes.base}>Sign in!</Link>&nbsp;
           </Message>
         </Grid.Column>
-      </Grid>
+      </Responsive>
     );
   }
 }

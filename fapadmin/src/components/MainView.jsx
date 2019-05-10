@@ -17,18 +17,16 @@ import {
   Label,
   Menu,
   Segment,
-  Sidebar,
-  Button
+  Responsive,
 } from "semantic-ui-react";
 import logo from "../FAPLogo.png";
 
-const Title = styled.section`
-  height: 220px;
-  background-image: linear-gradient(to bottom right, #505c86, #404e67);
-  position: relative;
-`;
+// const Title = styled.section`
+//   height: 220px;
+//   background-image: linear-gradient(to bottom right, #505c86, #404e67);
+// `;
 
-const mql = window.matchMedia(`(min-width: 800px)`);
+//const mql = window.matchMedia(`(min-width: 800px)`);
 
 export default class MainView extends React.Component {
   constructor(props) {
@@ -36,13 +34,15 @@ export default class MainView extends React.Component {
     this.state = {
       role: "",
       username: "",
-      sidebarDocked: mql.matches,
-      sidebarOpen: false
+      //sidebarDocked: mql.matches,
+      //sidebarOpen: false
     };
 
-    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+    //this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+    //this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
+
+  handleOnUpdate = (e, { width }) => this.setState({ width })
 
   handleSignOut = () => {
     firebase
@@ -52,19 +52,19 @@ export default class MainView extends React.Component {
   }
 
   componentWillMount() {
-    mql.addListener(this.mediaQueryChanged);
+    //mql.addListener(this.mediaQueryChanged);
   }
 
   componentWillUnmount() {
-    mql.removeListener(this.mediaQueryChanged);
+    //mql.removeListener(this.mediaQueryChanged);
   }
 
   onSetSidebarOpen(open) {
-    this.setState({ sidebarOpen: open });
+    //this.setState({ sidebarOpen: open });
   }
 
   mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+    //this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
   }
 
   componentDidMount() {
@@ -166,27 +166,16 @@ export default class MainView extends React.Component {
 
     return (
       <div>
-        <Segment inverted color='' attached='top'>
+        <Segment basic color='blue' inverted padded='very'>
           <Header
+            padded='very'
             size="huge"
-            float="left"
-            // style={{
-            //   position: "absolute",
-            //   top: "150px",
-            //   left: "50px",
-            //   fontSize: "35px"
-            // }}
+            floated="left"
           >
             {title}
           </Header>
-          <Header
-            // style={{
-            //   color: "white",
-            //   position: "absolute",
-            //   top: "120px",
-            //   right: "50px"
-            // }}
-          >
+
+          <Responsive as={Header} floated="right" {...Responsive.onlyComputer}>
             <Icon name="user circle" size="huge" />
             <Header.Content>
               {this.state.username}
@@ -200,11 +189,27 @@ export default class MainView extends React.Component {
                 </Label>
               </Header.Subheader>
             </Header.Content>
-          </Header>
+          </Responsive>
+
+          <Responsive as={Header.Subheader} {...Responsive.onlyMobile}>
+            <Header.Content>
+              {this.state.username}
+              <Header.Subheader
+                style={{
+                  color: "white"
+                }}
+              >
+                <Label style={{ padding: "0.3em", margin: "0" }}>
+                  {label}
+                </Label>
+              </Header.Subheader>
+            </Header.Content>
+          </Responsive>
+          
         </Segment>
 
         {/* remove 'pointing secondary' to change to the alternate style */}
-        <Menu attached pointing secondary stackable>
+        <Menu stackable secondary>
               <Menu.Item
                 name='Create Bucks'
                 as={Link}
@@ -232,12 +237,26 @@ export default class MainView extends React.Component {
             <Menu.Menu position='right'>
               <Menu.Item
                     name='logout'
-                    // active={activeItem === 'logout'}
                     onClick={this.handleSignOut}
                   />
             </Menu.Menu>
-        </Menu>
+        </Menu>    
 
+        {/* <Responsive as={Menu}>
+          <Menu.Item header>Our Company</Menu.Item>
+          <Menu.Item
+            name='aboutUs'
+            active={activeItem === 'aboutUs'}
+            onClick={this.handleItemClick}
+          />
+          <Menu.Item name='jobs' active={activeItem === 'jobs'} onClick={this.handleItemClick} />
+          <Menu.Item
+            name='locations'
+            active={activeItem === 'locations'}
+            onClick={this.handleItemClick}
+          />
+        </Responsive>     */}
+        
         <Container
             style={{
               width: "100%",

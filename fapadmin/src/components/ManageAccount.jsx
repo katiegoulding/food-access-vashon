@@ -1,11 +1,10 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
 import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import AccountList from "./AccountList";
-import { Header, Container, Grid, Segment } from "semantic-ui-react";
+import { Container, Segment } from "semantic-ui-react";
 
 export default class ManageAccount extends React.Component {
   constructor(props) {

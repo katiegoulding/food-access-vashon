@@ -1,6 +1,6 @@
 import React from "react";
 import Account from "./Account";
-import { Table } from "semantic-ui-react";
+import { Table, Segment, Loader, Dimmer } from "semantic-ui-react";
 
 export default class AccountList extends React.Component {
   constructor(props) {
@@ -31,7 +31,14 @@ export default class AccountList extends React.Component {
 
   render() {
     if (!this.state.accountSnapshot) {
-      return <div>Loading... please be patient</div>;
+      // return <div>Loading... please be patient</div>;
+      return   <div>
+                <Segment>
+                  <Dimmer active inverted>
+                    <Loader indeterminate>Loading Accounts</Loader>
+                  </Dimmer>
+                </Segment>
+                </div>
     }
 
     let accts = [];
@@ -48,7 +55,7 @@ export default class AccountList extends React.Component {
     });
 
     return (
-      <Table singleLine unstackable>
+      <Table singleLine stackable selectable> 
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
