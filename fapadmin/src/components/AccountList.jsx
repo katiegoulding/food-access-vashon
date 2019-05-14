@@ -59,11 +59,12 @@ export default class AccountList extends React.Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Email</Table.HeaderCell>
-            <Table.HeaderCell>Organization</Table.HeaderCell>
             <Table.HeaderCell>Role</Table.HeaderCell>
+            <Table.HeaderCell>Email</Table.HeaderCell>
+            {/* <Table.HeaderCell>Role</Table.HeaderCell> */}
             <Table.HeaderCell>Approval Status</Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
+            <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
+            <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>{accts}</Table.Body>

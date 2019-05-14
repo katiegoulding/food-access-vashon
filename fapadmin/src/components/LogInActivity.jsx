@@ -22,7 +22,16 @@ export default class LogInActivity extends React.Component {
     //listen for auth change
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push(constants.routes.dash.base);
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role)
+          if(idTokenResult.claims.role) {
+              //push them on to the dashboard
+              this.props.history.push(constants.routes.dash.base);
+            } else {
+              //push them to the barrier page
+              this.props.history.push(constants.routes.barrier);
+          }
+        });
       }
     });
   }
@@ -104,7 +113,7 @@ export default class LogInActivity extends React.Component {
             <Link to={constants.routes.createAccount}>Sign Up</Link>
             &nbsp;instead.
           </Message>
-          
+
         </Grid.Column>
       </Responsive>
     );

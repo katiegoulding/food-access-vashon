@@ -1,7 +1,7 @@
 import React from "react";
 import firebase from 'firebase/app'
 import constants from './constants'
-import { Container, Header } from 'semantic-ui-react';
+import { Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import "firebase/auth";
 import "firebase/database";
 
@@ -22,10 +22,16 @@ export default class Barrier extends React.Component {
 
     render() {
         return ( 
-            <Container>
-                <Header content="Just a moment!"/>
-                <Header.Subheader>Your account is pending approval.</Header.Subheader>
-            </Container>        
+            <Grid centered="true">
+                <Grid.Column width={6} verticalAlign="middle" textAlign="center">
+                <Segment inverted color="olive">
+                    <Icon name="hand paper outline" size="huge"></Icon>
+                    <Header inverted as="h1" content="Your account is pending approval."/>
+                    <Header.Subheader>Once your account is approved this page will automatically update.</Header.Subheader>
+                    <p>Please contact foodaccesspartnership@vigavashon.org with account inquiries.</p>
+                </Segment>
+                </Grid.Column>
+            </Grid>        
         )
     }
 }
