@@ -50,7 +50,7 @@ export default class MainView extends React.Component {
       .auth()
       .signOut()
       .then(this.props.history.push(constants.routes.base));
-  }
+  };
 
   componentWillMount() {
     //mql.addListener(this.mediaQueryChanged);
@@ -207,9 +207,7 @@ export default class MainView extends React.Component {
                   color: "white"
                 }}
               >
-                <Label style={{ padding: "0.3em", margin: "0" }}>
-                  {label}
-                </Label>
+                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
               </Header.Subheader>
             </Header.Content>
           </Responsive>
@@ -295,6 +293,6 @@ export default class MainView extends React.Component {
             </Router>
           </Container>
       </div>
-    )
+    );
   }
 }
