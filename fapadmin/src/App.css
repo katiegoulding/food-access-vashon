@@ -19,13 +19,10 @@ a.item::before {
   background: white !important;
 }
 
-<<<<<<< HEAD
 .antonHeader {
   border-bottom: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-=======
->>>>>>> b0f9fec34f932cac082d09e4110d2c6f7286285b
 .sidebarItem {
   margin: 5px 5px;
   font-size: 14px !important;
