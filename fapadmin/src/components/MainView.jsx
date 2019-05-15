@@ -162,7 +162,8 @@ export default class MainView extends React.Component {
         exact
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
-      />
+      />,
+      <Route path={constants.routes.dash.viewData} component={ViewData} />
     ];
 
     let cworkerUI = [
