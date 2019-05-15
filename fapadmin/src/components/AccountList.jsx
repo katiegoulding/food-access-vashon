@@ -56,7 +56,7 @@ export default class AccountList extends React.Component {
 
     return (
       <Container>
-      <Table singleLine stackable selectable attached="top"> 
+      <Table singleLine stackable selectable> 
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
@@ -68,19 +68,6 @@ export default class AccountList extends React.Component {
           </Table.Row>
         </Table.Header>
         <Table.Body>{accts}</Table.Body>
-      </Table>
-      <Table attached="bottom">
-      <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Role</Table.HeaderCell>
-            <Table.HeaderCell>Email</Table.HeaderCell>
-            <Table.HeaderCell>Approval Status</Table.HeaderCell>
-            <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
-            <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body></Table.Body>
       </Table>
       </Container>
     )

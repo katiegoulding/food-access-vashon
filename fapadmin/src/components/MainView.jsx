@@ -132,13 +132,13 @@ export default class MainView extends React.Component {
                   ];
 
     let adminUI = [
-                  <Route
-                    exact
-                    path={constants.routes.dash.base}
-                    render={() => (
-                      <Scan role={this.state.role} userId={this.state.uid} />
-                    )}
-                  />,
+                  // <Route
+                  //   exact
+                  //   path={constants.routes.dash.base}
+                  //   render={() => (
+                  //     <Scan role={this.state.role} userId={this.state.uid} />
+                  //   )}
+                  // />,
                   <Route
                     path={constants.routes.dash.bucksLanding}
                     component={() => <BucksLanding username={this.state.username} />}
