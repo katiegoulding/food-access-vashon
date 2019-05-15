@@ -17,7 +17,7 @@ import {
   Label,
   Menu,
   Segment,
-  Responsive,
+  Responsive
 } from "semantic-ui-react";
 import logo from "../FAPLogo.png";
 import NavigationBar from "./NavigationBar";
@@ -34,7 +34,7 @@ export default class MainView extends React.Component {
     super(props);
     this.state = {
       role: "",
-      username: "",
+      username: ""
       //sidebarDocked: mql.matches,
       //sidebarOpen: false
     };
@@ -43,7 +43,7 @@ export default class MainView extends React.Component {
     //this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
   }
 
-  handleOnUpdate = (e, { width }) => this.setState({ width })
+  handleOnUpdate = (e, { width }) => this.setState({ width });
 
   handleSignOut = () => {
     firebase
@@ -75,6 +75,7 @@ export default class MainView extends React.Component {
         this.props.history.push(constants.routes.base);
       } else {
         user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role);
           this.setState({
             username: user.email,
             uid: user.uid,
@@ -106,72 +107,104 @@ export default class MainView extends React.Component {
   // }
 
   render() {
+    let farmerNav = [
+      <Menu.Item
+        name="Scan"
+        as={Link}
+        to={constants.routes.dash.base}
+        //active={this.props.location.pathname === constants.routes.dash.base}
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        //active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
+    let cworkerNav = [
+      <Menu.Item
+        name="Scan"
+        as={Link}
+        to={constants.routes.dash.base}
+        //active={this.props.location.pathname === constants.routes.dash.base}
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        //active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
+    let adminNav = [
+      <Menu.Item
+        name="Create Bucks"
+        as={Link}
+        to={constants.routes.dash.bucksLanding}
+        //active={this.props.location.pathname ===constants.routes.dash.bucksLanding}
+      />,
+      <Menu.Item
+        name="Manage Accounts"
+        as={Link}
+        to={constants.routes.dash.manageAccount}
+        //active={this.props.location.pathname ===constants.routes.dash.manageAccount}
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        //active={this.props.location.pathname ===constants.routes.dash.viewData}
+      />
+    ];
+
     // TODO: Set userId in state
     let farmerUI = [
-                    <Route 
-                      exact
-                      path={constants.routes.dash.base}
-                      render={() => 
-                        (<Scan role={this.state.role} userId={this.state.uid} />)
-                      }
-                    />
-                  ];
-    
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => <Scan role={this.state.role} userId={this.state.uid} />}
+      />
+    ];
+
     let cworkerUI = [
-                    <Route
-                      exact
-                      path={constants.routes.dash.base} 
-                      render={() => 
-                        (<Scan role={this.state.role} userId={this.state.uid} />
-                      )}
-                    />,
-                    <Route 
-                      path={constants.routes.dash.viewData} 
-                      component={ViewData} 
-                    />
-                  ];
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => <Scan role={this.state.role} userId={this.state.uid} />}
+      />,
+      <Route path={constants.routes.dash.viewData} component={ViewData} />
+    ];
 
     let adminUI = [
-                  <Route
-                    exact
-                    path={constants.routes.dash.base}
-                    render={() => (
-                      <Scan role={this.state.role} userId={this.state.uid} />
-                    )}
-                  />,
-                  <Route
-                    path={constants.routes.dash.bucksLanding}
-                    component={() => <BucksLanding username={this.state.username} />}
-                  />,
-                  <Route
-                    path={constants.routes.dash.manageAccount}
-                    component={ManageAccount}
-                  />,
-                  <Route 
-                    path={constants.routes.dash.base} 
-                    render={() => 
-                      <ViewData />
-                    } 
-                  />,
-                  <Route
-                    path={constants.routes.dash.createBucks}
-                    render={() => 
-                      <CreateBucks username={this.state.username} />
-                    }
-                  />
-                ];
+      <Route
+        path={constants.routes.dash.bucksLanding}
+        component={() => <BucksLanding username={this.state.username} />}
+      />,
+      <Route
+        path={constants.routes.dash.manageAccount}
+        component={ManageAccount}
+      />,
+      <Route path={constants.routes.dash.base} render={() => <ViewData />} />,
+      <Route
+        path={constants.routes.dash.createBucks}
+        render={() => <CreateBucks username={this.state.username} />}
+      />
+    ];
 
     let ui;
     let label;
+    let nav;
 
     if (this.state.role === "admin") {
       ui = adminUI;
+      nav = adminNav;
       label = "Food Access Partnership";
     } else if (this.state.role === "caseworker") {
       ui = cworkerUI;
+      nav = cworkerNav;
       label = "Partner Organization";
     } else {
       ui = farmerUI;
+      nav = farmerNav;
       label = "Farmer";
     }
     let title;
@@ -189,12 +222,8 @@ export default class MainView extends React.Component {
 
     return (
       <div>
-        <Segment basic color='blue' inverted padded='very'>
-          <Header
-            padded='very'
-            size="huge"
-            floated="left"
-          >
+        <Segment basic color="blue" inverted padded="very">
+          <Header padded="very" size="huge" floated="left">
             {title}
           </Header>
 
@@ -220,48 +249,19 @@ export default class MainView extends React.Component {
                   color: "white"
                 }}
               >
-                <Label style={{ padding: "0.3em", margin: "0" }}>
-                  {label}
-                </Label>
+                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
               </Header.Subheader>
             </Header.Content>
           </Responsive>
-          
         </Segment>
 
         {/* remove 'pointing secondary' to change to the alternate style */}
         <Menu stackable secondary>
-              <Menu.Item
-                name='Create Bucks'
-                as={Link}
-                to={constants.routes.dash.bucksLanding}
-                active={this.props.location.pathname === constants.routes.dash.bucksLanding}
-              />
-              <Menu.Item
-                name="Scan"
-                as={Link}
-                to={constants.routes.dash.base}
-                active={this.props.location.pathname === constants.routes.dash.base}
-              />
-              <Menu.Item
-                name='Manage Accounts'
-                as={Link}
-                to={constants.routes.dash.manageAccount}
-                active={this.props.location.pathname ===constants.routes.dash.manageAccount}
-              />
-              <Menu.Item
-                name='View Data'
-                as={Link}
-                to={constants.routes.dash.viewData}
-                active={this.props.location.pathname ===constants.routes.dash.viewData}
-              />
-            <Menu.Menu position='right'>
-              <Menu.Item
-                    name='logout'
-                    onClick={this.handleSignOut}
-                  />
-            </Menu.Menu>
-        </Menu>     
+          {nav}
+          <Menu.Menu position="right">
+            <Menu.Item name="logout" onClick={this.handleSignOut} />
+          </Menu.Menu>
+        </Menu>
 
         {/* <Responsive as={Menu}>
           <Menu.Item header>Our Company</Menu.Item>
@@ -279,19 +279,19 @@ export default class MainView extends React.Component {
         </Responsive>     */}
 
         {/* <NavigationBar /> */}
-        
+
         <Container
-            style={{
-              width: "100%",
-              padding: "50px",
-              height: "calc(100% - 220px)  !important",
-              backgroundColor: "#eff0f3"
-            }}
-          >
-            <Router>
-              <Switch>{ui}</Switch>
-            </Router>
-          </Container>
+          style={{
+            width: "100%",
+            padding: "50px",
+            height: "calc(100% - 220px)  !important",
+            backgroundColor: "#eff0f3"
+          }}
+        >
+          <Router>
+            <Switch>{ui}</Switch>
+          </Router>
+        </Container>
       </div>
     );
   }
