@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-
-//import logo from './logo.svg';
 import "./App.css";
-
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import constants from "./components/constants";
-
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
@@ -17,6 +13,7 @@ import EditAccount from "./components/EditAccount.jsx";
 import MainView from "./components/MainView";
 import Scan from "./components/Scan";
 import ViewData from "./components/ViewData";
+import Barrier from "./components/Barrier.jsx"
 
 class App extends Component {
   // constructor(props) {
@@ -57,6 +54,10 @@ class App extends Component {
             <Route
               path={constants.routes.accountRecovery}
               component={AccountRecovery}
+            />
+            <Route
+              path={constants.routes.barrier}
+              component={Barrier}
             />
           </Switch>
         </Router>

@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from "firebase";
-import { Table, Icon } from "semantic-ui-react";
+import { Table, Icon, Header, Button } from "semantic-ui-react";
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -53,31 +53,38 @@ export default class Account extends React.Component {
       );
     }
 
+
     return (
-      <Table.Row>
+      <Table.Row warning={!acct.approved}>
         <Table.Cell>
-          {acct.firstName} {acct.lastName}
+          
+        <Header as='h4'>
+          <Header.Content>
+            {acct.firstName} {acct.lastName}
+            <Header.Subheader>{acct.org}</Header.Subheader>
+          </Header.Content>
+        </Header>
         </Table.Cell>
-        <Table.Cell>{acct.email}</Table.Cell>
-        <Table.Cell>{acct.org}</Table.Cell>
         <Table.Cell>{acct.role}</Table.Cell>
+        <Table.Cell>{acct.email}</Table.Cell>
         {appEl}
-        <Table.Cell textAlign="right">
+        <Table.Cell textAlign="center">
           {acct.approved ? null : (
-            <Icon
-              name="check circle"
-              ref="ebutt"
-              className="approve"
-              onClick={() => this.handleApprove()}
-              size="large"
-            />
+            <Button.Group>
+              <Button size='mini' positive content="Approve" onClick={() => this.handleApprove()}/>
+              <Button size='mini' content="Reject" onClick={() => this.handlePurge()}/>
+            </Button.Group>
           )}
+          {
+          }
+        </Table.Cell>
+        <Table.Cell textAlign='center'>
           <Icon
-            onClick={() => this.handlePurge()}
-            name="user delete"
-            className="delete"
-            size="large"
-          />
+              name="delete"
+              className="delete"
+              size="large"
+              onClick={() => this.handlePurge()}
+            />
         </Table.Cell>
       </Table.Row>
     );

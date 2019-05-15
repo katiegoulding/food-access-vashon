@@ -3,24 +3,72 @@ import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { Container, Divider, Header } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 
 
 export default class NavigationBar extends React.Component {
 
-
-
+    handleSignOut = () => {
+        firebase
+          .auth()
+          .signOut()
+          .then(this.props.history.push(constants.routes.base));
+      }
+      
     render() {
-        let farmerUI = [];
+        let farmerUI = [
+            <Menu.Item
+                name="Scan"
+                as={Link}
+                to={constants.routes.dash.base}
+                //active={this.props.location.pathname === constants.routes.dash.base}
+              />,
+              <Menu.Item
+                name='View Data'
+                as={Link}
+                to={constants.routes.dash.viewData}
+                //active={this.props.location.pathname === constants.routes.dash.viewData}
+              />
+        ];
         let cworkerUI = [
-            <Link to={constants.routes.dash.base} className="navButton"> Scan </Link>,
-            <Link to={constants.routes.dash.viewData} className="navButton"> View Data </Link>
+            <Menu.Item
+                name="Scan"
+                as={Link}
+                to={constants.routes.dash.base}
+                //active={this.props.location.pathname === constants.routes.dash.base}
+              />,
+              <Menu.Item
+                name='View Data'
+                as={Link}
+                to={constants.routes.dash.viewData}
+                //active={this.props.location.pathname === constants.routes.dash.viewData}
+              />
         ];
         let adminUI = [
-            <Link to={constants.routes.dash.viewData} className="navButton"> View Data </Link>,
-            <Link to={constants.routes.dash.bucksLanding} className="navButton"> Create Bux </Link>,
-            <Link to={constants.routes.dash.manageAccount} className="navButton"> Manage Accounts </Link>,
-            <Link to={constants.routes.dash.base} className="navButton"> Scan </Link>
+            <Menu.Item
+                name='Create Bucks'
+                as={Link}
+                to={constants.routes.dash.bucksLanding}
+                //active={this.props.location.pathname ===constants.routes.dash.bucksLanding}
+              />,
+              <Menu.Item
+                name="Scan"
+                as={Link}
+                to={constants.routes.dash.base}
+                //active={this.props.location.pathname === constants.routes.dash.base}
+              />,
+              <Menu.Item
+                name='Manage Accounts'
+                as={Link}
+                to={constants.routes.dash.manageAccount}
+                //active={this.props.location.pathname ===constants.routes.dash.manageAccount}
+              />,
+              <Menu.Item
+                name='View Data'
+                as={Link}
+                to={constants.routes.dash.viewData}
+                //active={this.props.location.pathname ===constants.routes.dash.viewData}
+              />
         ];
 
         let ui;
@@ -38,15 +86,15 @@ export default class NavigationBar extends React.Component {
         }
 
         return (
-            <div>
-                <Container>
-                    {ui}
-                </Container>
-                <Container>
-                    <Header as="h1">Welcome to the dashboard</Header>
-                    <Divider hidden />
-                </Container>
-            </div>
+            <Menu stackable secondary>
+                {ui}
+                <Menu.Menu position='right'>
+                <Menu.Item
+                        name='logout'
+                        onClick={this.handleSignOut}
+                    />
+                </Menu.Menu>
+            </Menu>
         )
     }
 }
