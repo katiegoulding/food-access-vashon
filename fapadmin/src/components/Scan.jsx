@@ -54,14 +54,14 @@ export default class Scan extends React.Component {
 
     return (
       <Container>
-          <Segment
-            style={{
-              "padding-top": "30px",
-              "padding-right": "40px",
-              "padding-left": "40px"
-            }}
-            raised
-          >
+        <Segment
+          style={{
+            "padding-top": "30px",
+            "padding-right": "40px",
+            "padding-left": "40px"
+          }}
+          raised
+        >
           <Container>
             {scanner}
             <p>Results: {this.state.result}</p>

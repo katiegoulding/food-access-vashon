@@ -49,7 +49,7 @@ export default class MainView extends React.Component {
       .auth()
       .signOut()
       .then(this.props.history.push(constants.routes.base));
-  }
+  };
 
   componentWillMount() {
     mql.addListener(this.mediaQueryChanged);
@@ -85,58 +85,48 @@ export default class MainView extends React.Component {
   render() {
     // TODO: Set userId in state
     let farmerUI = [
-                    <Route 
-                      exact
-                      path={constants.routes.dash.base}
-                      render={() => 
-                        (<Scan role={this.state.role} userId={this.state.userId} />)
-                      }
-                    />
-                  ];
-    
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => (
+          <Scan role={this.state.role} userId={this.state.userId} />
+        )}
+      />
+    ];
+
     let cworkerUI = [
-                    <Route
-                      exact
-                      path={constants.routes.dash.base} 
-                      render={() => 
-                        (<Scan role={this.state.role} userId={this.state.userId} />
-                      )}
-                    />,
-                    <Route 
-                      path={constants.routes.dash.viewData} 
-                      component={ViewData} 
-                    />
-                  ];
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => (
+          <Scan role={this.state.role} userId={this.state.userId} />
+        )}
+      />,
+      <Route path={constants.routes.dash.viewData} component={ViewData} />
+    ];
 
     let adminUI = [
-                  <Route
-                    exact
-                    path={constants.routes.dash.base}
-                    render={() => (
-                      <Scan role={this.state.role} userId={this.state.userId} />
-                    )}
-                  />,
-                  <Route
-                    path={constants.routes.dash.bucksLanding}
-                    component={() => <BucksLanding username={this.state.username} />}
-                  />,
-                  <Route
-                    path={constants.routes.dash.manageAccount}
-                    component={ManageAccount}
-                  />,
-                  <Route 
-                    path={constants.routes.dash.base} 
-                    render={() => 
-                      <ViewData />
-                    } 
-                  />,
-                  <Route
-                    path={constants.routes.dash.createBucks}
-                    render={() => 
-                      <CreateBucks username={this.state.username} />
-                    }
-                  />
-                ];
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => (
+          <Scan role={this.state.role} userId={this.state.userId} />
+        )}
+      />,
+      <Route
+        path={constants.routes.dash.bucksLanding}
+        component={() => <BucksLanding username={this.state.username} />}
+      />,
+      <Route
+        path={constants.routes.dash.manageAccount}
+        component={ManageAccount}
+      />,
+      <Route path={constants.routes.dash.base} render={() => <ViewData />} />,
+      <Route
+        path={constants.routes.dash.createBucks}
+        render={() => <CreateBucks username={this.state.username} />}
+      />
+    ];
 
     let ui;
     let label;
@@ -166,7 +156,7 @@ export default class MainView extends React.Component {
 
     return (
       <div>
-        <Segment inverted color='' attached='top'>
+        <Segment inverted color="" attached="top">
           <Header
             size="huge"
             float="left"
@@ -180,12 +170,12 @@ export default class MainView extends React.Component {
             {title}
           </Header>
           <Header
-            // style={{
-            //   color: "white",
-            //   position: "absolute",
-            //   top: "120px",
-            //   right: "50px"
-            // }}
+          // style={{
+          //   color: "white",
+          //   position: "absolute",
+          //   top: "120px",
+          //   right: "50px"
+          // }}
           >
             <Icon name="user circle" size="huge" />
             <Header.Content>
@@ -195,9 +185,7 @@ export default class MainView extends React.Component {
                   color: "white"
                 }}
               >
-                <Label style={{ padding: "0.3em", margin: "0" }}>
-                  {label}
-                </Label>
+                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
               </Header.Subheader>
             </Header.Content>
           </Header>
@@ -205,52 +193,60 @@ export default class MainView extends React.Component {
 
         {/* remove 'pointing secondary' to change to the alternate style */}
         <Menu attached pointing secondary stackable>
-              <Menu.Item
-                name='Create Bucks'
-                as={Link}
-                to={constants.routes.dash.bucksLanding}
-                active={this.props.location.pathname ===constants.routes.dash.bucksLanding}
-              />
-              <Menu.Item
-                name="Scan"
-                as={Link}
-                to={constants.routes.dash.base}
-                active={this.props.location.pathname === constants.routes.dash.base}
-              />
-              <Menu.Item
-                name='Manage Accounts'
-                as={Link}
-                to={constants.routes.dash.manageAccount}
-                active={this.props.location.pathname ===constants.routes.dash.manageAccount}
-              />
-              <Menu.Item
-                name='View Data'
-                as={Link}
-                to={constants.routes.dash.viewData}
-                active={this.props.location.pathname ===constants.routes.dash.viewData}
-              />
-            <Menu.Menu position='right'>
-              <Menu.Item
-                    name='logout'
-                    // active={activeItem === 'logout'}
-                    onClick={this.handleSignOut}
-                  />
-            </Menu.Menu>
+          <Menu.Item
+            name="Create Bucks"
+            as={Link}
+            to={constants.routes.dash.bucksLanding}
+            active={
+              this.props.location.pathname ===
+              constants.routes.dash.bucksLanding
+            }
+          />
+          <Menu.Item
+            name="Scan"
+            as={Link}
+            to={constants.routes.dash.base}
+            active={this.props.location.pathname === constants.routes.dash.base}
+          />
+          <Menu.Item
+            name="Manage Accounts"
+            as={Link}
+            to={constants.routes.dash.manageAccount}
+            active={
+              this.props.location.pathname ===
+              constants.routes.dash.manageAccount
+            }
+          />
+          <Menu.Item
+            name="View Data"
+            as={Link}
+            to={constants.routes.dash.viewData}
+            active={
+              this.props.location.pathname === constants.routes.dash.viewData
+            }
+          />
+          <Menu.Menu position="right">
+            <Menu.Item
+              name="logout"
+              // active={activeItem === 'logout'}
+              onClick={this.handleSignOut}
+            />
+          </Menu.Menu>
         </Menu>
 
         <Container
-            style={{
-              width: "100%",
-              padding: "50px",
-              height: "calc(100% - 220px)  !important",
-              "background-color": "#eff0f3"
-            }}
-          >
-            <Router>
-              <Switch>{ui}</Switch>
-            </Router>
-          </Container>
+          style={{
+            width: "100%",
+            padding: "50px",
+            height: "calc(100% - 220px)  !important",
+            "background-color": "#eff0f3"
+          }}
+        >
+          <Router>
+            <Switch>{ui}</Switch>
+          </Router>
+        </Container>
       </div>
-    )
+    );
   }
 }

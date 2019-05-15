@@ -3,6 +3,14 @@ const admin = require("firebase-admin");
 const pdfmake = require("pdfmake/build/pdfmake");
 const vfsFonts = require("pdfmake/build/vfs_fonts");
 const cors = require("cors")({ origin: true });
+var os = require("os");
+const path = require("path");
+const fileName = "bucktemplateprintpage.jpg";
+const tempFilePath = path.join(os.tmpdir(), fileName);
+const options = {
+  // The path to which the file should be downloaded, e.g. "./file.txt"
+  destination: tempFilePath
+};
 
 pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
@@ -11,14 +19,16 @@ admin.initializeApp();
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
+async function downloadImg() {
+  var defaultStorage = admin.storage();
+  var bucket = defaultStorage.bucket("gs://fapadmin-97af8.appspot.com");
+  var file = bucket.file(fileName);
+  await file.download(options);
+}
+
 exports.helloWorld = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
-    // let json = safelyParseJSON(response, request.body);
-
-    // response.status(200).json({
-    //     message: 'It worked!'
-    // });
-
+    let promise = downloadImg();
     let ids = request.body.ids;
     let year = request.body.year;
 
@@ -28,29 +38,59 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
       content: []
     };
 
+    // PDF VARIABLES(in mm):
+
+    var count = 1;
+
     ids.forEach(id => {
       console.log(id);
       let pOrg = id.partnerOrg;
       let code = id.id;
-      let qr = { qr: code, fit: 100, margin: [50, 50] };
+      let qr;
+      if (count % 4 == 0 && count !== ids.length) {
+        qr = {
+          qr: code,
+          fit: 48.96,
+          margin: [380.88, 0, 0, 142.56],
+          pageBreak: "after"
+        };
+      } else if (count % 4 == 1) {
+        qr = { qr: code, fit: 48.96, margin: [380.88, 50.904, 0, 190] };
+      } else {
+        qr = { qr: code, fit: 48.96, margin: [380.88, 0, 0, 190] };
+      }
       console.log(JSON.stringify(qr));
       documentDefinition.content.push(qr);
+      count++;
     });
 
-    //documentDefinition.append(pageMargins: [ 0, 0, 0, 0 ]);
+    documentDefinition.pageMargins = [0, 0, 0, 0];
 
-    console.log(JSON.stringify(documentDefinition));
+    Promise.all([promise])
+      .then(doesPass => {
+        documentDefinition.background = [
+          {
+            image: tempFilePath,
+            width: 792
+          }
+        ];
 
-    const pdfDoc = pdfMake.createPdf(documentDefinition);
-    pdfDoc.getBase64(data => {
-      response.writeHead(200, {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": 'attachment;filename="vouchers.pdf"'
+        console.log(JSON.stringify(documentDefinition));
+
+        const pdfDoc = pdfMake.createPdf(documentDefinition);
+        pdfDoc.getBase64(data => {
+          response.writeHead(200, {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": 'attachment;filename="vouchers.pdf"'
+          });
+
+          const download = Buffer.from(data.toString("utf-8"), "base64");
+          response.end(download);
+        });
+      })
+      .catch(error => {
+        console.log(error);
       });
-
-      const download = Buffer.from(data.toString("utf-8"), "base64");
-      response.end(download);
-    });
   });
 });
 

@@ -10,10 +10,6 @@ export default class Dashboard extends React.Component {
     };
   }
 
-  //    makeplot() {
-  //        Plotly.d3.csv("../../../fap_history_data.csv", function(data{ processData(data)}));
-  //   }
-
   render() {
     return (
       <Container>
