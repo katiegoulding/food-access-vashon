@@ -8,16 +8,21 @@ import "firebase/database";
 export default class Barrier extends React.Component {
 
     componentDidMount() {
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+        this.authUnsub = firebase.auth().onIdTokenChanged(user => {
             if (user) {
+                console.log("user = ", {user})
                 user.getIdTokenResult().then(idTokenResult => {
+                    console.log("idTokenResult", {idTokenResult})
                     if(idTokenResult.claims.role) {
                         //push them on to the dashboard
                         this.props.history.push(constants.routes.dash.base);
                     }
                 });
+            } else {
+                console.log('user not defined')
             }
         });
+        // firebase.auth().onIdTokenChanged()
     }
 
     render() {

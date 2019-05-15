@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-import { Header, Container, Grid, Segment } from "semantic-ui-react";
+import { Container, Segment } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -24,16 +24,19 @@ export default class Scan extends React.Component {
             console.log("this is the uid passed from props", this.props.userId)
             console.log("this is the role passed from props", this.props.role)
 
-            if(this.props.role == "farmer") {
+            // TODO: THIS IS CASE SENSITIVE
+            if(this.props.role === "Farmer") {
                 // TODO: fill in the corresponding data visualization object with a new scan
-                
-                // if they are a farmer, fill in the "whenRedeemed" field on voucher object to the current time
+                console.log("I am in the farmer scan section")
+                // if they are a farmer, fill in the "redeemedOn" field on voucher object to the current time
                 let redeemedOnRef = firebase.database().ref('vouchers/' + data + "/redeemedOn")
                 redeemedOnRef.on('value', function(snapshot) {
-                    if(snapshot.val() == "") {
+                    console.log("snapshot.val() : ", snapshot.val())
+                    if(!snapshot.val()) { 
+                        //if it is null there is no entry for redeemedOn
                         console.log("this voucher has not been redeemed before")
                         voucherRef.update({
-                            redeemedOn: new String(new Date())
+                            redeemedOn: new Date()
                         })
                     } else {
                         console.log("this voucher has already been redeemed")
@@ -45,16 +48,17 @@ export default class Scan extends React.Component {
                     [data]: "true"
                 })
 
-            } else if(this.props.role == "caseworker") {
+            } else if(this.props.role === "Caseworker") {
                 // TODO: fill in the corresponding data visualization object with a new scan
 
                 // if they are a caseworker, fill in the "handedOutOn" field on voucher object to the current time
                 let handedOutRef = firebase.database().ref('vouchers/' + data + "/handedOutOn")
                 handedOutRef.on('value', function(snapshot) {
-                    if(snapshot.val() == "") {
+                    if(!snapshot.val()) {
+                        //if it is null there is no entry for handedOutOn
                         console.log("this voucher has not been handed out before")
                         voucherRef.update({
-                            handedOutOn: new String(new Date())
+                            handedOutOn: new Date()
                         })
                     } else {
                         console.log("this voucher has already been handed out")
@@ -70,7 +74,7 @@ export default class Scan extends React.Component {
                 // if they are an admin we could give them an informational message about the voucher? not required.
                 // just give an informational message?
                 // OR don't do anything? 
-
+                console.log("you're currently an admin which does not support scanning")
             }
             
             // Make a call to a google cloud function
@@ -118,9 +122,9 @@ export default class Scan extends React.Component {
       <Container>
           <Segment
             style={{
-              "padding-top": "30px",
-              "padding-right": "40px",
-              "padding-left": "40px"
+              paddingTop: "30px",
+              paddingRight: "40px",
+              paddingLeft: "40px"
             }}
             raised
           >

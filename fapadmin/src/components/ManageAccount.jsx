@@ -47,9 +47,9 @@ export default class ManageAccount extends React.Component {
       <Container>
         <Segment
           style={{
-            "padding-top": "30px",
-            "padding-right": "40px",
-            "padding-left": "40px"
+            paddingTop: "30px",
+            paddingRight: "40px",
+            paddingLeft: "40px"
           }}
           raised
         >

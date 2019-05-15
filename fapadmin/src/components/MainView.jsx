@@ -20,6 +20,7 @@ import {
   Responsive,
 } from "semantic-ui-react";
 import logo from "../FAPLogo.png";
+import NavigationBar from "./NavigationBar";
 
 // const Title = styled.section`
 //   height: 220px;
@@ -67,6 +68,7 @@ export default class MainView extends React.Component {
     //this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
   }
 
+  //anton componentDidMount() -> useful for testing because you can still work if not approved
   componentDidMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
@@ -75,12 +77,33 @@ export default class MainView extends React.Component {
         user.getIdTokenResult().then(idTokenResult => {
           this.setState({
             username: user.email,
+            uid: user.uid,
             role: idTokenResult.claims.role
           });
         });
       }
     });
   }
+
+  //august componentDidMount() -> does not allow people to route around
+  // componentDidMount() {
+  //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+  //     if (user) {
+  //       user.getIdTokenResult().then(idTokenResult => {
+  //         console.log(idTokenResult.claims.role)
+  //         if(idTokenResult.claims.role) {
+  //             //push them on to the dashboard
+  //             this.props.history.push(constants.routes.dash.base);
+  //           } else {
+  //             //push them to the barrier page
+  //             this.props.history.push(constants.routes.barrier);
+  //         }
+  //       })
+  //     } else {
+  //       this.props.history.push(constants.routes.base);
+  //     }
+  //   })
+  // }
 
   render() {
     // TODO: Set userId in state
@@ -89,7 +112,7 @@ export default class MainView extends React.Component {
                       exact
                       path={constants.routes.dash.base}
                       render={() => 
-                        (<Scan role={this.state.role} userId={this.state.userId} />)
+                        (<Scan role={this.state.role} userId={this.state.uid} />)
                       }
                     />
                   ];
@@ -99,7 +122,7 @@ export default class MainView extends React.Component {
                       exact
                       path={constants.routes.dash.base} 
                       render={() => 
-                        (<Scan role={this.state.role} userId={this.state.userId} />
+                        (<Scan role={this.state.role} userId={this.state.uid} />
                       )}
                     />,
                     <Route 
@@ -113,7 +136,7 @@ export default class MainView extends React.Component {
                     exact
                     path={constants.routes.dash.base}
                     render={() => (
-                      <Scan role={this.state.role} userId={this.state.userId} />
+                      <Scan role={this.state.role} userId={this.state.uid} />
                     )}
                   />,
                   <Route
@@ -214,7 +237,7 @@ export default class MainView extends React.Component {
                 name='Create Bucks'
                 as={Link}
                 to={constants.routes.dash.bucksLanding}
-                active={this.props.location.pathname ===constants.routes.dash.bucksLanding}
+                active={this.props.location.pathname === constants.routes.dash.bucksLanding}
               />
               <Menu.Item
                 name="Scan"
@@ -240,7 +263,7 @@ export default class MainView extends React.Component {
                     onClick={this.handleSignOut}
                   />
             </Menu.Menu>
-        </Menu>    
+        </Menu>     
 
         {/* <Responsive as={Menu}>
           <Menu.Item header>Our Company</Menu.Item>
@@ -256,13 +279,15 @@ export default class MainView extends React.Component {
             onClick={this.handleItemClick}
           />
         </Responsive>     */}
+
+        {/* <NavigationBar /> */}
         
         <Container
             style={{
               width: "100%",
               padding: "50px",
               height: "calc(100% - 220px)  !important",
-              "background-color": "#eff0f3"
+              backgroundColor: "#eff0f3"
             }}
           >
             <Router>

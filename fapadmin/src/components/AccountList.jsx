@@ -1,6 +1,6 @@
 import React from "react";
 import Account from "./Account";
-import { Table, Segment, Loader, Dimmer } from "semantic-ui-react";
+import { Table, Segment, Loader, Dimmer, Container } from "semantic-ui-react";
 
 export default class AccountList extends React.Component {
   constructor(props) {
@@ -55,13 +55,13 @@ export default class AccountList extends React.Component {
     });
 
     return (
-      <Table singleLine stackable selectable> 
+      <Container>
+      <Table singleLine stackable selectable attached="top"> 
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Role</Table.HeaderCell>
             <Table.HeaderCell>Email</Table.HeaderCell>
-            {/* <Table.HeaderCell>Role</Table.HeaderCell> */}
             <Table.HeaderCell>Approval Status</Table.HeaderCell>
             <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
             <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
@@ -69,6 +69,20 @@ export default class AccountList extends React.Component {
         </Table.Header>
         <Table.Body>{accts}</Table.Body>
       </Table>
-    );
+      <Table attached="bottom">
+      <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Role</Table.HeaderCell>
+            <Table.HeaderCell>Email</Table.HeaderCell>
+            <Table.HeaderCell>Approval Status</Table.HeaderCell>
+            <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
+            <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body></Table.Body>
+      </Table>
+      </Container>
+    )
   }
 }
