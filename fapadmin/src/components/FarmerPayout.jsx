@@ -35,7 +35,7 @@ export default class FarmerPayout extends React.Component {
     let accountRef = firebase.database().ref("/users/");
     // filter by role == farmer
     // load all users that are farmers AND are approved
-    // load their count of total vouchers
+    // get their voucher list, check the flag (expecting either "paid" or "paidNot")
     // search all those vouchers -> confirmed they've been redeemed AND check if they've been paid out
     // if they haven't been paid out, add them to a list and get the count 
   }
