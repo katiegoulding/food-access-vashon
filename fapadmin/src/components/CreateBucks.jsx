@@ -110,8 +110,17 @@ export default class CreateBucks extends React.Component {
         .push().key;
       ids.push({ partnerOrg: organization, id: newVoucherKey });
 
+      firebase
+        .database()
+        .ref()
+        .child("vis2/" + organization + "/created/")
+        .update({
+          [newVoucherKey]: new Date()
+        });
+
       updates["/vouchers/" + newVoucherKey] = voucherData;
     }
+
     return firebase
       .database()
       .ref()

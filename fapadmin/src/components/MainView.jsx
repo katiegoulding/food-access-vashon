@@ -34,7 +34,8 @@ export default class MainView extends React.Component {
     super(props);
     this.state = {
       role: "",
-      username: ""
+      username: "",
+      org: ""
       //sidebarDocked: mql.matches,
       //sidebarOpen: false
     };
@@ -76,11 +77,20 @@ export default class MainView extends React.Component {
       } else {
         user.getIdTokenResult().then(idTokenResult => {
           console.log(idTokenResult.claims.role);
-          this.setState({
-            username: user.email,
-            uid: user.uid,
-            role: idTokenResult.claims.role
-          });
+          if (idTokenResult.claims.role === "caseworker") {
+            this.setState({
+              username: user.email,
+              uid: user.uid,
+              role: idTokenResult.claims.role,
+              org: this.state.org
+            });
+          } else {
+            this.setState({
+              username: user.email,
+              uid: user.uid,
+              role: idTokenResult.claims.role
+            });
+          }
         });
       }
     });
