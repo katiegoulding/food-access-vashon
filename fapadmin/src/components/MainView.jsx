@@ -73,7 +73,7 @@ export default class MainView extends React.Component {
       if (!user) {
         this.props.history.push(constants.routes.base);
       } else {
-        user.getIdTokenResult().then(idTokenResult => {
+        user.getIdTokenResult(true).then(idTokenResult => {
           console.log(idTokenResult.claims.role);
           if (idTokenResult.claims.role === "caseworker") {
             this.setState({
@@ -179,7 +179,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let cworkerUI = [
@@ -188,7 +197,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let adminUI = [
@@ -200,7 +218,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.manageAccount}
         component={ManageAccount}
       />,
-      <Route path={constants.routes.dash.base} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />,
+      <Route
+        path={constants.routes.dash.base}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />,
       <Route
         path={constants.routes.dash.createBucks}
         render={() => <CreateBucks username={this.state.username} />}

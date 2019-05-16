@@ -12,38 +12,32 @@ export default class Dashboard extends React.Component {
     };
   }
 
-//TODO: add role and org and uid to props, not currently defined here
-componentDidMount() {
-let firebaseDataArray = []
+  componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps", nextProps);
 
-if(this.props.role === 'farmer') {
-  let farmerRef = firebase.database().ref('viz1/' + this.props.uid)
-} else if(this.props.role === 'admin') { 
-  let adminRef = firebase.database().ref('viz2')
-} else if(this.props.role === 'caseworker') {
-  let caseworkerRef = firebase.database().ref('viz2/' + this.props.org)
-}
+    this.setState(nextProps);
 
-//   buckSetsRef.orderByChild('createdOn').on('child_added', (snapshot) => {
-//       const value = snapshot.val()
-//       // sort by newest
-//       firebaseDataArray.push({
-//           title: value.name,
-//           subtitle: value.createdBy
-//       })
-//       this.setState({
-//         firebaseDataArray
-//       })
-//   });
-//   buckSetsRef.orderByChild('createdOn').on('child_removed', (snapshot) => {
-//       const value = snapshot.val()
-//       // filter out the removed item and force another render
-//       firebaseDataArray = firebaseDataArray.filter(el => !(el.title === value.name && el.subtitle === value.createdBy))
-//       this.setState({
-//         firebaseDataArray
-//       })
-//   });
-}
+    let firebaseDataArray = [];
+    let ref;
+    console.log("this.state.role in Dashboard", nextProps.role);
+    if (nextProps.role === "farmer") {
+      console.log("I'm a farmer");
+      ref = firebase.database().ref("vis1/" + nextProps.uid);
+    } else if (this.props.role === "admin") {
+      ref = firebase.database().ref("vis2");
+    } else if (this.props.role === "caseworker") {
+      ref = firebase.database().ref("vis2/" + nextProps.org);
+    }
+    ref.on("child_added", snapshot => {
+      const value = snapshot.val();
+      console.log(value);
+      // sort by newest
+      firebaseDataArray.push(value);
+      this.setState({
+        firebaseDataArray
+      });
+    });
+  }
 
   render() {
     return (
