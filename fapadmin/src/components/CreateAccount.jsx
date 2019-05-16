@@ -111,7 +111,8 @@ export default class CreateAccount extends React.Component {
     const roleOptions = [
       { key: "f", text: "Farmer", value: "Farmer" },
       { key: "c", text: "Caseworker", value: "Caseworker" },
-      { key: "a", text: "Admin", value: "Admin" }
+      { key: "a", text: "Admin", value: "Admin" },
+      { key: "b", text: "Bookkeeper", value: "Bookkeeper"}
     ];
 
     const orgOptions = [

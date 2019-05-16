@@ -4,7 +4,15 @@ import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Message, Form, Button, Icon, Grid, Divider, Responsive } from "semantic-ui-react";
+import {
+  Message,
+  Form,
+  Button,
+  Icon,
+  Grid,
+  Divider,
+  Responsive
+} from "semantic-ui-react";
 
 export default class LogInActivity extends React.Component {
   constructor(props) {
@@ -23,13 +31,13 @@ export default class LogInActivity extends React.Component {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (user) {
         user.getIdTokenResult().then(idTokenResult => {
-          console.log(idTokenResult.claims.role)
-          if(idTokenResult.claims.role) {
-              //push them on to the dashboard
-              this.props.history.push(constants.routes.dash.base);
-            } else {
-              //push them to the barrier page
-              this.props.history.push(constants.routes.barrier);
+          console.log(idTokenResult.claims.role);
+          if (idTokenResult.claims.role) {
+            //push them on to the dashboard
+            this.props.history.push(constants.routes.dash.base);
+          } else {
+            //push them to the barrier page
+            this.props.history.push(constants.routes.barrier);
           }
         });
       }
@@ -58,29 +66,35 @@ export default class LogInActivity extends React.Component {
       );
   }
 
-  handleOnUpdate = (e, { width }) => this.setState({ width })
+  handleOnUpdate = (e, { width }) => this.setState({ width });
 
   render() {
     const { loading, errorMessage } = this.state;
-    const { width } = this.state
-    const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
+    const { width } = this.state;
+    const colWidth = width >= Responsive.onlyTablet.minWidth ? "6" : "12";
 
     return (
-      <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
+      <Responsive
+        as={Grid}
+        fireOnMount
+        onUpdate={this.handleOnUpdate}
+        centered="true"
+        middle
+        columns={1}
+      >
         <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
-      
           <Message
-            attached='top'
+            attached="top"
             header="Welcome to our site!"
             content="Sign in to access your account"
           />
-          
+
           <Form
             className="attached fluid segment"
             onSubmit={evt => this.handleSignIn(evt)}
             error={errorMessage}
-            loading={loading}>
-
+            loading={loading}
+          >
             <Message error header={errorMessage} content={"not logged in"} />
 
             <Form.Input
@@ -90,7 +104,8 @@ export default class LogInActivity extends React.Component {
               placeholder="Email"
               type="email"
               value={this.state.email}
-              onInput={evt => this.setState({ email: evt.target.value })}/>
+              onInput={evt => this.setState({ email: evt.target.value })}
+            />
 
             <Form.Input
               required
@@ -113,7 +128,6 @@ export default class LogInActivity extends React.Component {
             <Link to={constants.routes.createAccount}>Sign Up</Link>
             &nbsp;instead.
           </Message>
-
         </Grid.Column>
       </Responsive>
     );
