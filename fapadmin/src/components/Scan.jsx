@@ -79,7 +79,7 @@ export default class Scan extends React.Component {
 
                 // also add the voucher id to the user's list of associated ids
                 userRef.child("vouchersList").update({
-                  [data]: "true"
+                  [data]: "notPaid"
                 });
 
                 // add to vis1 list (MAYBE CHANGE LATER????)
@@ -136,6 +136,7 @@ export default class Scan extends React.Component {
                       });
                   });
 
+                // TODO: Do we want to keep this as true?
                 // also add the voucher id to the user's list of associated ids
                 userRef.child("vouchersList").update({
                   [data]: "true"

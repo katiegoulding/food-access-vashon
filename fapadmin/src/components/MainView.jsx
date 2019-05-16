@@ -9,7 +9,6 @@ import Scan from "./Scan";
 import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
 import CreateBucks from "./CreateBucks.jsx";
-import styled from "styled-components";
 import {
   Container,
   Header,
@@ -19,8 +18,6 @@ import {
   Segment,
   Responsive
 } from "semantic-ui-react";
-import logo from "../FAPLogo.png";
-import NavigationBar from "./NavigationBar";
 
 // const Title = styled.section`
 //   height: 220px;
@@ -69,7 +66,7 @@ export default class MainView extends React.Component {
     //this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
   }
 
-  //anton componentDidMount() -> useful for testing because you can still work if not approved
+  // anton componentDidMount() -> useful for testing because you can still work if not approved
   componentDidMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
@@ -96,22 +93,27 @@ export default class MainView extends React.Component {
     });
   }
 
-  //august componentDidMount() -> does not allow people to route around
+  // august componentDidMount() -> does not allow people to route around
   // componentDidMount() {
   //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
+  //     if(!user) {
+  //       this.props.history.push(constants.routes.base);
+  //     } else { //they are authenticated
   //       user.getIdTokenResult().then(idTokenResult => {
   //         console.log(idTokenResult.claims.role)
-  //         if(idTokenResult.claims.role) {
-  //             //push them on to the dashboard
-  //             this.props.history.push(constants.routes.dash.base);
-  //           } else {
-  //             //push them to the barrier page
-  //             this.props.history.push(constants.routes.barrier);
+  //         if(!idTokenResult.claims.role) {
+  //           //their role is null
+  //           //push them to the barrier page
+  //           this.props.history.push(constants.routes.barrier);
+  //         } else {
+  //           //their role has been approved
+  //           this.setState({
+  //             username: user.email,
+  //             uid: user.uid,
+  //             role: idTokenResult.claims.role
+  //           });
   //         }
   //       })
-  //     } else {
-  //       this.props.history.push(constants.routes.base);
   //     }
   //   })
   // }
@@ -122,13 +124,13 @@ export default class MainView extends React.Component {
         name="Scan"
         as={Link}
         to={constants.routes.dash.base}
-        //active={this.props.location.pathname === constants.routes.dash.base}
+        active={this.props.location.pathname === constants.routes.dash.base}
       />,
       <Menu.Item
         name="View Data"
         as={Link}
         to={constants.routes.dash.viewData}
-        //active={this.props.location.pathname === constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
     let cworkerNav = [
@@ -136,13 +138,13 @@ export default class MainView extends React.Component {
         name="Scan"
         as={Link}
         to={constants.routes.dash.base}
-        //active={this.props.location.pathname === constants.routes.dash.base}
+        active={this.props.location.pathname === constants.routes.dash.base}
       />,
       <Menu.Item
         name="View Data"
         as={Link}
         to={constants.routes.dash.viewData}
-        //active={this.props.location.pathname === constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
     let adminNav = [
@@ -150,23 +152,26 @@ export default class MainView extends React.Component {
         name="Create Bucks"
         as={Link}
         to={constants.routes.dash.bucksLanding}
-        //active={this.props.location.pathname ===constants.routes.dash.bucksLanding}
+        active={
+          this.props.location.pathname === constants.routes.dash.bucksLanding
+        }
       />,
       <Menu.Item
         name="Manage Accounts"
         as={Link}
         to={constants.routes.dash.manageAccount}
-        //active={this.props.location.pathname ===constants.routes.dash.manageAccount}
+        active={
+          this.props.location.pathname === constants.routes.dash.manageAccount
+        }
       />,
       <Menu.Item
         name="View Data"
         as={Link}
         to={constants.routes.dash.viewData}
-        //active={this.props.location.pathname ===constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
 
-    // TODO: Set userId in state
     let farmerUI = [
       <Route
         exact
@@ -186,6 +191,13 @@ export default class MainView extends React.Component {
     ];
 
     let adminUI = [
+      // <Route
+      //   exact
+      //   path={constants.routes.dash.base}
+      //   render={() => (
+      //     <Scan role={this.state.role} userId={this.state.uid} />
+      //   )}
+      // />,
       <Route
         path={constants.routes.dash.bucksLanding}
         component={() => <BucksLanding username={this.state.username} />}
@@ -273,23 +285,6 @@ export default class MainView extends React.Component {
             <Menu.Item name="logout" onClick={this.handleSignOut} />
           </Menu.Menu>
         </Menu>
-
-        {/* <Responsive as={Menu}>
-          <Menu.Item header>Our Company</Menu.Item>
-          <Menu.Item
-            name='aboutUs'
-            active={activeItem === 'aboutUs'}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item name='jobs' active={activeItem === 'jobs'} onClick={this.handleItemClick} />
-          <Menu.Item
-            name='locations'
-            active={activeItem === 'locations'}
-            onClick={this.handleItemClick}
-          />
-        </Responsive>     */}
-
-        {/* <NavigationBar /> */}
 
         <Container
           style={{
