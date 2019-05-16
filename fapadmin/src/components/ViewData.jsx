@@ -10,10 +10,7 @@ export default class ViewData extends React.Component {
     // const { tier } = user
     // https://firebase.google.com/docs/auth/admin/custom-claims
     return (
-      <Container>
-        <h1>DATA DATA DATA</h1>
         <Dashboard />
-      </Container>
     );
   }
 }
