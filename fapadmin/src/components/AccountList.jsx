@@ -31,7 +31,6 @@ export default class AccountList extends React.Component {
 
   render() {
     if (!this.state.accountSnapshot) {
-      // return <div>Loading... please be patient</div>;
       return   <div>
                 <Segment>
                   <Dimmer active inverted>

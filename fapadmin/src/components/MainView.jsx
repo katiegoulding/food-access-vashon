@@ -18,6 +18,7 @@ import {
   Segment,
   Responsive
 } from "semantic-ui-react";
+import Dashboard from "./Dashboard";
 
 // const Title = styled.section`
 //   height: 220px;
@@ -178,7 +179,7 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} component={ViewData} />
+      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
     ];
 
     let cworkerUI = [
@@ -187,26 +188,19 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} component={ViewData} />
+      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
     ];
 
     let adminUI = [
-      // <Route
-      //   exact
-      //   path={constants.routes.dash.base}
-      //   render={() => (
-      //     <Scan role={this.state.role} userId={this.state.uid} />
-      //   )}
-      // />,
       <Route
         path={constants.routes.dash.bucksLanding}
-        component={() => <BucksLanding username={this.state.username} />}
+        render={() => <BucksLanding username={this.state.username} />}
       />,
       <Route
         path={constants.routes.dash.manageAccount}
         component={ManageAccount}
       />,
-      <Route path={constants.routes.dash.base} render={() => <ViewData />} />,
+      <Route path={constants.routes.dash.base} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />,
       <Route
         path={constants.routes.dash.createBucks}
         render={() => <CreateBucks username={this.state.username} />}

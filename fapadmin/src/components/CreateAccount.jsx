@@ -12,8 +12,8 @@ export default class CreateAccount extends React.Component {
     this.state = {
       firstName: "",
       lastName: "",
-      role: "farmer",
-      org: "foodbank",
+      role: "",
+      org: "",
       email: "",
       pw: "",
       pw_confirm: "",
@@ -45,6 +45,13 @@ export default class CreateAccount extends React.Component {
     this.setState({
       loading: true
     });
+
+    // handle case for bookkeeper and admin org
+    if(this.state.role === 'Admin') {
+      this.setState({
+        org: "fap"
+      })
+    }
 
     if (this.state.pw !== this.state.pw_confirm) {
       this.setState({
@@ -130,7 +137,7 @@ export default class CreateAccount extends React.Component {
       { key: "y", text: "Vashon Youth and Family Services", value: "vyfs" }
     ];
 
-    const { loading, errorMessage } = this.state;
+    const { loading, errorMessage, role } = this.state;
     const { width } = this.state
     const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
 
@@ -184,18 +191,53 @@ export default class CreateAccount extends React.Component {
               value={this.state.role}
               options={roleOptions}
               onChange={(evt, data) => {
-                this.setState({ role: data.value })
-              }
+                  this.setState({ role: data.value })
+                }
               }
             />
 
-            <Form.Select
-              label="Affiliated Organization:"
-              htmlFor="organization"
-              value={this.state.org}
-              options={orgOptions}
-              onChange={(evt, data) => this.setState({ org: data.value })}
-            />
+            {(() => {
+              switch(role) {
+                case 'Caseworker':
+                  return <Form.Select 
+                            required 
+                            label="Affiliated Organization:" 
+                            htmlFor="organization" 
+                            value={this.state.org} 
+                            options={orgOptions} 
+                            onChange={(evt, data) => { 
+                                this.setState({ org: data.value }) 
+                              }
+                            } 
+                          />;
+                case 'Farmer':
+                  return <Form.Input 
+                            required
+                            label="Farm Name:" 
+                            htmlFor="organization" 
+                            value={this.state.org} 
+                            onInput={evt => this.setState({ org: evt.target.value })}
+                          />;
+                case 'Admin':
+                  return <Form.Input 
+                          label='Affiliated Organization:'
+                          htmlFor="organization"  
+                          value={"Food Access Partnership"} 
+                          placeholder='Food Access Partnership' 
+                          readOnly 
+                        />;
+                case 'Bookkeeper':
+                return <Form.Input 
+                        label='Affiliated Organization:'
+                        htmlFor="organization"  
+                        value={"Food Access Partnership"} 
+                        placeholder='Food Access Partnership' 
+                        readOnly 
+                      />;
+                default:
+                  return <div></div>;
+              }
+            })()}
 
             <Form.Input
               required
