@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-import { Container, Segment, Message } from "semantic-ui-react";
+import { Container, Segment, Message, Transition } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -219,10 +219,12 @@ export default class Scan extends React.Component {
           raised
         >
           {this.state.invalidScan ? (
-            <Message warning>
-              <Message.Header>Invalid Scan!</Message.Header>
-              <p>Make sure you have a valid coupon, then try again.</p>
-            </Message>
+            <Transition visible={true} animation="scale" duration={500}>
+              <Message warning>
+                <Message.Header>Invalid Scan!</Message.Header>
+                <p>Make sure you have a valid coupon, then try again.</p>
+              </Message>
+            </Transition>
           ) : null}
           <Container>
             {scanner}

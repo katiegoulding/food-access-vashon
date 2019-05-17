@@ -1,7 +1,9 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import { Container } from "semantic-ui-react";
+import { Container, Segment, Dimmer, Loader, Image } from "semantic-ui-react";
 import firebase from "firebase/app";
+import { ResponsiveBar } from "@nivo/bar";
+import { ResponsiveLine } from "@nivo/line";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -13,36 +15,135 @@ export default class Dashboard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps", nextProps);
+    if (this.props != this.nextProps) {
+      console.log("componentWillReceiveProps", nextProps);
+      this.setState(nextProps);
 
-    this.setState(nextProps);
+      // let firebaseDataArray = [];
+      // let ref;
+      // console.log("this.state.role in Dashboard", nextProps.role);
+      // if (nextProps.role === "farmer") {
+      //   console.log("I'm a farmer");
+      //   ref = firebase.database().ref("vis1/" + nextProps.uid);
+      //   ref.on("child_added", snapshot => {
+      //     const value = snapshot.val();
+      //     console.log(value);
+      //     let scanDay = new Date(value).toISOString().split("T")[0];
+      //     var index = firebaseDataArray.findIndex(function(item, i) {
+      //       return item.x === scanDay;
+      //     });
+      //     if (index === -1) {
+      //       firebaseDataArray.push({
+      //         x: scanDay,
+      //         y: 2
+      //       });
+      //     } else {
+      //       firebaseDataArray[index].y += 2;
+      //     }
+      //     this.setState({
+      //       firebaseDataArray
+      //     });
+      //   });
+      // } else if (nextProps.role === "admin") {
+      //   ref = firebase.database().ref("vis2");
+      // } else if (nextProps.role === "caseworker") {
+      //   ref = firebase
+      //     .database()
+      //     .ref()
+      //     .child("vis2/" + nextProps.org);
+      // }
+    }
+  }
 
+  componentDidMount() {
     let firebaseDataArray = [];
     let ref;
-    console.log("this.state.role in Dashboard", nextProps.role);
-    if (nextProps.role === "farmer") {
+    console.log("this.state.role in Dashboard", this.props.role);
+    if (this.props.role === "farmer") {
       console.log("I'm a farmer");
-      ref = firebase.database().ref("vis1/" + nextProps.uid);
+      ref = firebase.database().ref("vis1/" + this.props.uid);
+      ref.on("child_added", snapshot => {
+        const value = snapshot.val();
+        console.log(value);
+        let scanDay = new Date(value).toISOString().split("T")[0];
+        var index = firebaseDataArray.findIndex(function(item, i) {
+          return item.x === scanDay;
+        });
+        if (index === -1) {
+          firebaseDataArray.push({
+            x: scanDay,
+            y: 2
+          });
+        } else {
+          firebaseDataArray[index].y += 2;
+        }
+        this.setState({
+          firebaseDataArray
+        });
+      });
     } else if (this.props.role === "admin") {
       ref = firebase.database().ref("vis2");
     } else if (this.props.role === "caseworker") {
-      ref = firebase.database().ref("vis2/" + nextProps.org);
+      ref = firebase
+        .database()
+        .ref()
+        .child("vis2/" + this.props.org);
     }
-    ref.on("child_added", snapshot => {
-      const value = snapshot.val();
-      console.log(value);
-      // sort by newest
-      firebaseDataArray.push(value);
-      this.setState({
-        firebaseDataArray
-      });
-    });
   }
 
   render() {
+    let charData = [];
+    let data = this.state.firebaseDataArray.sort(
+      (a, b) => new Date(a.x) - new Date(b.x)
+    );
+
+    charData.push({
+      id: "random shit",
+      data: data
+    });
+
+    console.log(JSON.stringify(this.state.firebaseDataArray));
     return (
       <Container>
-        <Plot
+        <Segment raised style={{ height: "700px" }}>
+          {JSON.stringify(this.state.firebaseDataArray, null, 2)}
+          {this.state.firebaseDataArray == [] ? null : (
+            <ResponsiveLine
+              data={charData}
+              colors={{ scheme: "nivo" }}
+              xScale={{
+                type: "time",
+                format: "%Y-%m-%d",
+                precision: "day"
+              }}
+              xFormat="time: %Y-%m-%d"
+              curve="monotoneX"
+              yScale={{
+                type: "linear",
+                stacked: false
+              }}
+              axisLeft={{
+                orient: "left",
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: "count",
+                legendOffset: -40,
+                legendPosition: "middle"
+              }}
+              axisBottom={{
+                format: "%b %d",
+                tickValues: "every 2 days",
+                legend: "time scale",
+                legendOffset: -12
+              }}
+              animate={true}
+              margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+              mesh={data.length !== 0}
+            />
+          )}
+        </Segment>
+        {/* <Plot
           // consider putting this on the backend, so its only retrieved by an authenticated API call
           data={[
             {
@@ -181,7 +282,7 @@ export default class Dashboard extends React.Component {
             }
           ]}
           layout={{ title: "Pie" }}
-        />
+        /> */}
       </Container>
     );
   }

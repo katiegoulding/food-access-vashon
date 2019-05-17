@@ -73,23 +73,30 @@ export default class MainView extends React.Component {
       if (!user) {
         this.props.history.push(constants.routes.base);
       } else {
-        user.getIdTokenResult(true).then(idTokenResult => {
-          console.log(idTokenResult.claims.role);
-          if (idTokenResult.claims.role === "caseworker") {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role,
-              org: this.state.org
+        firebase
+          .database()
+          .ref("users/" + user.uid)
+          .once("value")
+          .then(snapshot => {
+            var org = snapshot.val().org;
+            user.getIdTokenResult(true).then(idTokenResult => {
+              console.log(idTokenResult.claims.role);
+              if (idTokenResult.claims.role === "caseworker") {
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role,
+                  org: org
+                });
+              } else {
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role
+                });
+              }
             });
-          } else {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role
-            });
-          }
-        });
+          });
       }
     });
   }
