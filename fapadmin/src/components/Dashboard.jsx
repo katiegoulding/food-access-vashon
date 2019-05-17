@@ -10,7 +10,9 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {
       chartData: props.chartData,
-      firebaseDataArray: []
+      firebaseDataArray: [],
+      created: [],
+      redeemed: []
     };
   }
 
@@ -57,13 +59,22 @@ export default class Dashboard extends React.Component {
 
   componentDidMount() {
     let firebaseDataArray = [];
+    let created = [];
+    let redeemed = [];
     let ref;
+    let count = 0;
+    let rcount = 0;
+    let ccount = 0;
     console.log("this.state.role in Dashboard", this.props.role);
     if (this.props.role === "farmer") {
       console.log("I'm a farmer");
-      ref = firebase.database().ref("vis1/" + this.props.uid);
+      ref = firebase
+        .database()
+        .ref("vis1/" + this.props.uid)
+        .orderByValue();
       ref.on("child_added", snapshot => {
         const value = snapshot.val();
+        count += 2;
         console.log(value);
         let scanDay = new Date(value).toISOString().split("T")[0];
         var index = firebaseDataArray.findIndex(function(item, i) {
@@ -72,7 +83,7 @@ export default class Dashboard extends React.Component {
         if (index === -1) {
           firebaseDataArray.push({
             x: scanDay,
-            y: 2
+            y: count
           });
         } else {
           firebaseDataArray[index].y += 2;
@@ -87,7 +98,53 @@ export default class Dashboard extends React.Component {
       ref = firebase
         .database()
         .ref()
-        .child("vis2/" + this.props.org);
+        .child("vis2/" + this.props.org + "/created/")
+        .orderByValue();
+      ref.on("child_added", snapshot => {
+        const value = snapshot.val();
+        ccount += 2;
+        console.log(value);
+        let scanDay = new Date(value).toISOString().split("T")[0];
+        var index = created.findIndex(function(item, i) {
+          return item.x === scanDay;
+        });
+        if (index === -1) {
+          created.push({
+            x: scanDay,
+            y: ccount
+          });
+        } else {
+          created[index].y += 2;
+        }
+        this.setState({
+          created
+        });
+      });
+      ref = firebase
+        .database()
+        .ref()
+        .child("vis2/" + this.props.org + "/redeemed/")
+        .orderByValue();
+      ref.on("child_added", snapshot => {
+        const value = snapshot.val();
+        rcount += 2;
+        console.log(value);
+        let scanDay = new Date(value).toISOString().split("T")[0];
+        var index = redeemed.findIndex(function(item, i) {
+          return item.x === scanDay;
+        });
+        if (index === -1) {
+          redeemed.push({
+            x: scanDay,
+            y: rcount
+          });
+        } else {
+          redeemed[index].y += 2;
+        }
+        this.setState({
+          redeemed
+        });
+      });
     }
   }
 
@@ -97,17 +154,48 @@ export default class Dashboard extends React.Component {
       (a, b) => new Date(a.x) - new Date(b.x)
     );
 
-    charData.push({
-      id: "random shit",
-      data: data
-    });
+    if (this.props.role == "farmer") {
+      charData.push({
+        id: "Redeemed",
+        data: data
+      });
+    } else if (this.props.role == "caseworker") {
+      let redeemTemp = [];
+      redeemTemp = this.state.redeemed;
+      try {
+        console.log("first created:" + this.state.created[0]["x"]);
+        if (this.state.redeemed[0]["x"] !== this.state.created[0]["x"]) {
+          redeemTemp.push({
+            x: this.state.created[0]["x"],
+            y: 0
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+      redeemTemp = redeemTemp.sort((a, b) => new Date(a.x) - new Date(b.x));
+      charData.push({
+        id: "Redeemed",
+        data: redeemTemp
+      });
+      charData.push({
+        id: "Created",
+        data: this.state.created
+      });
+      try {
+        console.log("first created:" + this.state.created[0].getString("x"));
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
-    console.log(JSON.stringify(this.state.firebaseDataArray));
+    console.log(JSON.stringify(charData));
     return (
       <Container>
         <Segment raised style={{ height: "700px" }}>
-          {JSON.stringify(this.state.firebaseDataArray, null, 2)}
-          {this.state.firebaseDataArray == [] ? null : (
+          {JSON.stringify(charData, null, 2)}
+          {this.state.firebaseDataArray === [] ||
+          this.state.created === [] ? null : (
             <ResponsiveLine
               data={charData}
               colors={{ scheme: "nivo" }}
@@ -139,150 +227,41 @@ export default class Dashboard extends React.Component {
               }}
               animate={true}
               margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-              mesh={data.length !== 0}
+              // enableSlices={false}
+              // useMesh={data.length > 2}
+              legends={
+                this.props.role === "caseworker"
+                  ? [
+                      {
+                        anchor: "bottom-right",
+                        direction: "column",
+                        justify: false,
+                        translateX: 100,
+                        translateY: 0,
+                        itemsSpacing: 0,
+                        itemDirection: "left-to-right",
+                        itemWidth: 80,
+                        itemHeight: 20,
+                        itemOpacity: 0.75,
+                        symbolSize: 12,
+                        symbolShape: "circle",
+                        symbolBorderColor: "rgba(0, 0, 0, .5)",
+                        effects: [
+                          {
+                            on: "hover",
+                            style: {
+                              itemBackground: "rgba(0, 0, 0, .03)",
+                              itemOpacity: 1
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  : undefined
+              }
             />
           )}
         </Segment>
-        {/* <Plot
-          // consider putting this on the backend, so its only retrieved by an authenticated API call
-          data={[
-            {
-              x: [
-                "VYFS",
-                "IFCH",
-                "Community Dinner",
-                "VCCC",
-                "Senior Center",
-                "DOVE",
-                "La Communidad",
-                "VHH",
-                "Food Bank"
-              ],
-              y: [0.62, 0.63, 0.29, 0.79, 0.84, 0.65, 0.45, 0.81, 0.5],
-              type: "bar",
-              name: "2018"
-            },
-            {
-              x: [
-                "VYFS",
-                "IFCH",
-                "Community Dinner",
-                "VCCC",
-                "Senior Center",
-                "DOVE",
-                "La Communidad",
-                "VHH",
-                "Food Bank"
-              ],
-              y: [0.7, 0.75, 0.73, 0.96, 0.99, 0.47, 0.64, 0.69, 0.72],
-              type: "bar",
-              name: "2017"
-            },
-            {
-              x: [
-                "VYFS",
-                "IFCH",
-                "Community Dinner",
-                "VCCC",
-                "Senior Center",
-                "DOVE",
-                "La Communidad",
-                "VHH",
-                "Food Bank"
-              ],
-              y: [0.694, 0.802, 0.46, 0.71, 0.98, 0.685, 0.567, 0.988, 0],
-              type: "bar",
-              name: "2016"
-            }
-          ]}
-          layout={{
-            title: "Redemption Rates",
-            barmode: "group",
-            yaxis: { title: "Percent" },
-            xaxis: { title: "Partner Organizations" }
-          }}
-        />
-
-        <Plot
-          data={[
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.62, 0.7, 0.694, 0.915],
-              type: "bar",
-              name: "VYFS"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.63, 0.75, 0.8029, 0.607],
-              type: "bar",
-              name: "IFCH"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.29, 0.73, 0.46, 0.3354],
-              type: "bar",
-              name: "Community Dinner"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.79, 0.96, 0.71, 0.9988],
-              type: "bar",
-              name: "VCCC"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.84, 0.99, 0.98, 0.924],
-              type: "bar",
-              name: "Senior Center"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.29, 0.73, 0.46, 0.808],
-              type: "bar",
-              name: "Community Dinner"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.65, 0.47, 0.685, 0.808],
-              type: "bar",
-              name: "DOVE"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.45, 0.64, 0.5677, 0.716],
-              type: "bar",
-              name: "La Communidad"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.81, 0.69, 0.988, 0.8267],
-              type: "bar",
-              name: "VHH"
-            },
-            {
-              x: [2018, 2017, 2016, 2015],
-              y: [0.5, 0.72, 0, 0],
-              type: "bar",
-              name: "Food Bank"
-            }
-          ]}
-          layout={{
-            title: "Redemption Rates",
-            barmode: "group",
-            yaxis: { title: "Percent" },
-            xaxis: { title: "Partner Organizations" }
-          }}
-        />
-        <Plot
-          data={[
-            {
-              values: [20, 30, 50],
-              type: "pie",
-              labels: ["a", "b", "c"]
-            }
-          ]}
-          layout={{ title: "Pie" }}
-        /> */}
       </Container>
     );
   }
