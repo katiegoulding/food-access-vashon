@@ -32,7 +32,16 @@ export default class FarmerPayout extends React.Component {
   }
 
   loadPayoutRecords() {
-    let accountRef = firebase.database().ref("/users/");
+    let farmerList = []
+    let payoutRef = firebase.database().ref("/users/");
+    payoutRef.once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            let value = childSnapshot.val()
+            if(value.role.ignoreCase === 'farmer' && value.approved.ignoreCase ==='true') {
+                farmerList.push()
+            }
+        });
+    });
     // filter by role == farmer
     // load all users that are farmers AND are approved
     // get their voucher list, check the flag (expecting either "paid" or "paidNot")
@@ -46,7 +55,6 @@ export default class FarmerPayout extends React.Component {
   }
 
   render() {
-    
 
     return (
       <Container>
@@ -63,15 +71,15 @@ export default class FarmerPayout extends React.Component {
             <Table.Header>
             <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Role</Table.HeaderCell>
+                <Table.HeaderCell>Farm</Table.HeaderCell>
                 <Table.HeaderCell>Email</Table.HeaderCell>
-                <Table.HeaderCell>Approval Status</Table.HeaderCell>
-                <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
-                <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
+                <Table.HeaderCell>Total Bucks Collected</Table.HeaderCell>
+                <Table.HeaderCell>Unpaid Bucks</Table.HeaderCell>
+                <Table.HeaderCell>Mark As Paid</Table.HeaderCell>
             </Table.Row>
             </Table.Header>
             <Table.Body></Table.Body>
-        </Table>
+            </Table>
           </Container>
         </Segment>
       </Container>
