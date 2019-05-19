@@ -4,6 +4,7 @@ import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
 import { Container, Segment, Message, Transition } from "semantic-ui-react";
+
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -193,7 +194,7 @@ export default class Scan extends React.Component {
           delay={300}
           onError={this.handleError}
           onScan={this.handleScan}
-          style={{ width: "50%", margin: "auto" }}
+          style={{ width: "90%", margin: "auto" }}
           legacyMode
         />
       );
@@ -203,7 +204,7 @@ export default class Scan extends React.Component {
           delay={300}
           onError={this.handleError}
           onScan={this.handleScan}
-          style={{ width: "50%", margin: "auto" }}
+          style={{ width: "90%", margin: "auto" }}
         />
       );
     }

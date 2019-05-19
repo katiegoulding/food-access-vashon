@@ -20,40 +20,6 @@ export default class Dashboard extends React.Component {
     if (this.props != this.nextProps) {
       console.log("componentWillReceiveProps", nextProps);
       this.setState(nextProps);
-
-      // let firebaseDataArray = [];
-      // let ref;
-      // console.log("this.state.role in Dashboard", nextProps.role);
-      // if (nextProps.role === "farmer") {
-      //   console.log("I'm a farmer");
-      //   ref = firebase.database().ref("vis1/" + nextProps.uid);
-      //   ref.on("child_added", snapshot => {
-      //     const value = snapshot.val();
-      //     console.log(value);
-      //     let scanDay = new Date(value).toISOString().split("T")[0];
-      //     var index = firebaseDataArray.findIndex(function(item, i) {
-      //       return item.x === scanDay;
-      //     });
-      //     if (index === -1) {
-      //       firebaseDataArray.push({
-      //         x: scanDay,
-      //         y: 2
-      //       });
-      //     } else {
-      //       firebaseDataArray[index].y += 2;
-      //     }
-      //     this.setState({
-      //       firebaseDataArray
-      //     });
-      //   });
-      // } else if (nextProps.role === "admin") {
-      //   ref = firebase.database().ref("vis2");
-      // } else if (nextProps.role === "caseworker") {
-      //   ref = firebase
-      //     .database()
-      //     .ref()
-      //     .child("vis2/" + nextProps.org);
-      // }
     }
   }
 
@@ -134,6 +100,7 @@ export default class Dashboard extends React.Component {
           return item.x === scanDay;
         });
         if (index === -1) {
+          // redeemed not found
           redeemed.push({
             x: scanDay,
             y: rcount
