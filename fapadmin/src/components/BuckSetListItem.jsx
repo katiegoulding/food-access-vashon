@@ -20,6 +20,7 @@ export default class BuckSetListItem extends React.Component {
 
     deleteBuckSet = () => {
         let key = this.props.data.title
+        //TODO: make if(!key) {...} and throw an error 
         if(key != '') {
             let buckSetRef = firebase.database().ref('buckSets/' + key)
             buckSetRef.remove()

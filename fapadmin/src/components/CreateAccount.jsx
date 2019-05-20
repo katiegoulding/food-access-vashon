@@ -47,7 +47,7 @@ export default class CreateAccount extends React.Component {
     });
 
     // handle case for bookkeeper and admin org
-    if(this.state.role === 'Admin') {
+    if(this.state.role.toLowerCase() === 'admin' || this.state.role.toLowerCase() === 'bookkeeper') {
       this.setState({
         org: "fap"
       })
@@ -91,7 +91,8 @@ export default class CreateAccount extends React.Component {
                 email: this.state.email,
                 role: this.state.role,
                 org: this.state.org,
-                approved: false  // TODO: Change this 
+                vouchersList: [], // added on 5/20 to avoid accessing undefined later
+                approved: false  // TODO: Change this?
               });
           } catch (err) {
             console.log('err on write to db = ', err)
