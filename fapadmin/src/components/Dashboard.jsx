@@ -1,18 +1,49 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { Container } from "semantic-ui-react";
+import firebase from "firebase/app";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartData: props.chartData
+      chartData: props.chartData,
+      firebaseDataArray: []
     };
   }
 
-  //    makeplot() {
-  //        Plotly.d3.csv("../../../fap_history_data.csv", function(data{ processData(data)}));
-  //   }
+//TODO: add role and org and uid to props, not currently defined here
+componentDidMount() {
+let firebaseDataArray = []
+
+if(this.props.role === 'farmer') {
+  let farmerRef = firebase.database().ref('viz1/' + this.props.uid)
+} else if(this.props.role === 'admin') { 
+  let adminRef = firebase.database().ref('viz2')
+} else if(this.props.role === 'caseworker') {
+  let caseworkerRef = firebase.database().ref('viz2/' + this.props.org)
+}
+
+//   buckSetsRef.orderByChild('createdOn').on('child_added', (snapshot) => {
+//       const value = snapshot.val()
+//       // sort by newest
+//       firebaseDataArray.push({
+//           title: value.name,
+//           subtitle: value.createdBy
+//       })
+//       this.setState({
+//         firebaseDataArray
+//       })
+//   });
+//   buckSetsRef.orderByChild('createdOn').on('child_removed', (snapshot) => {
+//       const value = snapshot.val()
+//       // filter out the removed item and force another render
+//       firebaseDataArray = firebaseDataArray.filter(el => !(el.title === value.name && el.subtitle === value.createdBy))
+//       this.setState({
+//         firebaseDataArray
+//       })
+//   });
+}
 
   render() {
     return (

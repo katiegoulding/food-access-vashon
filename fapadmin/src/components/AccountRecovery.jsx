@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from 'firebase/app'
-import { Form, Button } from 'semantic-ui-react';
+import { Form, Button, Grid, Responsive, Message } from 'semantic-ui-react';
 import "firebase/auth";
 import "firebase/database";
 
@@ -9,7 +9,8 @@ export default class AccountRecovery extends React.Component {
     super(props);
     this.state = {
       email: "",
-      errorMessage: undefined
+      errorMessage: false,
+      successMessage: undefined
     };
   }
 
@@ -25,32 +26,62 @@ export default class AccountRecovery extends React.Component {
     this.authUnsub();
   }
 
-  handlePasswordReset(email) {
+  handlePasswordReset(evt) {
     let auth = firebase.auth();
-    console.log("before");
     this.setState({ errorMessage: undefined });
     auth
-      .sendPasswordResetEmail(email)
-      .then(function() {})
-      .catch(err => this.setState({ errorMessage: err.message }));
-    console.log("after");
+      .sendPasswordResetEmail(this.state.email)
+      .then( this.setState({
+        successMessage: true,
+        email: ""
+      }) )
+      .catch(err => this.setState({
+        errorMessage: err.message 
+      }));
   }
 
+  handleOnUpdate = (e, { width }) => this.setState({ width })
+
     render() {
+      const { width, successMessage, email } = this.state
+      const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
+
       return (
-        <Form onSubmit={evt => this.handlePasswordReset(evt)}>
-        <h1>Reset Password</h1> 
-          <Form.Input
-            required
-            id="email"
-            label='Email'
-            type="email"
-            placeholder="Enter your email address"
-            value={this.state.email}
-            onInput={evt => this.setState({email: evt.target.value})}
-          />
-          <Button type="submit" content='reset'/>
-        </Form>
+        <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
+          <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
+            
+            <Message
+              attached='top'
+              header="Account Recovery"
+              content="Enter your account email to reset your password."
+            />
+            
+            <Form 
+              className="attached fluid segment"
+              onSubmit={evt => this.handlePasswordReset(evt)}
+              warning={successMessage}>
+                
+                <Form.Input
+                  required
+                  id="email"
+                  label='Email'
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={this.state.email}
+                  onInput={evt => this.setState({ email: evt.target.value })}
+                />
+
+                <Button type="submit" content='Reset'/>
+
+                <Message
+                  warning
+                  header={"Thank you"}
+                  content={"If that account exists in our system, password reset steps will be sent"}
+                />
+
+            </Form>
+          </Grid.Column>
+        </Responsive>
         )
     }
 }

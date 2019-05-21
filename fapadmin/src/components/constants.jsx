@@ -1,5 +1,6 @@
 export default {
   routes: {
+    barrier: "/barrier",
     createAccount: "/signup",
     accountRecovery: "/recover",
     base: "/",

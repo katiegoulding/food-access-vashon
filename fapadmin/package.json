@@ -11,7 +11,7 @@
     "cors": "^2.8.5",
     "firebase": "^5.9.4",
     "gh-pages": "^2.0.1",
-    "pdfmake": "^0.1.54",
+    "pdfmake": "^0.1.56",
     "plotly.js": "^1.45.2",
     "react": "^16.8.3",
     "react-chartjs-2": "^2.7.4",

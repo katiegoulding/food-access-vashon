@@ -4,7 +4,15 @@ import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Message, Form, Button, Icon, Grid, Divider } from "semantic-ui-react";
+import {
+  Message,
+  Form,
+  Button,
+  Icon,
+  Grid,
+  Divider,
+  Responsive
+} from "semantic-ui-react";
 
 export default class LogInActivity extends React.Component {
   constructor(props) {
@@ -22,7 +30,16 @@ export default class LogInActivity extends React.Component {
     //listen for auth change
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push(constants.routes.dash.base);
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role);
+          if (idTokenResult.claims.role) {
+            //push them on to the dashboard
+            this.props.history.push(constants.routes.dash.base);
+          } else {
+            //push them to the barrier page
+            this.props.history.push(constants.routes.barrier);
+          }
+        });
       }
     });
   }
@@ -49,17 +66,29 @@ export default class LogInActivity extends React.Component {
       );
   }
 
+  handleOnUpdate = (e, { width }) => this.setState({ width });
+
   render() {
     const { loading, errorMessage } = this.state;
+    const { width } = this.state;
+    const colWidth = width >= Responsive.onlyTablet.minWidth ? "6" : "12";
 
     return (
-      <Grid centered="true" middle columns={1}>
-        <Grid.Column width={6} verticalAlign="middle" textAlign="left">
+      <Responsive
+        as={Grid}
+        fireOnMount
+        onUpdate={this.handleOnUpdate}
+        centered="true"
+        middle
+        columns={1}
+      >
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
           <Message
-            attached
+            attached="top"
             header="Welcome to our site!"
             content="Sign in to access your account"
           />
+
           <Form
             className="attached fluid segment"
             onSubmit={evt => this.handleSignIn(evt)}
@@ -92,6 +121,7 @@ export default class LogInActivity extends React.Component {
             <Divider hidden />
             <Link to={constants.routes.accountRecovery}>Forgot password?</Link>
           </Form>
+
           <Message attached="bottom" info>
             <Icon name="help" />
             Don't have an account? &nbsp;
@@ -99,7 +129,7 @@ export default class LogInActivity extends React.Component {
             &nbsp;instead.
           </Message>
         </Grid.Column>
-      </Grid>
+      </Responsive>
     );
   }
 }

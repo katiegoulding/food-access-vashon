@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Message, Form, Button, Icon, Grid } from "semantic-ui-react";
+import { Message, Form, Button, Icon, Grid, Responsive } from "semantic-ui-react";
 
 export default class CreateAccount extends React.Component {
   constructor(props) {
@@ -12,8 +12,8 @@ export default class CreateAccount extends React.Component {
     this.state = {
       firstName: "",
       lastName: "",
-      role: "farmer",
-      org: "foodbank",
+      role: "",
+      org: "",
       email: "",
       pw: "",
       pw_confirm: "",
@@ -25,7 +25,16 @@ export default class CreateAccount extends React.Component {
     //listen for auth change
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push(constants.routes.dash.base);
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role)
+          if(idTokenResult.claims.role) {
+              //push them on to the dashboard
+              this.props.history.push(constants.routes.dash.base);
+          } else {
+              //push them to the barrier page
+              this.props.history.push(constants.routes.barrier);
+          }
+        });
       }
     });
   }
@@ -36,6 +45,13 @@ export default class CreateAccount extends React.Component {
     this.setState({
       loading: true
     });
+
+    // handle case for bookkeeper and admin org
+    if(this.state.role === 'Admin') {
+      this.setState({
+        org: "fap"
+      })
+    }
 
     if (this.state.pw !== this.state.pw_confirm) {
       this.setState({
@@ -55,51 +71,59 @@ export default class CreateAccount extends React.Component {
       });
       return;
     } else {
+      // auth.token.role == 'admin'
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.pw)
-        .then(async Response => {
+        .then(response => {
           try {
             this.setState({
               loading: true,
               errorMessage: ""
             });
+            console.log('response = ', response)
             return firebase
               .database()
-              .ref(`/users/${Response.user.uid}`)
+              .ref(`/users/${response.user.uid}`)
               .set({
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
-                email: Response.user.email,
+                email: this.state.email,
                 role: this.state.role,
                 org: this.state.org,
-                approved: false
+                approved: false  // TODO: Change this 
               });
           } catch (err) {
+            console.log('err on write to db = ', err)
             return this.setState({
               loading: false,
               errorMessage: err.message
             });
           }
         })
-        .catch(err =>
+        .catch(err => {
+          console.log('err on write to db = ', err)
           this.setState({
             loading: false,
             errorMessage: err.message
           })
-        );
+        }
+      );
     }
   }
 
+  handleOnUpdate = (e, { width }) => this.setState({ width })
+
   render() {
     const roleOptions = [
-      { key: "f", text: "Farmer", value: "farmer" },
-      { key: "c", text: "Caseworker", value: "caseworker" },
-      { key: "a", text: "Admin", value: "admin" }
+      { key: "f", text: "Farmer", value: "Farmer" },
+      { key: "c", text: "Caseworker", value: "Caseworker" },
+      { key: "a", text: "Admin", value: "Admin" },
+      { key: "b", text: "Bookkeeper", value: "Bookkeeper"}
     ];
 
     const orgOptions = [
-      { key: "f", text: "Food Bank", value: "foodbank" },
+      { key: "f", text: "Food Bank", value: "Foodbank" },
       { key: "d", text: "DoVE", value: "dove" },
       { key: "c", text: "Vashon Community Care", value: "vcc" },
       { key: "s", text: "Senior Center", value: "seniorcenter" },
@@ -113,11 +137,13 @@ export default class CreateAccount extends React.Component {
       { key: "y", text: "Vashon Youth and Family Services", value: "vyfs" }
     ];
 
-    const { loading, errorMessage } = this.state;
+    const { loading, errorMessage, role } = this.state;
+    const { width } = this.state
+    const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
 
     return (
-      <Grid centered columns={1}>
-        <Grid.Column width={10} verticalAlign="middle" textAlign="left">
+      <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
           <Message
             attached
             header="Create an Account"
@@ -164,16 +190,54 @@ export default class CreateAccount extends React.Component {
               htmlFor="role"
               value={this.state.role}
               options={roleOptions}
-              onChange={evt => this.setState({ role: evt.target.value })}
+              onChange={(evt, data) => {
+                  this.setState({ role: data.value })
+                }
+              }
             />
 
-            <Form.Select
-              label="Affiliated Organization:"
-              htmlFor="organization"
-              value={this.state.org}
-              options={orgOptions}
-              onChange={evt => this.setState({ org: evt.target.value })}
-            />
+            {(() => {
+              switch(role) {
+                case 'Caseworker':
+                  return <Form.Select 
+                            required 
+                            label="Affiliated Organization:" 
+                            htmlFor="organization" 
+                            value={this.state.org} 
+                            options={orgOptions} 
+                            onChange={(evt, data) => { 
+                                this.setState({ org: data.value }) 
+                              }
+                            } 
+                          />;
+                case 'Farmer':
+                  return <Form.Input 
+                            required
+                            label="Farm Name:" 
+                            htmlFor="organization" 
+                            value={this.state.org} 
+                            onInput={evt => this.setState({ org: evt.target.value })}
+                          />;
+                case 'Admin':
+                  return <Form.Input 
+                          label='Affiliated Organization:'
+                          htmlFor="organization"  
+                          value={"Food Access Partnership"} 
+                          placeholder='Food Access Partnership' 
+                          readOnly 
+                        />;
+                case 'Bookkeeper':
+                return <Form.Input 
+                        label='Affiliated Organization:'
+                        htmlFor="organization"  
+                        value={"Food Access Partnership"} 
+                        placeholder='Food Access Partnership' 
+                        readOnly 
+                      />;
+                default:
+                  return <div></div>;
+              }
+            })()}
 
             <Form.Input
               required
@@ -209,6 +273,7 @@ export default class CreateAccount extends React.Component {
             />
 
             <Button type="submit">Create Account</Button>
+            
           </Form>
           <Message attached="bottom" info>
             <Icon name="help" />
@@ -216,7 +281,7 @@ export default class CreateAccount extends React.Component {
             <Link to={constants.routes.base}>Sign in!</Link>&nbsp;
           </Message>
         </Grid.Column>
-      </Grid>
+      </Responsive>
     );
   }
 }

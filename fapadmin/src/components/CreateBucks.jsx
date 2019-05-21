@@ -1,10 +1,23 @@
-import React from 'react';
-import firebase from 'firebase/app'
-import 'firebase/auth';
-import "firebase/functions"
-import 'firebase/database';
-import { Statistic, Header, Button, Divider, Grid, Form, Message, Segment } from 'semantic-ui-react';
-import axios from 'axios';
+import React from "react";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/functions";
+import "firebase/database";
+import {
+  Statistic,
+  Header,
+  Button,
+  Divider,
+  Grid,
+  Form,
+  Message,
+  Segment
+} from "semantic-ui-react";
+import axios from "axios";
+import bgImg from "../bucktemplateprintpage.jpg";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default class CreateBucks extends React.Component {
   constructor(props) {
@@ -15,6 +28,68 @@ export default class CreateBucks extends React.Component {
       hasError: false,
       errorMessage: ""
     };
+  }
+
+  toDataURL(src, callback, outputFormat) {
+    var img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function() {
+      var canvas = document.createElement("CANVAS");
+      var ctx = canvas.getContext("2d");
+      var dataURL;
+      canvas.height = this.naturalHeight;
+      canvas.width = this.naturalWidth;
+      ctx.drawImage(this, 0, 0);
+      dataURL = canvas.toDataURL(outputFormat);
+      callback(dataURL);
+    };
+    img.src = src;
+    if (img.complete || img.complete === undefined) {
+      img.src =
+        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+      img.src = src;
+    }
+  }
+
+  createPDF(data) {
+    let ids = data.ids;
+    let year = data.year;
+
+    var documentDefinition = {
+      content: []
+    };
+
+    documentDefinition.content.pageSize = "LETTER";
+
+    // PDF VARIABLES(in mm):
+
+    var count = 1;
+
+    ids.forEach(id => {
+      console.log(id);
+      let pOrg = id.partnerOrg;
+      let code = id.id;
+      let qr;
+      if (count % 4 == 0 && count !== ids.length) {
+        qr = {
+          qr: code,
+          fit: 50,
+          margin: [381, 0, 0, 137],
+          pageBreak: "after"
+        };
+      } else if (count % 4 == 1) {
+        qr = { qr: code, fit: 50, margin: [381, 51, 0, 137] };
+      } else {
+        qr = { qr: code, fit: 50, margin: [381, 0, 0, 137] };
+      }
+      console.log(JSON.stringify(qr));
+      documentDefinition.content.push(qr);
+      count++;
+    });
+
+    documentDefinition.pageMargins = [0, 0, 0, 0];
+
+    return documentDefinition;
   }
 
   // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
@@ -35,8 +110,17 @@ export default class CreateBucks extends React.Component {
         .push().key;
       ids.push({ partnerOrg: organization, id: newVoucherKey });
 
+      firebase
+        .database()
+        .ref()
+        .child("vis2/" + organization + "/created/")
+        .update({
+          [newVoucherKey]: new Date()
+        });
+
       updates["/vouchers/" + newVoucherKey] = voucherData;
     }
+
     return firebase
       .database()
       .ref()
@@ -146,53 +230,31 @@ export default class CreateBucks extends React.Component {
       ids
     };
 
-    // Debugging Purposes: Print data sent to Google Cloud function
-    // console.log('data stringified = ', JSON.stringify(data))
-    // data.ids.forEach((id) => {
-    //     console.log(id);
-    // });
-
     // Call Google Cloud Function to generate PDF of vouchers
     Promise.all([promise1, promise2, promise3, promise4])
       .then(doesPass => {
-        axios({
-          method: "post",
-          url: `https://us-central1-fapadmin-97af8.cloudfunctions.net/helloWorld/`,
-          data: data,
-          responseType: "blob" //Force to receive data in a Blob Format
-        })
-          .then(response => {
-            //Create a Blob from the PDF Stream
-            const file = new Blob([response.data], { type: "application/pdf" });
-            //Build a URL from the file
-            const fileURL = URL.createObjectURL(file);
-            //Open the URL on new Window
-            window.open(fileURL);
-            const link = document.createElement("a");
-            link.href = fileURL;
-            link.setAttribute("download", "file.pdf");
-            document.body.appendChild(link);
-            link.click();
-            // remove
-            link.parentNode.removeChild(link);
-            this.setState({
-              complete: true,
-              loading: false,
-              errorMessage: ""
-            });
-            const { toggleShowCreateBucks } = this.props;
-            toggleShowCreateBucks();
-          })
-          .catch(error => {
-            error.json().then(json => {
-              console.log("Error = ", error);
+        let documentDefinition = this.createPDF(data);
+        this.toDataURL(bgImg, dataUrl => {
+          documentDefinition.background = [
+            {
+              image: dataUrl,
+              width: 612.0,
+              height: 792.0
+            }
+          ];
+          console.log(JSON.stringify(documentDefinition));
+          pdfMake
+            .createPdf(documentDefinition)
+            .download(this.props.buckSetName + ".pdf", () => {
               this.setState({
-                hasError: true,
-                errorMessage: json,
-                loading: false
+                complete: true,
+                loading: false,
+                errorMessage: ""
               });
+              const { toggleShowCreateBucks } = this.props;
+              toggleShowCreateBucks();
             });
-          });
+        });
       })
       .catch(err => {
         console.log("Error on firebase request", err);
@@ -211,41 +273,50 @@ export default class CreateBucks extends React.Component {
       this.props.lacomunidadCount +
       this.props.vashonhouseholdCount;
 
-        return (
-            <Grid.Column width={10}>
-            {/* <div class="ui raised very padded container segment"> */}
+    return (
+      <Grid.Column width={10}>
+        {/* <div class="ui raised very padded container segment"> */}
 
-            <Segment
-                raised
-                // style={{
-                // "padding-top": "30px",
-                // "padding-right": "40px",
-                // "padding-left": "40px"
-                // }}
-            >
-            <Form onSubmit={this.handleSubmit} loading={loading} error={errorMessage}>
-                <Form.Input 
-                        required
-                        fluid 
-                        transparent
-                        size="huge"
-                        placeholder="Buck Set Name" 
-                        value={this.props.buckSetName}
-                        onInput={evt => this.props.handleChange({ buckSetName: evt.target.value })} />
+        <Segment
+          raised
+          // style={{
+          // "padding-top": "30px",
+          // "padding-right": "40px",
+          // "padding-left": "40px"
+          // }}
+        >
+          <Form
+            onSubmit={this.handleSubmit}
+            loading={loading}
+            error={errorMessage}
+          >
+            <Form.Input
+              required
+              fluid
+              transparent
+              size="huge"
+              placeholder="Buck Set Name"
+              value={this.props.buckSetName}
+              onInput={evt =>
+                this.props.handleChange({ buckSetName: evt.target.value })
+              }
+            />
 
             <Header as="h5" color="grey" textAlign="left">
               BUCK ALLOCATION
             </Header>
 
-            <Form.Input 
-                    required
-                    fluid 
-                    label='Expiration Date' 
-                    placeholder="ie: 2018" 
-                    type="date"
-                    value={this.props.validYear}
-                    onInput={evt => this.props.handleChange({ validYear: (evt.target.value) })} 
-                /> 
+            <Form.Input
+              required
+              fluid
+              label="Expiration Date"
+              placeholder="ie: 2018"
+              type="date"
+              value={this.props.validYear}
+              onInput={evt =>
+                this.props.handleChange({ validYear: evt.target.value })
+              }
+            />
 
             <Form.Input
               fluid
@@ -299,17 +370,16 @@ export default class CreateBucks extends React.Component {
 
             <Divider hidden />
 
-                {<Button color='blue'>Generate Set</Button>}
-                
-                <Message
-                    error
-                    header={errorMessage}
-                    content={"form not submitted"}
-                    />
+            {<Button color="blue">Generate Set</Button>}
 
-                </Form>
-                </Segment>
-            </Grid.Column>
-        )
-    }
+            <Message
+              error
+              header={errorMessage}
+              content={"form not submitted"}
+            />
+          </Form>
+        </Segment>
+      </Grid.Column>
+    );
+  }
 }
