@@ -6,7 +6,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Scan from "./Scan";
-import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
 import CreateBucks from "./CreateBucks.jsx";
 import {
@@ -317,10 +316,10 @@ export default class MainView extends React.Component {
         <Container
           style={{
             width: "100%",
-            padding: "50px",
-            height: "calc(100% - 220px)  !important",
+            paddingTop: "50px",
             backgroundColor: "#eff0f3"
           }}
+          className="body"
         >
           <Router>
             <Switch>{ui}</Switch>
