@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from "firebase";
-import { Table, Icon, Header, Button } from "semantic-ui-react";
+import { Table, Icon, Header, Button, Confirm } from "semantic-ui-react";
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ export default class Account extends React.Component {
       console.log(result);
     });
     this.props.acctRef.child(this.props.acctSnapshot.key).remove();
+    this.close()
   }
 
   handleApprove() {
@@ -31,6 +32,9 @@ export default class Account extends React.Component {
       console.log(result);
     });
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   render() {
     // let user = firebase.auth().currentUser;
@@ -75,16 +79,23 @@ export default class Account extends React.Component {
               <Button size='mini' content="Reject" onClick={() => this.handlePurge()}/>
             </Button.Group>
           )}
-          {
-          }
         </Table.Cell>
         <Table.Cell textAlign='center'>
           <Icon
               name="delete"
               className="delete"
               size="large"
-              onClick={() => this.handlePurge()}
+              onClick={this.open}
             />
+            <Confirm 
+              size='small' 
+              header="Are you sure?"
+              content={`Are you sure you want to delete the account of ${acct.firstName} ${acct.lastName}? This action cannot be undone`}
+              cancelButton='Cancel'
+              confirmButton="Delete Account"
+              open={this.state.open} 
+              onCancel={this.close} 
+              onClick={() => this.handlePurge()} />
         </Table.Cell>
       </Table.Row>
     );

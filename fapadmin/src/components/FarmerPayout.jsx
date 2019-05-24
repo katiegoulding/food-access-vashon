@@ -3,7 +3,7 @@ import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Container, Segment, Table, TableRow, Button, Label, Icon } from "semantic-ui-react";
+import { Container, Segment, Table, TableRow, Button, Label, Icon, Header, Confirm } from "semantic-ui-react";
 
 export default class FarmerPayout extends React.Component {
   constructor(props) {
@@ -25,6 +25,7 @@ export default class FarmerPayout extends React.Component {
     });
 
     this.loadPayoutRecords()
+    this.listenForUpdates()
   }
 
   componentWillUnmount() {
@@ -35,8 +36,16 @@ export default class FarmerPayout extends React.Component {
     this.setState({ value: evt.target.value });
   }
 
+  listenForUpdates = () => {
+    // let farmerList = this.state.farmerList
+    let farmerRef = firebase.database().ref('users')
+    farmerRef.on('child_changed', (_snapshot) => {
+        this.loadPayoutRecords()
+    })
+  }
+
   loadPayoutRecords = () => {
-    let farmerList = this.state.farmerList
+    let farmerList = []
     let payoutRef = firebase.database().ref("/users/");
     payoutRef.once('value', (snapshot) => {
         snapshot.forEach((childSnapshot) => {
@@ -48,12 +57,8 @@ export default class FarmerPayout extends React.Component {
             //maybe can get rid of if statement...
             if(childSnapshot.val().vouchersList) {
                 let vouchersList = childSnapshot.val().vouchersList  
-                console.log("vouchersList", vouchersList)
                 Object.keys(vouchersList).forEach((voucher) => {
                     totalBucks++
-                    console.log("voucher", voucher)
-                    console.log("voucher.val()", vouchersList[voucher])
-
                     if(vouchersList[voucher].toLowerCase() === 'notpaid') {
                         bucksNotPaid++
                     }
@@ -76,19 +81,16 @@ export default class FarmerPayout extends React.Component {
         })
     });
     console.log("after set state, farmerList: ", farmerList)
-
-    // filter by role == farmer
-    // load all users that are farmers AND are approved
-    // get their voucher list, check the flag (expecting either "paid" or "paidNot")
-    // search all those vouchers -> confirmed they've been redeemed AND check if they've been paid out
-    // if they haven't been paid out, add them to a list and get the count 
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   // On Button click set the unpaid voucher list to be paidOut: true
   completePayout = (farmerUid) => {
     console.log("farmerUid", farmerUid)
     let farmerRef = firebase.database().ref('users/' + farmerUid + "/vouchersList")
-    farmerRef.once('value', (snapshot) => {
+    farmerRef.on('value', (snapshot) => {
         snapshot.forEach((childSnapshot) => {
             let key = childSnapshot.key
             console.log("key", key)
@@ -98,6 +100,7 @@ export default class FarmerPayout extends React.Component {
             })
         }) 
     })
+    this.close()
   }
 
   render() {
@@ -105,15 +108,9 @@ export default class FarmerPayout extends React.Component {
     console.log("farmerList: ", farmerList)
 
     return (
-      <Container>
-        <Segment
-          style={{
-            paddingTop: "30px",
-            paddingRight: "40px",
-            paddingLeft: "40px"
-          }}
-          raised
-        >
+        <Segment raised>
+        <Header textAlign="center" as="h3">Farmer Payout Records for *YEAR*</Header>
+
           <Container>
           <Table singleLine stackable selectable> 
             <Table.Header>
@@ -122,8 +119,7 @@ export default class FarmerPayout extends React.Component {
                 <Table.HeaderCell>Farm</Table.HeaderCell>
                 <Table.HeaderCell>Email</Table.HeaderCell>
                 <Table.HeaderCell>Total Bucks Collected</Table.HeaderCell>
-                <Table.HeaderCell textAlign='center'>Outstanding Bucks</Table.HeaderCell>
-                {/* <Table.HeaderCell>Mark As Paid</Table.HeaderCell> */}
+                <Table.HeaderCell>Outstanding Bucks</Table.HeaderCell>
             </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -139,7 +135,7 @@ export default class FarmerPayout extends React.Component {
                                 <Table.Cell>{element.farm}</Table.Cell>
                                 <Table.Cell>{element.email}</Table.Cell>
                                 <Table.Cell>{element.totalBucks}</Table.Cell>
-                                <Table.Cell textAlign='center'>
+                                <Table.Cell>
                                 {(element.bucksNotPaid === 0) ? 
                                     <Button compact basic color='green'>
                                     <Icon color='green' name='checkmark' size='small' />
@@ -148,12 +144,21 @@ export default class FarmerPayout extends React.Component {
                                     : 
                                     <Button as='div' labelPosition='left'>
                                         <Label basic as='a' pointing='right'>
-                                        ${element.bucksNotPaid * 2}.00 / {element.bucksNotPaid} Bucks
+                                        {element.bucksNotPaid} Bucks / ${element.bucksNotPaid * 2}.00
                                         </Label>
-                                        <Button color='green' icon onClick={() => this.completePayout(element.farmerUid)}>
+                                        <Button color='green' icon onClick={this.open}>
                                             <Icon name='dollar sign' />
                                             Mark as Paid
                                         </Button>
+                                        <Confirm 
+                                            size='small' 
+                                            header="Confirm Payout?"
+                                            content={`This will mark (${element.bucksNotPaid}) unpaid bucks as PAID for ${element.name} at ${element.farm}`}
+                                            cancelButton='Cancel'
+                                            confirmButton="Mark as paid"
+                                            open={this.state.open} 
+                                            onCancel={this.close} 
+                                            onClick={() => this.completePayout(element.farmerUid)} />
                                     </Button>
                                 }
                                 </Table.Cell>
@@ -166,7 +171,6 @@ export default class FarmerPayout extends React.Component {
             </Table>
           </Container>
         </Segment>
-      </Container>
     );
   }
 }

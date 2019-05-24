@@ -1,5 +1,5 @@
 import React from "react";
-import Plot from "react-plotly.js";
+// import Plot from "react-plotly.js";
 import { Container } from "semantic-ui-react";
 import firebase from "firebase/app";
 
@@ -48,7 +48,7 @@ if(this.props.role === 'farmer') {
   render() {
     return (
       <Container>
-        <Plot
+        {/* <Plot
           // consider putting this on the backend, so its only retrieved by an authenticated API call
           data={[
             {
@@ -187,7 +187,7 @@ if(this.props.role === 'farmer') {
             }
           ]}
           layout={{ title: "Pie" }}
-        />
+        /> */}
       </Container>
     );
   }

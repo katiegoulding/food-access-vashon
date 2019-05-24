@@ -74,7 +74,7 @@ export default class FormSuccess extends React.Component {
           <Header as="h5" color="grey" textAlign="left">
             EXPIRATION DATE
           </Header>
-          <p>{this.props.validYear}</p>
+          <p>{this.props.expirationDate}</p>
 
           <Divider hidden />
 

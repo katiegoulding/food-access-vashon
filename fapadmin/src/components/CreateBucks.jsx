@@ -13,7 +13,6 @@ import {
   Message,
   Segment
 } from "semantic-ui-react";
-import axios from "axios";
 import bgImg from "../bucktemplateprintpage.jpg";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -51,9 +50,10 @@ export default class CreateBucks extends React.Component {
     }
   }
 
+  // NAME CHANGE: year changed to expirationDate
   createPDF(data) {
     let ids = data.ids;
-    let year = data.year;
+    let expirationDate = data.expirationDate;
 
     var documentDefinition = {
       content: []
@@ -100,7 +100,7 @@ export default class CreateBucks extends React.Component {
       let voucherData = {
         organization,
         createdOn: new String(new Date()),
-        year: this.props.validYear
+        expirationDate: this.props.expirationDate
       };
 
       let newVoucherKey = firebase
@@ -198,7 +198,7 @@ export default class CreateBucks extends React.Component {
         name: this.props.buckSetName,
         createdOn: new String(new Date()),
         createdBy: this.props.username,
-        year: this.props.validYear,
+        expirationDate: this.props.expirationDate,
         doveCount: this.props.doveCount,
         vyfsCount: this.props.vyfsCount,
         lacomunidadCount: this.props.lacomunidadCount,
@@ -226,7 +226,7 @@ export default class CreateBucks extends React.Component {
 
     // prepare data for post to Google Cloud Function
     let data = {
-      Year: this.props.validYear,
+      expirationDate: this.props.expirationDate,
       ids
     };
 
@@ -274,10 +274,10 @@ export default class CreateBucks extends React.Component {
       this.props.vashonhouseholdCount;
 
     return (
-      <Grid.Column width={10}>
+      <Grid.Column width={8} >
         {/* <div class="ui raised very padded container segment"> */}
 
-        <Segment
+        <Segment 
           raised
           // style={{
           // "padding-top": "30px",
@@ -310,21 +310,37 @@ export default class CreateBucks extends React.Component {
               required
               fluid
               label="Expiration Date"
-              placeholder="ie: 2018"
               type="date"
-              value={this.props.validYear}
+              value={this.props.expirationDate}
               onInput={evt =>
-                this.props.handleChange({ validYear: evt.target.value })
+                this.props.handleChange({ 
+                  expirationDate: evt.target.value 
+                })
               }
             />
 
             <Form.Input
               fluid
-              label="VYFS"
+              label="DoVE"
               placeholder={0}
               type="number"
               onInput={evt =>
-                this.props.handleChange({ vyfsCount: Number(evt.target.value) })
+                this.props.handleChange({
+                  doveCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              fluid
+              label="Interfaith Council to Prevent Homelessness"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  interfaithCount: Number(evt.target.value)
+                })
               }
               min={0}
             />
@@ -344,12 +360,64 @@ export default class CreateBucks extends React.Component {
 
             <Form.Input
               fluid
+              label="Vashon Community Care"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  communitycareCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              fluid
+              label="Vashon Community Food Bank"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  foodbankCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />  
+
+            <Form.Input
+              fluid
               label="Vashon Household"
               placeholder={0}
               type="number"
               onInput={evt =>
                 this.props.handleChange({
                   vashonhouseholdCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              fluid
+              label="Vashon Senior Center"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  seniorcenterCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              fluid
+              label="Vashon Youth and Family Services"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfsCount: Number(evt.target.value) 
                 })
               }
               min={0}

@@ -45,14 +45,7 @@ export default class ManageAccount extends React.Component {
 
     return (
       <Container>
-        <Segment
-          style={{
-            paddingTop: "30px",
-            paddingRight: "40px",
-            paddingLeft: "40px"
-          }}
-          raised
-        >
+        <Segment raised>
           <Container>
             <AccountList
               user={this.state.currentUser}

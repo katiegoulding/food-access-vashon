@@ -124,18 +124,17 @@ export default class CreateAccount extends React.Component {
     ];
 
     const orgOptions = [
-      { key: "f", text: "Food Bank", value: "Foodbank" },
-      { key: "d", text: "DoVE", value: "dove" },
+      { key: "f", text: "Vashon Community Food Bank", value: "foodbank" },
+      { key: "d", text: "The Dove Project", value: "dove" },
       { key: "c", text: "Vashon Community Care", value: "vcc" },
-      { key: "s", text: "Senior Center", value: "seniorcenter" },
-      {
-        key: "i",
-        text: "Interfaith Council to Prevent Homelessness",
-        value: "interfaith"
-      },
+      { key: "s", text: "Vashon Senior Center", value: "seniorcenter" },
+      { key: "i", text: "Interfaith Council to Prevent Homelessness", value: "interfaith"},
+      { key: "m", text: "Community Meals", value: "communitymeals"},
       { key: "h", text: "Vashon Household", value: "vashonhousehold" },
-      { key: "l", text: "La Comunidad", value: "lacomunidad" },
-      { key: "y", text: "Vashon Youth and Family Services", value: "vyfs" }
+      { key: "l", text: "La Comunidad & ECEAP", value: "lacomunidad" },
+      { key: "y", text: "VYFS", value: "vyfs" },
+      { key: "y", text: "VYFS: Latinx", value: "vyfslatinx" },
+      { key: "y", text: "VYFS: Family Place", value: "vyfsfamily" }
     ];
 
     const { loading, errorMessage, role } = this.state;

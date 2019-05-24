@@ -308,10 +308,10 @@ export default class MainView extends React.Component {
 
         <Container
           style={{
-            width: "100%",
-            padding: "50px",
-            height: "calc(100% - 220px)  !important",
-            backgroundColor: "#eff0f3"
+            // width: "100%",
+            // padding: "50px",
+            // height: "calc(100% - 220px)  !important",
+            // backgroundColor: "#eff0f3"
           }}
         >
           <Router>

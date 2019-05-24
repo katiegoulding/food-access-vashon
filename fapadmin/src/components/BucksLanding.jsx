@@ -14,7 +14,7 @@ export default class BucksLanding extends React.Component {
       vyfsCount: 0,
       lacomunidadCount: 0,
       vashonhouseholdCount: 0,
-      validYear: ""
+      expirationDate: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.toggleShowCreateBucks = this.toggleShowCreateBucks.bind(this);
@@ -30,46 +30,40 @@ export default class BucksLanding extends React.Component {
     });
   }
 
-    toggleShowCreateBucks (_event) {
-        this.setState({
-            showCreateBucks: !this.state.showCreateBucks
-        })
-    }
-
-    render() {
-        return (
-            <Container>
-                <Grid stackable centered>
-                <Grid.Row>
-                    {
-                        this.state.showCreateBucks ?
-                            <CreateBucks 
-                                toggleShowCreateBucks={this.toggleShowCreateBucks}
-                                handleChange={this.handleChange}
-                                buckSetName={this.state.buckSetName}
-                                username={this.props.username}
-                                doveCount={this.state.doveCount}
-                                vyfsCount={this.state.vyfsCount}
-                                lacomunidadCount={this.state.lacomunidadCount}
-                                vashonhouseholdCount={this.state.vashonhouseholdCount}
-                                validYear={this.state.validYear}
-                            />
-                            : 
-                            <FormSuccess 
-                                toggleShowCreateBucks={this.toggleShowCreateBucks}
-                                buckSetName={this.state.buckSetName}
-                                doveCount={this.state.doveCount}
-                                vyfsCount={this.state.vyfsCount}
-                                lacomunidadCount={this.state.lacomunidadCount}
-                                vashonhouseholdCount={this.state.vashonhouseholdCount}
-                                validYear={this.state.validYear}
-                            />
-                    }
-                    <ViewBucks/>
-                </Grid.Row>
-                </Grid>
-            </Container>
-        )
-    }
+  render() {
+      return (
+          <Container>
+              <Grid stackable centered>
+              <Grid.Row>
+                  {
+                      this.state.showCreateBucks ?
+                          <CreateBucks 
+                              toggleShowCreateBucks={this.toggleShowCreateBucks}
+                              handleChange={this.handleChange}
+                              buckSetName={this.state.buckSetName}
+                              username={this.props.username}
+                              doveCount={this.state.doveCount}
+                              vyfsCount={this.state.vyfsCount}
+                              lacomunidadCount={this.state.lacomunidadCount}
+                              vashonhouseholdCount={this.state.vashonhouseholdCount}
+                              expirationDate={this.state.expirationDate}
+                          />
+                          : 
+                          <FormSuccess 
+                              toggleShowCreateBucks={this.toggleShowCreateBucks}
+                              buckSetName={this.state.buckSetName}
+                              doveCount={this.state.doveCount}
+                              vyfsCount={this.state.vyfsCount}
+                              lacomunidadCount={this.state.lacomunidadCount}
+                              vashonhouseholdCount={this.state.vashonhouseholdCount}
+                              expirationDate={this.state.expirationDate}
+                          />
+                  }
+                  <ViewBucks/>
+              </Grid.Row>
+              </Grid>
+          </Container>
+      )
+  }
 
 }
