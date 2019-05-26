@@ -11,6 +11,7 @@ export default class Account extends React.Component {
   }
 
   handlePurge() {
+    console.log("in purge function")
     var deleteUser = firebase.functions().httpsCallable("deleteUser");
     deleteUser({ email: this.props.acctSnapshot.val().email }).then(result => {
       console.log(result);
@@ -33,8 +34,15 @@ export default class Account extends React.Component {
     });
   }
 
-  open = () => this.setState({ open: true })
-  close = () => this.setState({ open: false })
+  open = () => {
+    console.log("in open function")
+    this.setState({ open: true })
+  }
+
+  close = () => {
+    console.log("in close function")
+    this.setState({ open: false })
+  }
 
   render() {
     // let user = firebase.auth().currentUser;
@@ -95,7 +103,7 @@ export default class Account extends React.Component {
               confirmButton="Delete Account"
               open={this.state.open} 
               onCancel={this.close} 
-              onClick={() => this.handlePurge()} />
+              onConfirm={() => this.handlePurge()} />
         </Table.Cell>
       </Table.Row>
     );

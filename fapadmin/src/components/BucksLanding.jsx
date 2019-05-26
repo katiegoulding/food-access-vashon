@@ -10,10 +10,17 @@ export default class BucksLanding extends React.Component {
     this.state = {
       showCreateBucks: true,
       buckSetName: "",
+      foodbankCount: 0,
       doveCount: 0,
-      vyfsCount: 0,
-      lacomunidadCount: 0,
+      communitycareCount: 0,
+      seniorcenterCount: 0,
+      interfaithCount: 0,
+      communitymealsCount: 0,
       vashonhouseholdCount: 0,
+      lacomunidadCount: 0,
+      vyfsCount: 0,
+      vyfslatinxCount: 0,
+      vyfsfamilyplaceCount: 0,
       expirationDate: ""
     };
     this.handleChange = this.handleChange.bind(this);
@@ -42,20 +49,34 @@ export default class BucksLanding extends React.Component {
                               handleChange={this.handleChange}
                               buckSetName={this.state.buckSetName}
                               username={this.props.username}
+                              foodbankCount={this.state.foodbankCount}
                               doveCount={this.state.doveCount}
-                              vyfsCount={this.state.vyfsCount}
-                              lacomunidadCount={this.state.lacomunidadCount}
+                              communitycareCount={this.state.communitycareCount}
+                              seniorcenterCount={this.state.seniorcenterCount}
+                              interfaithCount={this.state.interfaithCount}
+                              communitymealsCount={this.state.communitymealsCount}
                               vashonhouseholdCount={this.state.vashonhouseholdCount}
+                              lacomunidadCount={this.state.lacomunidadCount}
+                              vyfsCount={this.state.vyfsCount}
+                              vyfslatinxCount={this.state.vyfslatinxCount}
+                              vyfsfamilyplaceCount={this.state.vyfsfamilyplaceCount}
                               expirationDate={this.state.expirationDate}
                           />
                           : 
                           <FormSuccess 
                               toggleShowCreateBucks={this.toggleShowCreateBucks}
                               buckSetName={this.state.buckSetName}
+                              foodbankCount={this.state.foodbankCount}
                               doveCount={this.state.doveCount}
-                              vyfsCount={this.state.vyfsCount}
-                              lacomunidadCount={this.state.lacomunidadCount}
+                              communitycareCount={this.state.communitycareCount}
+                              seniorcenterCount={this.state.seniorcenterCount}
+                              interfaithCount={this.state.interfaithCount}
+                              communitymealsCount={this.state.communitymealsCount}
                               vashonhouseholdCount={this.state.vashonhouseholdCount}
+                              lacomunidadCount={this.state.lacomunidadCount}
+                              vyfsCount={this.state.vyfsCount}
+                              vyfslatinxCount={this.state.vyfslatinxCount}
+                              vyfsfamilyplaceCount={this.state.vyfsfamilyplaceCount}
                               expirationDate={this.state.expirationDate}
                           />
                   }

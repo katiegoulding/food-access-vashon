@@ -133,8 +133,8 @@ export default class CreateAccount extends React.Component {
       { key: "h", text: "Vashon Household", value: "vashonhousehold" },
       { key: "l", text: "La Comunidad & ECEAP", value: "lacomunidad" },
       { key: "y", text: "VYFS", value: "vyfs" },
-      { key: "y", text: "VYFS: Latinx", value: "vyfslatinx" },
-      { key: "y", text: "VYFS: Family Place", value: "vyfsfamily" }
+      { key: "x", text: "VYFS: Latinx", value: "vyfslatinx" },
+      { key: "p", text: "VYFS: Family Place", value: "vyfsfamily" }
     ];
 
     const { loading, errorMessage, role } = this.state;

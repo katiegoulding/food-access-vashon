@@ -48,25 +48,60 @@ export default class FormSuccess extends React.Component {
           </Header>
           <table class="ui very basic table">
             <tbody>
+            <tr>
+                <td>Vashon Community Food Bank</td>
+                <td>{this.props.foodbankCount} bucks</td>
+                <td>${this.props.foodbankCount * 2}.00</td>
+              </tr>
               <tr>
-                <td>Dove</td>
+                <td>DoVE</td>
                 <td>{this.props.doveCount} bucks</td>
                 <td>${this.props.doveCount * 2}.00</td>
               </tr>
               <tr>
-                <td>VYFS: LatinX</td>
-                <td>{this.props.vyfsCount} bucks</td>
-                <td>${this.props.vyfsCount * 2}.00</td>
+                <td>Vashon Community Care</td>
+                <td>{this.props.communitycareCount} bucks</td>
+                <td>${this.props.communitycareCount * 2}.00</td>
               </tr>
               <tr>
-                <td>La Comunidad</td>
-                <td>{this.props.lacomunidadCount} bucks</td>
-                <td>${this.props.lacomunidadCount * 2}.00</td>
+                <td>Vashon Senior Center</td>
+                <td>{this.props.seniorcenterCount} bucks</td>
+                <td>${this.props.seniorcenterCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>Interfaith Council to Prevent Homelessness</td>
+                <td>{this.props.interfaithCount} bucks</td>
+                <td>${this.props.interfaithCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>Community Meals</td>
+                <td>{this.props.communitymealsCount} bucks</td>
+                <td>${this.props.communitymealsCount * 2}.00</td>
               </tr>
               <tr>
                 <td>Vashon Household</td>
                 <td>{this.props.vashonhouseholdCount} bucks</td>
                 <td>${this.props.vashonhouseholdCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>La Communidad \ ECEAP</td>
+                <td>{this.props.lacomunidadCount} bucks</td>
+                <td>${this.props.lacomunidadCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>VYFS</td>
+                <td>{this.props.vyfsCount} bucks</td>
+                <td>${this.props.vyfsCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>VYFS: Latinx</td>
+                <td>{this.props.vyfslatinxCount} bucks</td>
+                <td>${this.props.vyfslatinxCount * 2}.00</td>
+              </tr>
+              <tr>
+                <td>VYFS: Family Place</td>
+                <td>{this.props.vyfsfamilyplaceCount} bucks</td>
+                <td>${this.props.vyfsfamilyplaceCount * 2}.00</td>
               </tr>
             </tbody>
           </table>

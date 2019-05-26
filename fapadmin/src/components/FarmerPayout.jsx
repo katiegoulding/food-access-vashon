@@ -158,7 +158,7 @@ export default class FarmerPayout extends React.Component {
                                             confirmButton="Mark as paid"
                                             open={this.state.open} 
                                             onCancel={this.close} 
-                                            onClick={() => this.completePayout(element.farmerUid)} />
+                                            onConfirm={() => this.completePayout(element.farmerUid)} />
                                     </Button>
                                 }
                                 </Table.Cell>
