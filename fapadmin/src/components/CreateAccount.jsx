@@ -143,7 +143,7 @@ export default class CreateAccount extends React.Component {
 
     return (
       <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
-        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left" className="mt100 mb100">
           <Message
             attached
             header="Create an Account"
