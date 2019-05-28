@@ -290,7 +290,6 @@ export default class Scan extends React.Component {
                           content='Please recycle this VIGA farm buck.'
                         />;
             default:
-              console.log('an unknown error has occurred')
               return <div></div>;
           }
         })()}
