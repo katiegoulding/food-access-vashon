@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-import { Segment, Message } from "semantic-ui-react";
+import { Segment, Message, Header, Container } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -11,8 +11,23 @@ export default class Scan extends React.Component {
       result: "No result",
       legacyMode: false,
       invalidScan: false,
-      scanState: ""
+      scanState: "",
+      qrCode: ''
     };
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    const priorQRCode = prevState.result.id
+    const curQRCode = this.state.result.id
+    if (priorQRCode !== curQRCode) {
+      setTimeout(
+        () => {
+          this.setState({
+            loading: false
+          })
+        }, 5000
+      )
+    }
   }
 
   // Checks that the data is a valid string
@@ -25,20 +40,26 @@ export default class Scan extends React.Component {
     if (data) {
       // There is some data on the QR code
       console.log("data ", data)
-
+      this.setState({
+        loading: true
+      })
       if (this.isValid(data)) {
         firebase.database().ref("vouchers/").child(data).once("value", snapshot => {
             if (snapshot.exists()) {
               console.log("This ID exists.");
               //The data is an id that we created
               this.populateUserData(data) 
-              this.populateVisData(data) 
+              this.populateVisData(data)
             } else {
               // the snapshot does not exist
               // logically, this buck has been deleted or is not a real buck 
               this.setState({scanState: "scanError"})
             }
-        });
+        }).catch(
+          err => {
+            console.log('Firebase voucher lookup err:', err)
+          }
+        );
       } else {
         console.log("bad path");
         this.setState({
@@ -273,6 +294,18 @@ export default class Scan extends React.Component {
               return <div></div>;
           }
         })()}
+        <Segment basic>
+          <Header as="h2">How to Scan</Header>
+          <p>
+            1. Make sure to allow this site to use your camera for scanning.
+          </p>
+          <p>
+            2. Have your Farm Buck(s) in hand and center QR code in the camera view.
+          </p>
+          <p>
+            3. You'll see a message informing you the scan is successful!
+          </p>
+        </Segment>
       </div>
     );
   }
