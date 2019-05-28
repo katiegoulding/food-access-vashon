@@ -82,15 +82,16 @@ export default class LogInActivity extends React.Component {
         middle
         columns={1}
       >
-        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left" >
           <Message
             attached="top"
             header="Welcome to our site!"
             content="Sign in to access your account"
+            className="messageHeader loginIllustrations"
           />
 
           <Form
-            className="attached fluid segment"
+            className="attached fluid segment messageBody"
             onSubmit={evt => this.handleSignIn(evt)}
             error={errorMessage}
             loading={loading}
@@ -105,6 +106,7 @@ export default class LogInActivity extends React.Component {
               type="email"
               value={this.state.email}
               onInput={evt => this.setState({ email: evt.target.value })}
+              className="LogInActivity-Input-Style"
             />
 
             <Form.Input
@@ -115,6 +117,7 @@ export default class LogInActivity extends React.Component {
               type="password"
               value={this.state.pw}
               onInput={evt => this.setState({ pw: evt.target.value })}
+              className="LogInActivity-Input-Style"
             />
 
             <Button type="submit">Sign In</Button>
@@ -122,7 +125,7 @@ export default class LogInActivity extends React.Component {
             <Link to={constants.routes.accountRecovery}>Forgot password?</Link>
           </Form>
 
-          <Message attached="bottom" info>
+          <Message attached="bottom" className="messageFooter" info>
             <Icon name="help" />
             Don't have an account? &nbsp;
             <Link to={constants.routes.createAccount}>Sign Up</Link>

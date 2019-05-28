@@ -5,6 +5,7 @@ body,
   min-height: 100% !important;
   position: absolute;
   width: 100%;
+  background-color: #F7FAFC;
 }
 
 #root {
@@ -22,6 +23,174 @@ a.item::before {
 .antonHeader {
   border-bottom: 1px solid rgba(34, 36, 38, 0.1);
 }
+
+/* CEDRIC'S CSS 
+|| * * *
+|| * *
+|| *
+*/
+
+
+/*
+============================
+======= Barrier.jsx ========
+============================ 
+*/
+
+.barrierContainer.ui.olive.inverted.segment {
+  padding-top: 100px !important;
+  padding-bottom: 100px !important;
+  background-image: linear-gradient(to bottom right, #404E67, #505C86) !important;
+  z-index: 1 !important;
+
+  position: relative !important;
+}
+
+.barrierContainer h1, .barrierContainer div, .barrierContainer p {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/*
+============================
+===== LogInActivity.jsx ====
+============================ 
+*/
+
+  /* Login Header */
+  .messageHeader {
+    box-shadow: inset 0 0 0px 1px rgb(246,250,252, 0) !important;
+
+    /* removes borders */
+    border-color: rgba(0, 0, 0, 0) !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+
+    background-image: linear-gradient(to bottom right, #404E67, #505C86) !important;
+    color: white !important;
+
+    box-shadow: 0px 20px 30px rgba(0,0,0,0.2) !important;
+    padding: 30px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+  }
+
+    .loginIllustrations:before {
+      content: '' !important;
+      width: 400px !important;
+      height: 400px !important;
+      background-color: #95BA65 !important;
+      position: absolute;
+      border-radius: 300px;
+      left: -150px;
+      top: 150px;
+
+      animation-name: floating;
+      animation-duration: 6s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    .loginIllustrations:after {
+      content: '' !important;
+      width: 100px !important;
+      height: 100px !important;
+      background: -webkit-radial-gradient(bottom left,#908A76,#696456);
+      background: radial-gradient(at bottom left,#908A76,#696456);
+      position: absolute;
+      border-radius: 300px;
+      right: -30px;
+      top: -50px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+      animation-name: floating;
+      animation-delay: 2s;
+      animation-duration: 5s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    @keyframes floating {
+      from { transform: translate(0,  0px); }
+      65%  { transform: translate(0, 15px); }
+      to   { transform: translate(0, -0px); }    
+    }
+
+  /* Login Body */
+  .messageBody {
+    box-shadow: inset 0 0 0px 1px rgb(246,250,252, 0) !important;
+
+    /* removes borders */
+    border-color: rgba(0, 0, 0, 0) !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+
+    box-shadow: 0px 40px 30px rgba(0,0,0,0.2) !important;
+
+    padding: 30px !important;
+  }
+
+    .required.field label {
+      color: rgba(0,0,0,0.3) !important;
+      text-transform: uppercase !important;
+      font-weight: 900 !important;
+      font-size: 11px !important;
+      letter-spacing: 0.5px;
+    }
+  
+    .ui.input input {
+      -webkit-appearance:     none;
+      -moz-appearance:        none;
+      -ms-appearance:         none;
+      -o-appearance:          none;
+      appearance:             none;
+      
+      padding: 15px !important;
+
+      border-color: rgba(0, 0, 0, 0) !important;
+
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.2) !important;
+
+      transition: all 0.4s ease !important;
+    }
+
+      .LogInActivity-Input-Style input:hover {
+        box-shadow: 0px 1px 4px rgba(0,0,0,0.4) !important;
+      }
+
+  .messageFooter {
+    border-color: rgba(0, 0, 0, 0) !important;
+    box-shadow: 0 0 0 black !important;
+  }
+
+  /* input buttons */
+  .ui.button {
+    background-color: #404e67 !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+  }
+
+    .ui.button:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0px 1px 4px rgba(0,0,0,0.3) !important;
+
+    }
+
+
+
+/*
+============================
+===== Example.js =====
+============================ 
+*/
+
+
+
+/*  
+|| * 
+|| * *
+|| * * *
+END OF CEDRIC'S CSS */
+
 
 .sidebarItem {
   margin: 5px 5px;

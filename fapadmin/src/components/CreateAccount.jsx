@@ -148,10 +148,11 @@ export default class CreateAccount extends React.Component {
             attached
             header="Create an Account"
             content="Provide some basic information to get started!"
+            className="messageHeader loginIllustrations"
           />
 
           <Form
-            className="attached fluid segment"
+            className="attached fluid segment messageBody"
             onSubmit={evt => this.handleCreateAccount(evt)}
             error={errorMessage}
             loading={loading}
@@ -275,7 +276,7 @@ export default class CreateAccount extends React.Component {
             <Button type="submit">Create Account</Button>
             
           </Form>
-          <Message attached="bottom" info>
+          <Message attached="bottom" className="messageFooter" info>
             <Icon name="help" />
             Already have an account? &nbsp;
             <Link to={constants.routes.base}>Sign in!</Link>&nbsp;
