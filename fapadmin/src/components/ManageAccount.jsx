@@ -21,6 +21,7 @@ export default class ManageAccount extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
   }
+  
   componentDidMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       this.setState({

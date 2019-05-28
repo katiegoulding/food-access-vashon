@@ -90,6 +90,7 @@ export default class CreateAccount extends React.Component {
                 lastName: this.state.lastName,
                 email: this.state.email,
                 role: this.state.role,
+                lastPayoutDate: "N/A",
                 org: this.state.org,
                 vouchersList: [], // added on 5/20 to avoid accessing undefined later
                 approved: false  // TODO: Change this?

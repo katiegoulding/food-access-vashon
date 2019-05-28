@@ -66,6 +66,7 @@ export default class BucksLanding extends React.Component {
                           <FormSuccess 
                               toggleShowCreateBucks={this.toggleShowCreateBucks}
                               buckSetName={this.state.buckSetName}
+                              username={this.props.username}
                               foodbankCount={this.state.foodbankCount}
                               doveCount={this.state.doveCount}
                               communitycareCount={this.state.communitycareCount}

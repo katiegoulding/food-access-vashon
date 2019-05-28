@@ -71,7 +71,7 @@ export default class BuckSetListItem extends React.Component {
                             <Modal.Header>Are you sure you want to delete "{name}" Buck Set?</Modal.Header>
                             <Modal.Content>
                                 <p>Doing so will mark all VIGA bucks generated for this set as inactive</p>
-                                <p>What is data? {data}</p>
+                                
                             </Modal.Content>
                             <Modal.Actions>
                                 <Button color="red" onClick={() => this.deleteBuckSet()}  content='Delete' />

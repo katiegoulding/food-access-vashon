@@ -100,7 +100,7 @@ export default class CreateBucks extends React.Component {
     for (let i = 0; i < count; i++) {
       let voucherData = {
         organization,
-        createdOn: new String(new Date()),
+        createdOn: new Date(),
         expirationDate: this.props.expirationDate
       };
 
@@ -275,6 +275,7 @@ export default class CreateBucks extends React.Component {
 
   render() {
     const { loading, errorMessage } = this.state;
+    const { toggleShowCreateBucks } = this.props;
     let sum =
       this.props.foodbankCount +
       this.props.doveCount +
@@ -295,7 +296,8 @@ export default class CreateBucks extends React.Component {
 
         <Container>
           <Form
-            onSubmit={this.handleSubmit}
+            // onSubmit={this.handleSubmit}
+            onSubmit={toggleShowCreateBucks}
             loading={loading}
             error={errorMessage}>
 
@@ -522,7 +524,7 @@ export default class CreateBucks extends React.Component {
 
             <Divider hidden />
 
-            {<Button color="blue">Generate Set</Button>}
+            {<Button color="blue">Next Step</Button>}
 
             <Message
               error

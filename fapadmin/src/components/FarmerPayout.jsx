@@ -72,7 +72,8 @@ export default class FarmerPayout extends React.Component {
                     farm: childSnapshot.val().org,
                     email: childSnapshot.val().email,
                     totalBucks: totalBucks,
-                    bucksNotPaid: bucksNotPaid
+                    bucksNotPaid: bucksNotPaid,
+                    lastPayoutDate: childSnapshot.val().lastPayoutDate
                 })
             }
         });
@@ -99,6 +100,13 @@ export default class FarmerPayout extends React.Component {
                 [key]: "paid"
             })
         }) 
+        let dateObj = new Date()
+        let prettyDate = (dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear()
+        console.log("prettyDate: ", prettyDate)
+        let dateRef =  firebase.database().ref('users/' + farmerUid)
+        dateRef.update({
+          lastPayoutDate: prettyDate
+        })
     })
     this.close()
   }
@@ -109,7 +117,7 @@ export default class FarmerPayout extends React.Component {
 
     return (
         <Segment raised>
-        <Header textAlign="center" as="h3">Farmer Payout Records for *YEAR*</Header>
+        <Header textAlign="center" as="h3">Farmer Payout Records</Header>
 
           <Container>
           <Table singleLine stackable selectable> 
@@ -120,6 +128,7 @@ export default class FarmerPayout extends React.Component {
                 <Table.HeaderCell>Email</Table.HeaderCell>
                 <Table.HeaderCell>Total Bucks Collected</Table.HeaderCell>
                 <Table.HeaderCell>Outstanding Bucks</Table.HeaderCell>
+                <Table.HeaderCell>Last Payout Date</Table.HeaderCell>
             </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -162,6 +171,7 @@ export default class FarmerPayout extends React.Component {
                                     </Button>
                                 }
                                 </Table.Cell>
+                                <Table.Cell>{element.lastPayoutDate}</Table.Cell>
                             </TableRow>
                         )
                     }
