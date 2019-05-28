@@ -1,75 +1,87 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
-import constants from "./constants";
 import firebase from 'firebase/app'
-import 'firebase/auth';
-import 'firebase/database';
-import ManageAccount from "./ManageAccount";
+import { Form, Button, Grid, Responsive, Message } from 'semantic-ui-react';
+import "firebase/auth";
+import "firebase/database";
 
 export default class AccountRecovery extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            errorMessage: undefined
-        }
-    }
-
-    componentDidMount() {
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-            this.setState({
-                currentUser: user, 
-            });            
-            // if(this.state.currentUser === null) {
-            //     this.props.history.push(constants.routes.base);
-            // }
-        });  
-    }
-
-    componentWillUnmount() {
-        this.authUnsub();
-    }
-
-    handlePasswordReset(email) {
-        let auth = firebase.auth();
-        console.log("before");
-        this.setState({errorMessage: undefined});
-        auth.sendPasswordResetEmail(email).then(function() {
-        
-        }).catch(err => this.setState({errorMessage: err.message}));
-        console.log("after");
-    }
-
-    onChange = event => {
-        this.setState ({ [event.target.name]: event.target.value });
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      errorMessage: false,
+      successMessage: undefined
     };
+  }
+
+  componentDidMount() {
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+      this.setState({
+        currentUser: user
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.authUnsub();
+  }
+
+  handlePasswordReset(evt) {
+    let auth = firebase.auth();
+    this.setState({ errorMessage: undefined });
+    auth
+      .sendPasswordResetEmail(this.state.email)
+      .then( this.setState({
+        successMessage: true,
+        email: ""
+      }) )
+      .catch(err => this.setState({
+        errorMessage: err.message 
+      }));
+  }
+
+  handleOnUpdate = (e, { width }) => this.setState({ width })
 
     render() {
-        return (
-            <div>
-                <ManageAccount />
-                <h1>Reset Password</h1> 
-                <form onSubmit={evt => this.handlePasswordReset(evt)}>
-                    <div className="col-md-4 mx-auto">  
-                        <label htmlFor="email">Email: </label>
-                        <input
-                            id="email"
-                            type="email"
-                            className="form-control"
-                            placeholder="Enter your email address"
-                            value={this.state.email}
-                            //onChange = {this.onChange}
-                            onInput={evt => this.setState({email: evt.target.value})}
-                        />
-                        </div>
-                        <div className="form-group">
-                            <button type="submit" className="btn btn-default">
-                                Reset
-                            </button>
-                        </div>
-                </form>  
-            </div >
+      const { width, successMessage, email } = this.state
+      const colWidth = width >= Responsive.onlyTablet.minWidth ? '6' : '12'
+
+      return (
+        <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
+          <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
+            
+            <Message
+              attached='top'
+              header="Account Recovery"
+              content="Enter your account email to reset your password."
+            />
+            
+            <Form 
+              className="attached fluid segment"
+              onSubmit={evt => this.handlePasswordReset(evt)}
+              warning={successMessage}>
+                
+                <Form.Input
+                  required
+                  id="email"
+                  label='Email'
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={this.state.email}
+                  onInput={evt => this.setState({ email: evt.target.value })}
+                />
+
+                <Button type="submit" content='Reset'/>
+
+                <Message
+                  warning
+                  header={"Thank you"}
+                  content={"If that account exists in our system, password reset steps will be sent"}
+                />
+
+            </Form>
+          </Grid.Column>
+        </Responsive>
         )
     }
 }

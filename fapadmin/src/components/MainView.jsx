@@ -1,88 +1,324 @@
-import React from 'react';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
-import MainActivity from "./MainActivity.jsx";
+import React from "react";
+import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
 import BucksLanding from "./BucksLanding";
-import NavigationBar from './NavigationBar';
 import constants from "./constants";
-import firebase from 'firebase/app'
-import 'firebase/auth';
-import 'firebase/database';
-import Scan from './Scan';
-import ViewData from './ViewData';
-import ManageAccount from './ManageAccount';
-import EditAccount from './EditAccount';
-import CreateBucks from './CreateBucks.jsx';
-import ViewBucks from './ViewBucks.jsx'
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
+import Scan from "./Scan";
+//import ViewData from "./ViewData";
+import ManageAccount from "./ManageAccount";
+import FarmerPayout from "./FarmerPayout";
+import CreateBucks from "./CreateBucks.jsx";
+import {
+  Container,
+  Header,
+  Icon,
+  Label,
+  Menu,
+  Segment,
+  Responsive
+} from "semantic-ui-react";
+import Dashboard from "./Dashboard";
+
+// const Title = styled.section`
+//   height: 220px;
+//   background-image: linear-gradient(to bottom right, #505c86, #404e67);
+// `;
+
+//const mql = window.matchMedia(`(min-width: 800px)`);
 
 export default class MainView extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            role: ''
-        }
-    }
-
-    handleSignOut() {
-        firebase.auth().signOut()
-            .then(this.props.history.push(constants.routes.base))
+  constructor(props) {
+    super(props);
+    this.state = {
+      role: "",
+      username: "",
+      org: ""
+      //sidebarDocked: mql.matches,
+      //sidebarOpen: false
     };
 
-    componentDidMount() {
-        this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                this.props.history.push(constants.routes.base)
-            } else {
-                user.getIdTokenResult().then(idTokenResult => {
-                    this.setState({
-                        role: idTokenResult.claims.role
-                    })
-                });
-            }
+    //this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+    //this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+  }
+
+  handleOnUpdate = (e, { width }) => this.setState({ width });
+
+  handleSignOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(this.props.history.push(constants.routes.base));
+  };
+
+  componentWillMount() {
+    //mql.addListener(this.mediaQueryChanged);
+  }
+
+  componentWillUnmount() {
+    //mql.removeListener(this.mediaQueryChanged);
+  }
+
+  onSetSidebarOpen(open) {
+    //this.setState({ sidebarOpen: open });
+  }
+
+  mediaQueryChanged() {
+    //this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+  }
+
+  // anton componentDidMount() -> useful for testing because you can still work if not approved
+  componentDidMount() {
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        this.props.history.push(constants.routes.base);
+      } else {
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log("role: ", idTokenResult.claims.role);
+          if (idTokenResult.claims.role === "caseworker") {
+            this.setState({
+              username: user.email,
+              uid: user.uid,
+              role: idTokenResult.claims.role,
+              org: this.state.org
+            });
+          } else {
+            this.setState({
+              username: user.email,
+              uid: user.uid,
+              role: idTokenResult.claims.role
+            });
+          }
         });
-    }
+      }
+    });
+  }
 
-    render() {
-        let farmerUI = [<Route path={constants.routes.dash.base} component={Scan} />];
-        let cworkerUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
-            <Route path={constants.routes.dash.viewData} component={ViewData} />
-        ];
-        let adminUI = [
-            <Route exact path={constants.routes.dash.base} component={Scan} />,
-            <Route path={constants.routes.dash.bucksLanding} component={BucksLanding} />,
-            <Route path={constants.routes.dash.manageAccount} component={ManageAccount} />,
-            <Route path={constants.routes.dash.viewBucks} component={ViewBucks} />,
-            <Route path={constants.routes.dash.createBucks} component={CreateBucks} />
-        ];
+  // august componentDidMount() -> does not allow people to route around
+  // componentDidMount() {
+  //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+  //     if(!user) {
+  //       this.props.history.push(constants.routes.base);
+  //     } else { //they are authenticated
+  //       user.getIdTokenResult().then(idTokenResult => {
+  //         console.log(idTokenResult.claims.role)
+  //         if(!idTokenResult.claims.role) {
+  //           //their role is null
+  //           //push them to the barrier page
+  //           this.props.history.push(constants.routes.barrier);
+  //         } else {
+  //           //their role has been approved
+  //           this.setState({
+  //             username: user.email,
+  //             uid: user.uid,
+  //             role: idTokenResult.claims.role
+  //           });
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
 
-        let ui;
+  render() {
+    let farmerNav = [
+      <Menu.Item
+        name="Scan"
+        as={Link}
+        to={constants.routes.dash.base}
+        active={this.props.location.pathname === constants.routes.dash.base}
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
 
-        if (this.state.role === 'admin') {
-            ui = adminUI;
-        } else if (this.state.role === 'caseworker') {
-            ui = cworkerUI;
-        } else {
-            ui = farmerUI;
+    let cworkerNav = [
+      <Menu.Item
+        name="Scan"
+        as={Link}
+        to={constants.routes.dash.base}
+        active={this.props.location.pathname === constants.routes.dash.base}
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
+
+    let adminNav = [
+      <Menu.Item
+        name="Create Bucks"
+        as={Link}
+        to={constants.routes.dash.bucksLanding}
+        active={
+          this.props.location.pathname === constants.routes.dash.bucksLanding
         }
+      />,
+      <Menu.Item
+        name="Manage Accounts"
+        as={Link}
+        to={constants.routes.dash.manageAccount}
+        active={
+          this.props.location.pathname === constants.routes.dash.manageAccount
+        }
+      />,
+      <Menu.Item
+        name="View Data"
+        as={Link}
+        to={constants.routes.dash.viewData}
+        active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
 
-        return (
-            <div>
-                <h1>FAP FAP FAP</h1>
-                <NavigationBar role={this.state.role} />
-                <Router>
-                    <Switch>
-                        {ui}
-                    </Switch>
-                </Router>
+    let bookkeeperNav = [
+      <Menu.Item
+        name="Farmer Payout"
+        as={Link}
+        to={constants.routes.dash.farmerPayout}
+        active={this.props.location.pathname === constants.routes.dash.farmerPayout}
+      />
+    ];
 
-                <button
-                    type="submit"
-                    className="btn btn-danger col-1"
-                    onClick={() => this.handleSignOut()}>
-                    Sign Out
-                </button>
-            </div>
-        )
+    let farmerUI = [
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => <Scan role={this.state.role} userId={this.state.uid} />}
+      />,
+      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+    ];
+
+    let cworkerUI = [
+      <Route
+        exact
+        path={constants.routes.dash.base}
+        render={() => <Scan role={this.state.role} userId={this.state.uid} />}
+      />,
+      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+    ];
+
+    let adminUI = [
+      <Route
+        path={constants.routes.dash.bucksLanding}
+        render={() => <BucksLanding username={this.state.username} />}
+      />,
+      <Route
+        path={constants.routes.dash.manageAccount}
+        component={ManageAccount}
+      />,
+      <Route path={constants.routes.dash.base} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />,
+      <Route
+        path={constants.routes.dash.createBucks}
+        render={() => <CreateBucks username={this.state.username} />}
+      />
+    ];
+
+    let bookkeeperUI = [
+      <Route
+        path={constants.routes.dash.farmerPayout}
+        render={() => <FarmerPayout username={this.state.username} />}
+      />
+    ]
+
+    let ui;
+    let label;
+    let nav;
+
+    if (this.state.role === "admin") {
+      ui = adminUI;
+      nav = adminNav;
+      label = "Food Access Partnership";
+    } else if (this.state.role === "caseworker") {
+      ui = cworkerUI;
+      nav = cworkerNav;
+      label = "Partner Organization";
+    } else if (this.state.role === 'farmer') {
+      ui = farmerUI;
+      nav = farmerNav;
+      label = "Farmer";
+    } else if (this.state.role === 'bookkeeper') {
+      ui = bookkeeperUI;
+      nav = bookkeeperNav;
+      label = "Bookkeeper";
     }
+
+    let title;
+
+    if (this.props.location.pathname === "/dash") {
+      title = "Scan";
+    } else if (this.props.location.pathname === "/dash/manage") {
+      title = "Manage Accounts";
+    } else if (this.props.location.pathname === "/dash/BucksLanding") {
+      title = "Create a Buck Set";
+    } else if (this.props.location.pathname === "/dash/farmerPayout") {
+      title = "Farmer Payout";
+    } else {
+      // TO CHANGE:
+      title = "Visualizations"; 
+    }
+
+    return (
+      <div>
+        <Segment basic color="blue" inverted padded="very">
+          <Header padded="very" size="huge" floated="left">
+            {title}
+          </Header>
+
+          <Responsive as={Header} floated="right" {...Responsive.onlyComputer}>
+            <Icon name="user circle" size="huge" />
+            <Header.Content>
+              {this.state.username}
+              <Header.Subheader
+                style={{
+                  color: "white"
+                }}
+              >
+                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
+              </Header.Subheader>
+            </Header.Content>
+          </Responsive>
+
+          <Responsive as={Header.Subheader} {...Responsive.onlyMobile}>
+            <Header.Content>
+              {this.state.username}
+              <Header.Subheader
+                style={{
+                  color: "white"
+                }}
+              >
+                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
+              </Header.Subheader>
+            </Header.Content>
+          </Responsive>
+        </Segment>
+
+        {/* remove 'pointing secondary' to change to the alternate style */}
+        <Menu stackable secondary>
+          {nav}
+          <Menu.Menu position="right">
+            <Menu.Item name="logout" onClick={this.handleSignOut} />
+          </Menu.Menu>
+        </Menu>
+
+        <Container
+          style={{
+            // width: "100%",
+            // padding: "50px",
+            // height: "calc(100% - 220px)  !important",
+            // backgroundColor: "#eff0f3"
+          }}
+        >
+          <Router>
+            <Switch>{ui}</Switch>
+          </Router>
+        </Container>
+      </div>
+    );
+  }
 }

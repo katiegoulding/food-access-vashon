@@ -1,39 +1,49 @@
-.App {
-  text-align: center;
+html,
+body,
+.App,
+.App > div {
+  min-height: 100% !important;
+  position: absolute;
+  width: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+#root {
+  min-height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ui.sidebar.visible ~ .pusher {
+  width: calc(100% - 350px);
 }
 
-.App-link {
-  color: #61dafb;
+a.item::before {
+  background: white !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.antonHeader {
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.navButton {
-  margin: 10px;
-  padding: 10px;
-  background-color: white;
+.sidebarItem {
+  margin: 5px 5px;
+  font-size: 14px !important;
+  border-radius: 20px !important;
+}
+
+.sidebarItem.active {
+  color: white !important;
+  background-image: linear-gradient(
+    to bottom right,
+    #505c86,
+    #404e67
+  ) !important;
+}
+
+.delete:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.approve:hover {
+  color: green;
+  cursor: pointer;
 }

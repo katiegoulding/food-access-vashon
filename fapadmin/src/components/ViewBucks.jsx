@@ -1,31 +1,63 @@
-import React from 'react'
-import BuckSetListItem from './BuckSetListItem.jsx'
+import React from "react";
+import BuckSetListItem from "./BuckSetListItem.jsx";
+import { Header, Container, Grid, Card } from "semantic-ui-react";
+import firebase from "firebase/app";
 
 export default class ViewBucks extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firebaseBuckSet: []
+    };
+  }
+
+
+    componentDidMount() {
+        let firebaseBuckSet = []
+
+        let buckSetsRef = firebase.database().ref('buckSets')
+        buckSetsRef.orderByChild('createdOn').on('child_added', (snapshot) => {
+            const value = snapshot.val()
+            // sort by newest
+            firebaseBuckSet.push({
+                name: value.name,
+                createdBy: value.createdBy
+            })
+            this.setState({
+                firebaseBuckSet
+            })
+        });
+        buckSetsRef.orderByChild('createdOn').on('child_removed', (snapshot) => {
+            const value = snapshot.val()
+            // filter out the removed item and force another render
+            firebaseBuckSet = firebaseBuckSet.filter(el => !(el.title === value.name && el.subtitle === value.createdBy))
+            this.setState({
+                firebaseBuckSet
+            })
+        });
+
+    }
 
     render () {
-        let localBuckSet = [{title: "2018-2019 Buck Set", subtitle: "Created on 12/23/17 by Juniper R."}, 
-            {title: "2017-2018 Buck Set", subtitle: "Created on 6/6/15 by August C."}, 
-            {title: "2016-2017 Buck Set", subtitle: "Created on 8/14/13 by Katie G."}]
-        
-            return(
-            <div>
-                <h2>Existing VIGA Farm Buck Sets</h2>
-                <div>
+            return (
+            <Grid.Column width={6}>
+                <Container>
+                <Header as='h2'>Existing Buck Sets</Header>
+                <Card.Group>
                     {
                         //for each item in the data provided, map will create a BuckSetListItem
                         //that has the respective title and subtitle
-                        localBuckSet.map(
-                            element => {
+                        this.state.firebaseBuckSet.map(
+                            (element) => {
                                 return (
-                                    <BuckSetListItem key={element.title + element.subtitle} data={element}/>
+                                    <BuckSetListItem key={element.name + element.createdBy} data={element}/>
                                 )
                             }
                         )
                     }
-                </div>
-            </div>
+                </Card.Group>
+                </Container>
+            </Grid.Column>
         )
     }
-
 }
