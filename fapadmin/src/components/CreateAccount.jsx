@@ -47,7 +47,7 @@ export default class CreateAccount extends React.Component {
     });
 
     // handle case for bookkeeper and admin org
-    if(this.state.role === 'Admin') {
+    if(this.state.role.toLowerCase() === 'admin' || this.state.role.toLowerCase() === 'bookkeeper') {
       this.setState({
         org: "fap"
       })
@@ -90,8 +90,10 @@ export default class CreateAccount extends React.Component {
                 lastName: this.state.lastName,
                 email: this.state.email,
                 role: this.state.role,
+                lastPayoutDate: "N/A",
                 org: this.state.org,
-                approved: false  // TODO: Change this 
+                vouchersList: [], // added on 5/20 to avoid accessing undefined later
+                approved: false  // TODO: Change this?
               });
           } catch (err) {
             console.log('err on write to db = ', err)
@@ -123,18 +125,17 @@ export default class CreateAccount extends React.Component {
     ];
 
     const orgOptions = [
-      { key: "f", text: "Food Bank", value: "Foodbank" },
-      { key: "d", text: "DoVE", value: "dove" },
+      { key: "f", text: "Vashon Community Food Bank", value: "foodbank" },
+      { key: "d", text: "The Dove Project", value: "dove" },
       { key: "c", text: "Vashon Community Care", value: "vcc" },
-      { key: "s", text: "Senior Center", value: "seniorcenter" },
-      {
-        key: "i",
-        text: "Interfaith Council to Prevent Homelessness",
-        value: "interfaith"
-      },
+      { key: "s", text: "Vashon Senior Center", value: "seniorcenter" },
+      { key: "i", text: "Interfaith Council to Prevent Homelessness", value: "interfaith"},
+      { key: "m", text: "Community Meals", value: "communitymeals"},
       { key: "h", text: "Vashon Household", value: "vashonhousehold" },
-      { key: "l", text: "La Comunidad", value: "lacomunidad" },
-      { key: "y", text: "Vashon Youth and Family Services", value: "vyfs" }
+      { key: "l", text: "La Comunidad & ECEAP", value: "lacomunidad" },
+      { key: "y", text: "VYFS", value: "vyfs" },
+      { key: "x", text: "VYFS: Latinx", value: "vyfslatinx" },
+      { key: "p", text: "VYFS: Family Place", value: "vyfsfamily" }
     ];
 
     const { loading, errorMessage, role } = this.state;

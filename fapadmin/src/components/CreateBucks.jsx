@@ -11,9 +11,9 @@ import {
   Grid,
   Form,
   Message,
-  Segment
+  Segment,
+  Container
 } from "semantic-ui-react";
-import axios from "axios";
 import bgImg from "../bucktemplateprintpage.jpg";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -51,9 +51,10 @@ export default class CreateBucks extends React.Component {
     }
   }
 
+  // NAME CHANGE: year changed to expirationDate
   createPDF(data) {
     let ids = data.ids;
-    let year = data.year;
+    let expirationDate = data.expirationDate;
 
     var documentDefinition = {
       content: []
@@ -99,8 +100,8 @@ export default class CreateBucks extends React.Component {
     for (let i = 0; i < count; i++) {
       let voucherData = {
         organization,
-        createdOn: new String(new Date()),
-        year: this.props.validYear
+        createdOn: new Date(),
+        expirationDate: this.props.expirationDate
       };
 
       let newVoucherKey = firebase
@@ -196,13 +197,20 @@ export default class CreateBucks extends React.Component {
       .child("buckSets/" + this.props.buckSetName)
       .update({
         name: this.props.buckSetName,
-        createdOn: new String(new Date()),
+        createdOn: new Date(),
         createdBy: this.props.username,
-        year: this.props.validYear,
+        expirationDate: this.props.expirationDate,
+        foodbankCount: this.props.foodbankCount,
         doveCount: this.props.doveCount,
-        vyfsCount: this.props.vyfsCount,
+        communitycareCount: this.props.communitycareCount,
+        seniorcenterCount: this.props.seniorcenterCount,
+        interfaithCount: this.props.interfaithCount,
+        communitymealsCount: this.props.communitymealsCount,
+        vashonhouseholdCount: this.props.vashonhouseholdCount,
         lacomunidadCount: this.props.lacomunidadCount,
-        vashonhouseholdCount: this.props.vashonhouseholdCount
+        vyfsCount: this.props.vyfsCount,
+        vyfslatinxCount: this.props.vyfslatinxCount,
+        vyfsfamilyplaceCount: this.props.vyfsfamilyplaceCount
       });
 
     promiseFromFirebase
@@ -226,7 +234,7 @@ export default class CreateBucks extends React.Component {
 
     // prepare data for post to Google Cloud Function
     let data = {
-      Year: this.props.validYear,
+      expirationDate: this.props.expirationDate,
       ids
     };
 
@@ -267,38 +275,57 @@ export default class CreateBucks extends React.Component {
 
   render() {
     const { loading, errorMessage } = this.state;
+    const { toggleShowCreateBucks } = this.props;
     let sum =
+      this.props.foodbankCount +
       this.props.doveCount +
-      this.props.vyfsCount +
+      this.props.communitycareCount +
+      this.props.seniorcenterCount + 
+      this.props.interfaithCount +
+      this.props.communitymealsCount +
+      this.props.vashonhouseholdCount +
       this.props.lacomunidadCount +
-      this.props.vashonhouseholdCount;
+      this.props.vyfsCount +
+      this.props.vyfslatinxCount +
+      this.props.vyfsfamilyplaceCount
 
     return (
-      <Grid.Column width={10}>
-        {/* <div class="ui raised very padded container segment"> */}
+      <Grid.Column width={8} >
 
-        <Segment
-          raised
-          // style={{
-          // "padding-top": "30px",
-          // "padding-right": "40px",
-          // "padding-left": "40px"
-          // }}
-        >
+        <Segment raised>
+
+        <Container>
           <Form
-            onSubmit={this.handleSubmit}
+            // onSubmit={this.handleSubmit}
+            onSubmit={toggleShowCreateBucks}
             loading={loading}
-            error={errorMessage}
-          >
+            error={errorMessage}>
+
             <Form.Input
+              inline
               required
               fluid
               transparent
-              size="huge"
+              size="massive"
               placeholder="Buck Set Name"
               value={this.props.buckSetName}
               onInput={evt =>
                 this.props.handleChange({ buckSetName: evt.target.value })
+              }
+            />
+
+            <Form.Input
+              width={8}
+              inline
+              required
+              fluid
+              label="Expiration Date"
+              type="date"
+              value={this.props.expirationDate}
+              onInput={evt =>
+                this.props.handleChange({ 
+                  expirationDate: evt.target.value 
+                })
               }
             />
 
@@ -307,42 +334,105 @@ export default class CreateBucks extends React.Component {
             </Header>
 
             <Form.Input
-              required
+              width={6}
+              inline
+              size="mini"
               fluid
-              label="Expiration Date"
-              placeholder="ie: 2018"
-              type="date"
-              value={this.props.validYear}
-              onInput={evt =>
-                this.props.handleChange({ validYear: evt.target.value })
-              }
-            />
-
-            <Form.Input
-              fluid
-              label="VYFS"
-              placeholder={0}
-              type="number"
-              onInput={evt =>
-                this.props.handleChange({ vyfsCount: Number(evt.target.value) })
-              }
-              min={0}
-            />
-
-            <Form.Input
-              fluid
-              label="La Communidad"
+              label="Vashon Community Food Bank"
               placeholder={0}
               type="number"
               onInput={evt =>
                 this.props.handleChange({
-                  lacomunidadCount: Number(evt.target.value)
+                  foodbankCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />  
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="DoVE"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  doveCount: Number(evt.target.value)
                 })
               }
               min={0}
             />
 
             <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Community Care"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  communitycareCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />     
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Senior Center"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  seniorcenterCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="Interfaith Council to Prevent Homelessness"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  interfaithCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="Community Meals"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  communitymealsCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
               fluid
               label="Vashon Household"
               placeholder={0}
@@ -354,6 +444,70 @@ export default class CreateBucks extends React.Component {
               }
               min={0}
             />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="La Communidad \ ECEAP"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  lacomunidadCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="VYFS"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfsCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="VYFS: Latinx"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfslatinxCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
+
+            <Form.Input
+              width={6}
+              inline
+              size="mini"
+              fluid
+              label="VYFS: Family Place"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfsfamilyplaceCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />      
 
             <Divider hidden />
 
@@ -370,7 +524,7 @@ export default class CreateBucks extends React.Component {
 
             <Divider hidden />
 
-            {<Button color="blue">Generate Set</Button>}
+            {<Button color="blue">Next Step</Button>}
 
             <Message
               error
@@ -378,6 +532,7 @@ export default class CreateBucks extends React.Component {
               content={"form not submitted"}
             />
           </Form>
+          </Container>
         </Segment>
       </Grid.Column>
     );

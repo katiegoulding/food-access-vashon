@@ -13,7 +13,8 @@ export default {
       scan: "/dash/Scan",
       manageAccount: "/dash/manage",
       editAccount: "/dash/manage/edit",
-      formSuccess: "/dash/formSuccess"
+      formSuccess: "/dash/formSuccess",
+      farmerPayout: "/dash/farmerPayout"
     }
   },
   variables: {

@@ -6,8 +6,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Scan from "./Scan";
-import ViewData from "./ViewData";
+//import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
+import FarmerPayout from "./FarmerPayout";
 import CreateBucks from "./CreateBucks.jsx";
 import {
   Container,
@@ -74,7 +75,7 @@ export default class MainView extends React.Component {
         this.props.history.push(constants.routes.base);
       } else {
         user.getIdTokenResult().then(idTokenResult => {
-          console.log(idTokenResult.claims.role);
+          console.log("role: ", idTokenResult.claims.role);
           if (idTokenResult.claims.role === "caseworker") {
             this.setState({
               username: user.email,
@@ -134,6 +135,7 @@ export default class MainView extends React.Component {
         active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
+
     let cworkerNav = [
       <Menu.Item
         name="Scan"
@@ -148,6 +150,7 @@ export default class MainView extends React.Component {
         active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
+
     let adminNav = [
       <Menu.Item
         name="Create Bucks"
@@ -170,6 +173,15 @@ export default class MainView extends React.Component {
         as={Link}
         to={constants.routes.dash.viewData}
         active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
+
+    let bookkeeperNav = [
+      <Menu.Item
+        name="Farmer Payout"
+        as={Link}
+        to={constants.routes.dash.farmerPayout}
+        active={this.props.location.pathname === constants.routes.dash.farmerPayout}
       />
     ];
 
@@ -207,6 +219,13 @@ export default class MainView extends React.Component {
       />
     ];
 
+    let bookkeeperUI = [
+      <Route
+        path={constants.routes.dash.farmerPayout}
+        render={() => <FarmerPayout username={this.state.username} />}
+      />
+    ]
+
     let ui;
     let label;
     let nav;
@@ -219,11 +238,16 @@ export default class MainView extends React.Component {
       ui = cworkerUI;
       nav = cworkerNav;
       label = "Partner Organization";
-    } else {
+    } else if (this.state.role === 'farmer') {
       ui = farmerUI;
       nav = farmerNav;
       label = "Farmer";
+    } else if (this.state.role === 'bookkeeper') {
+      ui = bookkeeperUI;
+      nav = bookkeeperNav;
+      label = "Bookkeeper";
     }
+
     let title;
 
     if (this.props.location.pathname === "/dash") {
@@ -232,9 +256,11 @@ export default class MainView extends React.Component {
       title = "Manage Accounts";
     } else if (this.props.location.pathname === "/dash/BucksLanding") {
       title = "Create a Buck Set";
+    } else if (this.props.location.pathname === "/dash/farmerPayout") {
+      title = "Farmer Payout";
     } else {
       // TO CHANGE:
-      title = "Visualizations";
+      title = "Visualizations"; 
     }
 
     return (
@@ -282,10 +308,10 @@ export default class MainView extends React.Component {
 
         <Container
           style={{
-            width: "100%",
-            padding: "50px",
-            height: "calc(100% - 220px)  !important",
-            backgroundColor: "#eff0f3"
+            // width: "100%",
+            // padding: "50px",
+            // height: "calc(100% - 220px)  !important",
+            // backgroundColor: "#eff0f3"
           }}
         >
           <Router>

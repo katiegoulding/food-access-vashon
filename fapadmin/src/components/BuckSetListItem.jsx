@@ -20,6 +20,7 @@ export default class BuckSetListItem extends React.Component {
 
     deleteBuckSet = () => {
         let key = this.props.data.title
+        //TODO: make if(!key) {...} and throw an error 
         if(key != '') {
             let buckSetRef = firebase.database().ref('buckSets/' + key)
             buckSetRef.remove()
@@ -39,14 +40,14 @@ export default class BuckSetListItem extends React.Component {
     }
 
     render () { 
-        const { title, subtitle } = this.props.data
+        const { name, createdBy, data } = this.props.data
         const { open } = this.state
 
         return(
                 <Card fluid>
                     <Card.Content>
-                        <Card.Header>{title}</Card.Header>
-                        <Card.Meta>{subtitle}</Card.Meta>
+                        <Card.Header>{name}</Card.Header>
+                        <Card.Meta>{createdBy}</Card.Meta>
                     </Card.Content>
 
                     <Card.Content extra>
@@ -55,9 +56,9 @@ export default class BuckSetListItem extends React.Component {
                             open={this.viewModalOpen} 
                             onClose={this.close} 
                             closeIcon >
-                            <Modal.Header>"{title}" Buck Set</Modal.Header>
+                            <Modal.Header>"{name}" Buck Set</Modal.Header>
                             <Modal.Content>
-                                <p>Created by {subtitle}</p>
+                                <p>Created by {createdBy}</p>
                                 <p>More information about the selected buck set</p>
                             </Modal.Content>
                         </Modal>
@@ -67,9 +68,10 @@ export default class BuckSetListItem extends React.Component {
                                 open={this.deleteModalOpen} 
                                 onClose={this.close}
                                 closeIcon >
-                            <Modal.Header>Are you sure you want to delete "{title}" Buck Set?</Modal.Header>
+                            <Modal.Header>Are you sure you want to delete "{name}" Buck Set?</Modal.Header>
                             <Modal.Content>
                                 <p>Doing so will mark all VIGA bucks generated for this set as inactive</p>
+                                
                             </Modal.Content>
                             <Modal.Actions>
                                 <Button color="red" onClick={() => this.deleteBuckSet()}  content='Delete' />

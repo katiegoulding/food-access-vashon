@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from "firebase";
-import { Table, Icon, Header, Button } from "semantic-ui-react";
+import { Table, Icon, Header, Button, Confirm } from "semantic-ui-react";
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -11,11 +11,13 @@ export default class Account extends React.Component {
   }
 
   handlePurge() {
+    console.log("in purge function")
     var deleteUser = firebase.functions().httpsCallable("deleteUser");
     deleteUser({ email: this.props.acctSnapshot.val().email }).then(result => {
       console.log(result);
     });
     this.props.acctRef.child(this.props.acctSnapshot.key).remove();
+    this.close()
   }
 
   handleApprove() {
@@ -30,6 +32,16 @@ export default class Account extends React.Component {
     }).then(result => {
       console.log(result);
     });
+  }
+
+  open = () => {
+    console.log("in open function")
+    this.setState({ open: true })
+  }
+
+  close = () => {
+    console.log("in close function")
+    this.setState({ open: false })
   }
 
   render() {
@@ -75,16 +87,23 @@ export default class Account extends React.Component {
               <Button size='mini' content="Reject" onClick={() => this.handlePurge()}/>
             </Button.Group>
           )}
-          {
-          }
         </Table.Cell>
         <Table.Cell textAlign='center'>
           <Icon
               name="delete"
               className="delete"
               size="large"
-              onClick={() => this.handlePurge()}
+              onClick={this.open}
             />
+            <Confirm 
+              size='small' 
+              header="Are you sure?"
+              content={`Are you sure you want to delete the account of ${acct.firstName} ${acct.lastName}? This action cannot be undone`}
+              cancelButton='Cancel'
+              confirmButton="Delete Account"
+              open={this.state.open} 
+              onCancel={this.close} 
+              onConfirm={() => this.handlePurge()} />
         </Table.Cell>
       </Table.Row>
     );
