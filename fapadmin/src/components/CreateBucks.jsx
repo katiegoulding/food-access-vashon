@@ -30,6 +30,8 @@ export default class CreateBucks extends React.Component {
     };
   }
 
+  //TODO: errorMessage (a string) should be replaced with hasError (a boolean) in the form props.
+
   toDataURL(src, callback, outputFormat) {
     var img = new Image();
     img.crossOrigin = "Anonymous";
