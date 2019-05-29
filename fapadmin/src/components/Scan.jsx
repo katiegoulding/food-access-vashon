@@ -3,31 +3,17 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-import { Segment, Message, Header, Container } from "semantic-ui-react";
+import { Segment, Message, Header, Container, Loader, Dimmer, Button, SegmentGroup } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: "No result",
       legacyMode: false,
       invalidScan: false,
       scanState: "",
-      qrCode: ''
+      qrCode: '',
+      loading: false
     };
-  }
-
-  componentDidUpdate(_prevProps, prevState) {
-    const priorQRCode = prevState.result.id
-    const curQRCode = this.state.result.id
-    if (priorQRCode !== curQRCode) {
-      setTimeout(
-        () => {
-          this.setState({
-            loading: false
-          })
-        }, 5000
-      )
-    }
   }
 
   // Checks that the data is a valid string
@@ -53,27 +39,34 @@ export default class Scan extends React.Component {
             } else {
               // the snapshot does not exist
               // logically, this buck has been deleted or is not a real buck 
-              this.setState({scanState: "scanError"})
+              this.setState({scanState: "scanError", loading: false})
             }
         }).catch(
           err => {
             console.log('Firebase voucher lookup err:', err)
+            this.setState({loading: false})
           }
-        );
+        )
       } else {
         console.log("bad path");
         this.setState({
           invalidScan: true,
-          scanState: "scanError"
+          scanState: "scanError",
+          loading: false
         });
       }
-      this.setState({
-        result: data
-      });
     }
   };
 
-  populateVisData = (data) => {
+  delayedStopLoading = () => {
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      })
+    }, 2000)
+  }
+
+  populateVisData = async (data) => {
     console.log("In the populate data branch")
     var redeemDate = new Date();
     let vizRef = firebase.database().ref().child("vis1/" + this.props.userId);
@@ -116,15 +109,13 @@ export default class Scan extends React.Component {
     if (this.props.role === "farmer") {
       // if they are a farmer, fill in the "redeemedOn" field on voucher object to the current time
       let redeemedOnRef = firebase.database().ref("vouchers/" + data + "/redeemedOn");
-
       redeemedOnRef.once("value", (snapshot) => {
         if (!snapshot.val()) {
           //if it is null, there is no entry for redeemedOn, the voucher hasn't yet been redeemed
           let redeemDate = new Date();
- 
           // this is necessary to get the expiration date
-          voucherRef.once("value", (snapshot) => {
-            let expirationDate = new Date(snapshot.val().expirationDate)
+          voucherRef.once("value", (snapshotInner) => {
+            let expirationDate = new Date(snapshotInner.val().expirationDate)
             if(redeemDate.getTime() <= expirationDate.getTime()) {
               //not expired - success: add to database
               voucherRef.update({
@@ -141,14 +132,14 @@ export default class Scan extends React.Component {
               console.log("in the expired statement")
               scanState = "expiredFarmer"
             }
+            this.setState({scanState}, this.delayedStopLoading)
           })
-
         } else {
           console.log('.val() already exists, setting state to already redeemed')
           //if it is not null, the voucher has already been redeemed
           scanState = "alreadyRedeemed"
+          this.setState({scanState}, this.delayedStopLoading)
         }
-        this.setState({scanState})
       });
     } else if (this.props.role === "caseworker") {
       // if they are a caseworker, fill in the "handedOutOn" field on voucher object to the current time
@@ -177,6 +168,7 @@ export default class Scan extends React.Component {
               console.log("in the expired statement")
               scanState = "expiredCaseworker"
             }
+            this.setState({scanState}, this.delayedStopLoading)
           })
 
         } else {
@@ -184,14 +176,77 @@ export default class Scan extends React.Component {
           // caseworkers may still hand out vouchers that have been handed out before
           // just without scanning them
           scanState = "alreadyHanded"
+          this.setState({scanState}, this.delayedStopLoading)
         }
-        this.setState({scanState})
       });
     } else {
       // not caseworker or farmer -> account does not support scanning
       this.setState({
         scanState: "accountIssue"
-      })
+      }, this.delayedStopLoading)
+    }
+  }
+
+  showResponseMessage = (scanState) => {
+    switch(scanState) {
+      case 'success':
+      return <Message
+                positive
+                attached='bottom'
+                icon='thumbs up'
+                header='Success!'
+                content='This buck has been submitted! Feel free to recycle or keep for your records.'
+              />;
+      case 'expiredFarmer':
+        return <Message
+                  warning
+                  attached='bottom'
+                  icon='calendar times outline'
+                  header='Expired'
+                  content='You may still receive compensation, please submit to a FAP organizer in person.'
+                />;
+      case 'alreadyRedeemed':
+        return <Message
+                  negative
+                  attached='bottom'
+                  icon='x'
+                  header='Previously Submitted'
+                  content='This buck has already been submitted.'
+                />;
+      case 'scanError':
+        return <Message
+                  warning
+                  attached='bottom'
+                  icon='frown'
+                  header='Error scanning'
+                  content='Make sure you have a valid buck, then try again.'
+                />;
+      case 'alreadyHanded':
+        return <Message
+                  negative
+                  attached='bottom'
+                  icon='x'
+                  header='Previously handed out'
+                  content='This buck has been "handed out" before, no need to scan again.'
+                />;
+      case 'accountIssue': 
+        return <Message
+                  warning
+                  attached='bottom'
+                  icon='!'
+                  header='Error'
+                  content='Your account does not support scanning.'
+                />;
+      case 'expiredCaseworker':
+        return <Message
+                    warning
+                    attached='bottom'
+                    icon='calendar times outline'
+                    header='This buck is expired'
+                    content='Please recycle this VIGA farm buck.'
+                  />;
+      default:
+        return <div></div>;
     }
   }
 
@@ -204,7 +259,7 @@ export default class Scan extends React.Component {
 
   render() {
     let scanner;
-    const { scanState } = this.state
+    const { scanState, loading } = this.state
 
     if (this.state.legacyMode) {
       scanner = (
@@ -227,72 +282,25 @@ export default class Scan extends React.Component {
 
     return (
       <div>
-        <Segment attached='top'>
+        <Button onClick={() => this.handleScan('-LfzLzCnmCeahaY5nAVh')}> CLICK ME </Button>
+        <SegmentGroup>
+          <Segment attached='top'>
             {scanner}
-        </Segment>
+          </Segment>
+          <Segment basic>
+            {
+              loading &&
+              <Dimmer active inverted>
+                  <Loader size={'mini'}/>
+                </Dimmer>
+            }
+            {
+              !loading &&
+                this.showResponseMessage(scanState)
+            }
+          </Segment>
+        </SegmentGroup>
 
-        {(() => {
-          switch(scanState) {
-            case 'success':
-            return <Message
-                      positive
-                      attached='bottom'
-                      icon='thumbs up'
-                      header='Success!'
-                      content='This buck has been submitted! Feel free to recycle or keep for your records.'
-                    />;
-            case 'expiredFarmer':
-              return <Message
-                        warning
-                        attached='bottom'
-                        icon='calendar times outline'
-                        header='Expired'
-                        content='You may still receive compensation, please submit to a FAP organizer in person.'
-                      />;
-            case 'alreadyRedeemed':
-              return <Message
-                        negative
-                        attached='bottom'
-                        icon='x'
-                        header='Previously Submitted'
-                        content='This buck has already been submitted.'
-                      />;
-            case 'scanError':
-              return <Message
-                        warning
-                        attached='bottom'
-                        icon='frown'
-                        header='Error scanning'
-                        content='Make sure you have a valid buck, then try again.'
-                      />;
-            case 'alreadyHanded':
-              return <Message
-                        negative
-                        attached='bottom'
-                        icon='x'
-                        header='Previously handed out'
-                        content='This buck has been "handed out" before, no need to scan again.'
-                      />;
-            case 'accountIssue': 
-              return <Message
-                        warning
-                        attached='bottom'
-                        icon='!'
-                        header='Error'
-                        content='Your account does not support scanning.'
-                      />;
-            case 'expiredCaseworker':
-              return <Message
-                          warning
-                          attached='bottom'
-                          icon='calendar times outline'
-                          header='This buck is expired'
-                          content='Please recycle this VIGA farm buck.'
-                        />;
-            default:
-              return <div></div>;
-          }
-        })()}
         <Segment basic>
           <Header as="h2">How to Scan</Header>
           <p>
