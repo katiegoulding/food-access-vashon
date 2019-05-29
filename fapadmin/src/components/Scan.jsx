@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import QrReader from "react-qr-reader";
-import { Segment, Message, Header, Container, Loader, Dimmer, Button, SegmentGroup } from "semantic-ui-react";
+import { Segment, Message, Header, Responsive, Loader, Dimmer, Container, SegmentGroup, Grid } from "semantic-ui-react";
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -99,7 +99,8 @@ export default class Scan extends React.Component {
     } 
   }
 
-  // If expired, farmers are still permitted to scan. If expired, caseworkers are not.
+  // If expired, farmers are instructed to complete submission in person, nothing is added to the database
+  // caseworkers are instructed to recycle if they try to scan an expired buck.
   populateUserData = (data) => {
     let scanState = ""
     let voucherRef = firebase.database().ref("vouchers/" + data);
@@ -190,13 +191,13 @@ export default class Scan extends React.Component {
   showResponseMessage = (scanState) => {
     switch(scanState) {
       case 'success':
-      return <Message
-                positive
-                attached='bottom'
-                icon='thumbs up'
-                header='Success!'
-                content='This buck has been submitted! Feel free to recycle or keep for your records.'
-              />;
+        return <Message
+                  positive
+                  attached='bottom'
+                  icon='thumbs up'
+                  header='Success!'
+                  content='This buck has been submitted! Feel free to recycle or keep for your records.'
+                />;
       case 'expiredFarmer':
         return <Message
                   warning
@@ -210,7 +211,7 @@ export default class Scan extends React.Component {
                   negative
                   attached='bottom'
                   icon='x'
-                  header='Previously Submitted'
+                  header='Previously submitted'
                   content='This buck has already been submitted.'
                 />;
       case 'scanError':
@@ -239,12 +240,12 @@ export default class Scan extends React.Component {
                 />;
       case 'expiredCaseworker':
         return <Message
-                    warning
-                    attached='bottom'
-                    icon='calendar times outline'
-                    header='This buck is expired'
-                    content='Please recycle this VIGA farm buck.'
-                  />;
+                  warning
+                  attached='bottom'
+                  icon='calendar times outline'
+                  header='This buck is expired'
+                  content='Please recycle this VIGA farm buck.'
+                />;
       default:
         return <div></div>;
     }
@@ -282,37 +283,80 @@ export default class Scan extends React.Component {
 
     return (
       <div>
-        <Button onClick={() => this.handleScan('-LfzLzCnmCeahaY5nAVh')}> CLICK ME </Button>
-        <SegmentGroup>
-          <Segment attached='top'>
-            {scanner}
-          </Segment>
-          <Segment basic>
-            {
-              loading &&
-              <Dimmer active inverted>
-                  <Loader size={'mini'}/>
-                </Dimmer>
-            }
-            {
-              !loading &&
-                this.showResponseMessage(scanState)
-            }
-          </Segment>
-        </SegmentGroup>
+        <Responsive as={Grid} centered minWidth={768}>
+          <Grid.Row>
+            <Segment basic>
+              {
+                loading &&
+                <Dimmer active inverted>
+                    <Loader size={'medium'}/>
+                  </Dimmer>
+              }
+              {
+                !loading &&
+                  this.showResponseMessage(scanState)
+              }
+            </Segment>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={6}>
+              <Segment>
+                {scanner}
+              </Segment>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Segment basic >
+                <Header as="h2">How to Scan</Header>
+                <p>
+                  1. Make sure to allow this site to use your camera for scanning.
+                </p>
+                <p>
+                  2. Have your Farm Buck(s) in hand and center QR code in the camera view.
+                </p>
+                <p>
+                  3. You'll see a message informing you the scan is successful! Keep the buck for your records.
+                </p>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Responsive>
 
-        <Segment basic>
-          <Header as="h2">How to Scan</Header>
-          <p>
-            1. Make sure to allow this site to use your camera for scanning.
-          </p>
-          <p>
-            2. Have your Farm Buck(s) in hand and center QR code in the camera view.
-          </p>
-          <p>
-            3. You'll see a message informing you the scan is successful!
-          </p>
-        </Segment>
+        <Responsive as={Container} fluid maxWidth={767}>
+
+          {/* <Button onClick={() => this.handleScan('-LfzLzCkhhIL-fGnkuqh')}> CLICK ME </Button> */}
+
+          <SegmentGroup>
+            <Segment attached='top'>
+              {scanner}
+            </Segment>
+            <Segment basic attached='bottom'>
+              {
+                loading &&
+                <Dimmer active inverted>
+                    <Loader size={'mini'}/>
+                  </Dimmer>
+              }
+              {
+                !loading &&
+                  this.showResponseMessage(scanState)
+              }
+            </Segment>
+          </SegmentGroup>
+
+          <Segment basic>
+            <Header as="h2">How to Scan</Header>
+            <p>
+              1. Make sure to allow this site to use your camera for scanning.
+            </p>
+            <p>
+              2. Have your Farm Buck(s) in hand and center QR code in the camera view.
+            </p>
+            <p>
+              3. You'll see a message informing you the scan is successful! Keep the buck for your records.
+            </p>
+          </Segment> 
+        </Responsive>
+
       </div>
     );
   }
