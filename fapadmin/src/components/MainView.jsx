@@ -229,23 +229,28 @@ export default class MainView extends React.Component {
     let ui;
     let label;
     let nav;
+    let isAdmin;
 
     if (this.state.role === "admin") {
       ui = adminUI;
       nav = adminNav;
       label = "Food Access Partnership";
+      isAdmin = true;
     } else if (this.state.role === "caseworker") {
       ui = cworkerUI;
       nav = cworkerNav;
       label = "Partner Organization";
+      isAdmin = false;
     } else if (this.state.role === 'farmer') {
       ui = farmerUI;
       nav = farmerNav;
       label = "Farmer";
+      isAdmin = false;
     } else if (this.state.role === 'bookkeeper') {
       ui = bookkeeperUI;
       nav = bookkeeperNav;
       label = "Bookkeeper";
+      isAdmin = false;
     }
 
     let title;
@@ -265,7 +270,7 @@ export default class MainView extends React.Component {
 
     return (
       <div>
-        
+
           {/* Regular Header */}
           <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very">
             {/* <Segment basic color="blue" inverted padded="very"> */}
@@ -294,7 +299,7 @@ export default class MainView extends React.Component {
             <Label><Icon name='user' /> {label}</Label>
           </Responsive>
 
-        <Menu secondary>
+        <Menu secondary stackable={isAdmin}>
           {nav}
           <Menu.Menu position="right">
             <Menu.Item name="logout" onClick={this.handleSignOut} />
