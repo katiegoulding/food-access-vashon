@@ -3,7 +3,7 @@ import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import { Container, Segment, Table, TableRow, Button, Label, Icon, Header, Confirm } from "semantic-ui-react";
+import { Responsive, Segment, Table, TableRow, Button, Label, Icon, Header, Confirm } from "semantic-ui-react";
 
 export default class FarmerPayout extends React.Component {
   constructor(props) {
@@ -119,68 +119,136 @@ export default class FarmerPayout extends React.Component {
         <Segment raised>
         <Header textAlign="center" as="h3">Farmer Payout Records</Header>
 
-          <Container>
-          <Table singleLine stackable selectable> 
+          {/* Regular View */}
+          <Responsive as={Table} minWidth={1024} singleLine selectable stackable>
             <Table.Header>
-            <Table.Row>
+              <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Farm</Table.HeaderCell>
                 <Table.HeaderCell>Email</Table.HeaderCell>
-                <Table.HeaderCell>Total Bucks Collected</Table.HeaderCell>
-                <Table.HeaderCell>Outstanding Bucks</Table.HeaderCell>
-                <Table.HeaderCell>Last Payout Date</Table.HeaderCell>
-            </Table.Row>
+                <Table.HeaderCell collapsing>Total Bucks Collected</Table.HeaderCell>
+                <Table.HeaderCell collapsing>Outstanding Bucks</Table.HeaderCell>
+                <Table.HeaderCell collapsing>Last Payout Date</Table.HeaderCell>
+              </Table.Row>
             </Table.Header>
+
             <Table.Body>
             {
-                //for each item in the data provided, map will create a TableRow
-                //that has the respective name, farm, and email
-                farmerList.map(
-                    (element) => {
-                        console.log("element: ", element)
-                        return (
-                            <TableRow>
-                                <Table.Cell>{element.name}</Table.Cell>
-                                <Table.Cell>{element.farm}</Table.Cell>
-                                <Table.Cell>{element.email}</Table.Cell>
-                                <Table.Cell>{element.totalBucks}</Table.Cell>
-                                <Table.Cell>
-                                {(element.bucksNotPaid === 0) ? 
-                                    <Button compact basic color='green'>
-                                    <Icon color='green' name='checkmark' size='small' />
-                                    All Paid Up!
+            //for each item in the data provided, map will create a TableRow
+            //that has the respective name, farm, and email
+            farmerList.map(
+                (element) => {
+                    console.log("element: ", element)
+                    return (
+                        <TableRow>
+                            <Table.Cell>{element.name}</Table.Cell>
+                            <Table.Cell>{element.farm}</Table.Cell>
+                            <Table.Cell>{element.email}</Table.Cell>
+                            <Table.Cell>{element.totalBucks}</Table.Cell>
+                            <Table.Cell>
+                            {(element.bucksNotPaid === 0) ? 
+                                <Button compact basic color='green'>
+                                <Icon color='green' name='checkmark' size='small' />
+                                All Paid Up!
+                                </Button>
+                                : 
+                                <Button as='div' labelPosition='left'>
+                                    <Label basic as='a' pointing='right'>
+                                    {element.bucksNotPaid} Bucks / ${element.bucksNotPaid * 2}.00
+                                    </Label>
+                                    <Button color='green' icon onClick={this.open}>
+                                        <Icon name='dollar sign' />
+                                        Mark as Paid
                                     </Button>
-                                    : 
-                                    <Button as='div' labelPosition='left'>
-                                        <Label basic as='a' pointing='right'>
-                                        {element.bucksNotPaid} Bucks / ${element.bucksNotPaid * 2}.00
-                                        </Label>
-                                        <Button color='green' icon onClick={this.open}>
-                                            <Icon name='dollar sign' />
-                                            Mark as Paid
-                                        </Button>
-                                        <Confirm 
-                                            size='small' 
-                                            header="Confirm Payout?"
-                                            content={`This will mark (${element.bucksNotPaid}) unpaid bucks as PAID for ${element.name} at ${element.farm}`}
-                                            cancelButton='Cancel'
-                                            confirmButton="Mark as paid"
-                                            open={this.state.open} 
-                                            onCancel={this.close} 
-                                            onConfirm={() => this.completePayout(element.farmerUid)} />
+                                    <Confirm 
+                                        size='small' 
+                                        header="Confirm Payout?"
+                                        content={`This will mark (${element.bucksNotPaid}) unpaid bucks as PAID for ${element.name} at ${element.farm}`}
+                                        cancelButton='Cancel'
+                                        confirmButton="Mark as paid"
+                                        open={this.state.open} 
+                                        onCancel={this.close} 
+                                        onConfirm={() => this.completePayout(element.farmerUid)} />
+                                </Button>
+                              }
+                              </Table.Cell>
+                              <Table.Cell>{element.lastPayoutDate}</Table.Cell>
+                          </TableRow>
+                    )
+                }
+            )
+            } 
+          </Table.Body>
+          </Responsive>
+
+          {/* Mobile View */}
+          <Responsive as={Table} maxWidth={1023} compact="very" singleLine selectable stackable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
+                <Table.HeaderCell collapsing>Total Bucks Collected</Table.HeaderCell>
+                <Table.HeaderCell collapsing>Outstanding Bucks</Table.HeaderCell>
+                <Table.HeaderCell collapsing>Last Payout Date</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+            {
+            //for each item in the data provided, map will create a TableRow
+            //that has the respective name, farm, and email
+            farmerList.map(
+                (element) => {
+                    console.log("element: ", element)
+                    return (
+                        <TableRow>
+                            <Table.Cell>
+                            <Header as='h4'>
+                              <Header.Content>
+                              {element.name}
+                                <Header.Subheader>{element.farm}</Header.Subheader>
+                              </Header.Content>
+                            </Header>
+                            </Table.Cell>
+
+                            <Table.Cell>{element.email}</Table.Cell>
+                            <Table.Cell>{element.totalBucks}</Table.Cell>
+                            <Table.Cell>
+                            {(element.bucksNotPaid === 0) ? 
+                                <Button compact basic color='green' size="mini">
+                                <Icon color='green' name='checkmark' size='small' />
+                                All Paid Up!
+                                </Button>
+                                : 
+                                <Button as='div' labelPosition='left'>
+                                    <Label basic as='a' pointing='right'>
+                                    {element.bucksNotPaid} Bucks / ${element.bucksNotPaid * 2}.00
+                                    </Label>
+                                    <Button color='green' icon onClick={this.open}>
+                                        <Icon name='dollar sign' />
+                                        Mark as Paid
                                     </Button>
-                                }
-                                </Table.Cell>
-                                <Table.Cell>{element.lastPayoutDate}</Table.Cell>
-                            </TableRow>
-                        )
-                    }
-                )
-            }
-            </Table.Body>
-            </Table>
-          </Container>
-        </Segment>
+                                    <Confirm 
+                                        size='small' 
+                                        header="Confirm Payout?"
+                                        content={`This will mark (${element.bucksNotPaid}) unpaid bucks as PAID for ${element.name} at ${element.farm}`}
+                                        cancelButton='Cancel'
+                                        confirmButton="Mark as paid"
+                                        open={this.state.open} 
+                                        onCancel={this.close} 
+                                        onConfirm={() => this.completePayout(element.farmerUid)} />
+                                </Button>
+                              }
+                              </Table.Cell>
+                              <Table.Cell>{element.lastPayoutDate}</Table.Cell>
+                          </TableRow>
+                    )
+                }
+            )
+            } 
+          </Table.Body>
+          </Responsive>
+      </Segment>
     );
   }
 }

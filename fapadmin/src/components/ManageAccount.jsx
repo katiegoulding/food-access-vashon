@@ -45,16 +45,12 @@ export default class ManageAccount extends React.Component {
     let accountRef = firebase.database().ref("/users/");
 
     return (
-      <Container>
         <Segment raised>
-          <Container>
             <AccountList
               user={this.state.currentUser}
               accountRef={accountRef}
             />
-          </Container>
         </Segment>
-      </Container>
     );
   }
 }

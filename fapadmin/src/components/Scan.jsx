@@ -283,6 +283,7 @@ export default class Scan extends React.Component {
 
     return (
       <div>
+        {/* Regular View */}
         <Responsive as={Grid} centered minWidth={768}>
           <Grid.Row>
             <Segment basic>
@@ -321,6 +322,7 @@ export default class Scan extends React.Component {
           </Grid.Row>
         </Responsive>
 
+        {/* Mobile View */}
         <Responsive as={Container} fluid maxWidth={767}>
 
           {/* <Button onClick={() => this.handleScan('-LfzLzCkhhIL-fGnkuqh')}> CLICK ME </Button> */}
