@@ -1,6 +1,6 @@
 import React from "react";
 import Account from "./Account";
-import { Table, Segment, Loader, Dimmer, Container } from "semantic-ui-react";
+import { Table, Segment, Loader, Dimmer, Responsive } from "semantic-ui-react";
 
 export default class AccountList extends React.Component {
   constructor(props) {
@@ -54,19 +54,36 @@ export default class AccountList extends React.Component {
     });
 
     return (
-      <Table stackable selectable> 
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Role</Table.HeaderCell>
-            <Table.HeaderCell>Email</Table.HeaderCell>
-            <Table.HeaderCell>Approval Status</Table.HeaderCell>
-            <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
-            <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{accts}</Table.Body>
-      </Table>
+      <div>
+        {/* Regular View */}
+        <Responsive as={Table} selectable minWidth={768}>
+          <Table.Header>
+            <Table.Row collapsing>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Role</Table.HeaderCell>
+              <Table.HeaderCell>Email</Table.HeaderCell>
+              <Table.HeaderCell>Approval Status</Table.HeaderCell>
+              <Table.HeaderCell textAlign='center'>Actions</Table.HeaderCell>
+              <Table.HeaderCell textAlign='center'>Delete Account</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>{accts}</Table.Body>
+        </Responsive>
+
+        {/* Mobile View */}
+        <Responsive as={Table} size="mini" compact="small" maxWidth={767}>
+          <Table.Header>
+              <Table.Row collapsing>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Role</Table.HeaderCell>
+                <Table.HeaderCell>Email</Table.HeaderCell>
+                <Table.HeaderCell>Approval Status</Table.HeaderCell>
+                <Table.HeaderCell>Delete Account</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>{accts}</Table.Body>
+        </Responsive>
+      </div>
     )
   }
 }
