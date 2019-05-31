@@ -6,8 +6,9 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Scan from "./Scan";
-import ViewData from "./ViewData";
+//import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
+import FarmerPayout from "./FarmerPayout";
 import CreateBucks from "./CreateBucks.jsx";
 import {
   Container,
@@ -74,7 +75,7 @@ export default class MainView extends React.Component {
         this.props.history.push(constants.routes.base);
       } else {
         user.getIdTokenResult().then(idTokenResult => {
-          console.log(idTokenResult.claims.role);
+          console.log("role: ", idTokenResult.claims.role);
           if (idTokenResult.claims.role === "caseworker") {
             this.setState({
               username: user.email,
@@ -134,6 +135,7 @@ export default class MainView extends React.Component {
         active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
+
     let cworkerNav = [
       <Menu.Item
         name="Scan"
@@ -148,6 +150,7 @@ export default class MainView extends React.Component {
         active={this.props.location.pathname === constants.routes.dash.viewData}
       />
     ];
+
     let adminNav = [
       <Menu.Item
         name="Create Bucks"
@@ -170,6 +173,15 @@ export default class MainView extends React.Component {
         as={Link}
         to={constants.routes.dash.viewData}
         active={this.props.location.pathname === constants.routes.dash.viewData}
+      />
+    ];
+
+    let bookkeeperNav = [
+      <Menu.Item
+        name="Farmer Payout"
+        as={Link}
+        to={constants.routes.dash.farmerPayout}
+        active={this.props.location.pathname === constants.routes.dash.farmerPayout}
       />
     ];
 
@@ -207,23 +219,40 @@ export default class MainView extends React.Component {
       />
     ];
 
+    let bookkeeperUI = [
+      <Route
+        path={constants.routes.dash.farmerPayout}
+        render={() => <FarmerPayout username={this.state.username} />}
+      />
+    ]
+
     let ui;
     let label;
     let nav;
+    let isAdmin;
 
     if (this.state.role === "admin") {
       ui = adminUI;
       nav = adminNav;
       label = "Food Access Partnership";
+      isAdmin = true;
     } else if (this.state.role === "caseworker") {
       ui = cworkerUI;
       nav = cworkerNav;
       label = "Partner Organization";
-    } else {
+      isAdmin = false;
+    } else if (this.state.role === 'farmer') {
       ui = farmerUI;
       nav = farmerNav;
       label = "Farmer";
+      isAdmin = false;
+    } else if (this.state.role === 'bookkeeper') {
+      ui = bookkeeperUI;
+      nav = bookkeeperNav;
+      label = "Bookkeeper";
+      isAdmin = false;
     }
+
     let title;
 
     if (this.props.location.pathname === "/dash") {
@@ -232,62 +261,52 @@ export default class MainView extends React.Component {
       title = "Manage Accounts";
     } else if (this.props.location.pathname === "/dash/BucksLanding") {
       title = "Create a Buck Set";
+    } else if (this.props.location.pathname === "/dash/farmerPayout") {
+      title = "Farmer Payout";
     } else {
       // TO CHANGE:
-      title = "Visualizations";
+      title = "Visualizations"; 
     }
 
     return (
       <div>
-        <Segment basic color="blue" inverted padded="very">
-          <Header padded="very" size="huge" floated="left">
-            {title}
-          </Header>
 
-          <Responsive as={Header} floated="right" {...Responsive.onlyComputer}>
-            <Icon name="user circle" size="huge" />
-            <Header.Content>
+          {/* Regular Header */}
+          <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very">
+            {/* <Segment basic color="blue" inverted padded="very"> */}
+            <Header padded="very" size="huge" floated="left" inverted color='white'>
+              {title}
+            </Header>
+
+            <Header floated="right" inverted color='white'>
               {this.state.username}
-              <Header.Subheader
-                style={{
-                  color: "white"
-                }}
-              >
-                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
+              <Header.Subheader inverted color='white'>
+                <Label><Icon name='user' /> {label}</Label>
               </Header.Subheader>
-            </Header.Content>
+            </Header>
+            {/* </Segment> */}
           </Responsive>
 
-          <Responsive as={Header.Subheader} {...Responsive.onlyMobile}>
-            <Header.Content>
-              {this.state.username}
-              <Header.Subheader
-                style={{
-                  color: "white"
-                }}
-              >
-                <Label style={{ padding: "0.3em", margin: "0" }}>{label}</Label>
+          {/* Mobile Header */}
+          <Responsive as={Segment} maxWidth={767} basic color="blue" inverted padded="very">
+            <Header padded="very" size="huge" inverted color='white'>
+              {title}
+              <Header.Subheader inverted color='white'>
+                {this.state.username}
               </Header.Subheader>
-            </Header.Content>
-          </Responsive>
-        </Segment>
+            </Header>
 
-        {/* remove 'pointing secondary' to change to the alternate style */}
-        <Menu stackable secondary>
+            <Label><Icon name='user' /> {label}</Label>
+          </Responsive>
+
+        <Menu secondary stackable={isAdmin}>
           {nav}
           <Menu.Menu position="right">
             <Menu.Item name="logout" onClick={this.handleSignOut} />
           </Menu.Menu>
         </Menu>
 
-        <Container
-          style={{
-            width: "100%",
-            padding: "50px",
-            height: "calc(100% - 220px)  !important",
-            backgroundColor: "#eff0f3"
-          }}
-        >
+        <Container>
           <Router>
             <Switch>{ui}</Switch>
           </Router>

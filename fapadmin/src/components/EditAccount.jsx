@@ -4,7 +4,7 @@ import constants from "./constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
-import Plot from "react-plotly.js";
+// import Plot from "react-plotly.js";
 
 export default class EditAccount extends React.Component {
   constructor(props) {
@@ -101,7 +101,7 @@ export default class EditAccount extends React.Component {
           </div>
         </form>
 
-        <Plot
+        {/* <Plot
           data={[
             {
               x: [
@@ -155,7 +155,7 @@ export default class EditAccount extends React.Component {
             yaxis: { title: "Percent" },
             xaxis: { title: "Month" }
           }}
-        />
+        /> */}
         <p>
           {" "}
           <Link to={constants.routes.dash.manageAccount}>
