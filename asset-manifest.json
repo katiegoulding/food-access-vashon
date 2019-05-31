@@ -1,17 +1,19 @@
 {
-  "main.css": "/food-access-vashon/static/css/main.aab092b2.chunk.css",
-  "main.js": "/food-access-vashon/static/js/main.72ddebf0.chunk.js",
-  "main.js.map": "/food-access-vashon/static/js/main.72ddebf0.chunk.js.map",
+  "main.css": "/food-access-vashon/static/css/main.eafc6b5c.chunk.css",
+  "main.js": "/food-access-vashon/static/js/main.838b0f3f.chunk.js",
+  "main.js.map": "/food-access-vashon/static/js/main.838b0f3f.chunk.js.map",
   "runtime~main.js": "/food-access-vashon/static/js/runtime~main.38e3206e.js",
   "runtime~main.js.map": "/food-access-vashon/static/js/runtime~main.38e3206e.js.map",
   "static/css/2.66774465.chunk.css": "/food-access-vashon/static/css/2.66774465.chunk.css",
-  "static/js/2.40f9890d.chunk.js": "/food-access-vashon/static/js/2.40f9890d.chunk.js",
-  "static/js/2.40f9890d.chunk.js.map": "/food-access-vashon/static/js/2.40f9890d.chunk.js.map",
+  "static/js/2.d7136c74.chunk.js": "/food-access-vashon/static/js/2.d7136c74.chunk.js",
+  "static/js/2.d7136c74.chunk.js.map": "/food-access-vashon/static/js/2.d7136c74.chunk.js.map",
   "index.html": "/food-access-vashon/index.html",
-  "precache-manifest.cc10d114f0b210856f59d7c2e8bb95e3.js": "/food-access-vashon/precache-manifest.cc10d114f0b210856f59d7c2e8bb95e3.js",
+  "precache-manifest.1bb9de66dcb8909d02200c476b48746e.js": "/food-access-vashon/precache-manifest.1bb9de66dcb8909d02200c476b48746e.js",
   "service-worker.js": "/food-access-vashon/service-worker.js",
   "static/css/2.66774465.chunk.css.map": "/food-access-vashon/static/css/2.66774465.chunk.css.map",
-  "static/css/main.aab092b2.chunk.css.map": "/food-access-vashon/static/css/main.aab092b2.chunk.css.map",
+  "static/css/main.eafc6b5c.chunk.css.map": "/food-access-vashon/static/css/main.eafc6b5c.chunk.css.map",
   "static/media/semantic.min.css": "/food-access-vashon/static/media/outline-icons.ef60a4f6.woff",
-  "static/media/bucktemplateprintpage.jpg": "/food-access-vashon/static/media/bucktemplateprintpage.97cf9a86.jpg"
+  "static/media/bucktemplateprintpage.jpg": "/food-access-vashon/static/media/bucktemplateprintpage.97cf9a86.jpg",
+  "static/media/farmBuckEnglish.jpg": "/food-access-vashon/static/media/farmBuckEnglish.8e8b37b7.jpg",
+  "static/media/farmBuckSpanish.jpg": "/food-access-vashon/static/media/farmBuckSpanish.c7d241e2.jpg"
 }

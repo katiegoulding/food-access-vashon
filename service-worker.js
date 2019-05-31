@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/food-access-vashon/precache-manifest.cc10d114f0b210856f59d7c2e8bb95e3.js"
+  "/food-access-vashon/precache-manifest.1bb9de66dcb8909d02200c476b48746e.js"
 );
 
 workbox.clientsClaim();
