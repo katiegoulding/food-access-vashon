@@ -169,11 +169,7 @@ export default class FormSuccess extends React.Component {
     let promise1 = this.postVoucherData("dove", doveCount, ids);
     let promise2 = this.postVoucherData("vyfs", vyfsCount, ids);
     let promise3 = this.postVoucherData("lacomunidad", lacomunidadCount, ids);
-    let promise4 = this.postVoucherData(
-      "vashonhousehold",
-      vashonhouseholdCount,
-      ids
-    );
+    let promise4 = this.postVoucherData("vashonhousehold", vashonhouseholdCount, ids);
 
     // prepare data for post to Google Cloud Function
     let data = {
@@ -236,9 +232,9 @@ export default class FormSuccess extends React.Component {
         <Segment
           raised
           style={{
-            "padding-top": "30px",
-            "padding-right": "40px",
-            "padding-left": "40px"
+            paddingTop: "30px",
+            paddingRight: "40px",
+            paddingLeft: "40px"
           }}
         >
           <Header as="h1" textAlign="left">
@@ -250,7 +246,7 @@ export default class FormSuccess extends React.Component {
           <Header as="h5" color="grey" textAlign="left">
             BUCK ALLOCATION
           </Header>
-          <table class="ui very basic table">
+          <table className="ui very basic table">
             <tbody>
             <tr>
                 <td>Vashon Community Food Bank</td>

@@ -1,6 +1,6 @@
 import React from "react";
 import firebase from "firebase";
-import { Table, Icon, Header, Button, Confirm } from "semantic-ui-react";
+import { Table, Icon, Header, Button, Confirm, Responsive} from "semantic-ui-react";
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -44,6 +44,8 @@ export default class Account extends React.Component {
     this.setState({ open: false })
   }
 
+  handleOnUpdate = (e, { width }) => this.setState({ width })
+
   render() {
     // let user = firebase.auth().currentUser;
     let acct = this.props.acctSnapshot.val();
@@ -65,9 +67,12 @@ export default class Account extends React.Component {
       );
     }
 
+    const { width } = this.state
+    const textAlign = width >= Responsive.onlyComputer.minWidth ? 'center' : 'left'
+
 
     return (
-      <Table.Row warning={!acct.approved}>
+      <Responsive as={(Table.Row)} warning={!acct.approved} collapsing fireOnMount onUpdate={this.handleOnUpdate}>
         <Table.Cell>
           
         <Header as='h4'>
@@ -80,15 +85,15 @@ export default class Account extends React.Component {
         <Table.Cell>{acct.role}</Table.Cell>
         <Table.Cell>{acct.email}</Table.Cell>
         {appEl}
-        <Table.Cell textAlign="center">
+        <Table.Cell textAlign={textAlign}>
           {acct.approved ? null : (
             <Button.Group>
-              <Button size='mini' positive content="Approve" onClick={() => this.handleApprove()}/>
-              <Button size='mini' content="Reject" onClick={() => this.handlePurge()}/>
+              <Button compact size='mini' positive content="Approve" onClick={() => this.handleApprove()}/>
+              <Button compact size='mini' content="Reject" onClick={() => this.handlePurge()}/>
             </Button.Group>
           )}
         </Table.Cell>
-        <Table.Cell textAlign='center'>
+        <Table.Cell textAlign={textAlign}>
           <Icon
               name="delete"
               className="delete"
@@ -105,7 +110,7 @@ export default class Account extends React.Component {
               onCancel={this.close} 
               onConfirm={() => this.handlePurge()} />
         </Table.Cell>
-      </Table.Row>
+      </Responsive>
     );
   }
 }
