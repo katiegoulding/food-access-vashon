@@ -144,15 +144,16 @@ export default class CreateAccount extends React.Component {
 
     return (
       <Responsive as={Grid} fireOnMount onUpdate={this.handleOnUpdate} centered="true" middle columns={1}>
-        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left">
+        <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left" className="mt100 mb100">
           <Message
             attached
             header="Create an Account"
             content="Provide some basic information to get started!"
+            className="messageHeader loginIllustrations"
           />
 
           <Form
-            className="attached fluid segment"
+            className="attached fluid segment messageBody"
             onSubmit={evt => this.handleCreateAccount(evt)}
             error={errorMessage}
             loading={loading}
@@ -276,7 +277,7 @@ export default class CreateAccount extends React.Component {
             <Button type="submit">Create Account</Button>
             
           </Form>
-          <Message attached="bottom" info>
+          <Message attached="bottom" className="messageFooter" info>
             <Icon name="help" />
             Already have an account? &nbsp;
             <Link to={constants.routes.base}>Sign in!</Link>&nbsp;
