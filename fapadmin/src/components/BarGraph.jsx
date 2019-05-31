@@ -35,7 +35,7 @@ export default function BarGraph(props) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "Count",
+        legend: "Dollars",
         legendPosition: "middle",
         legendOffset: -40
       }}

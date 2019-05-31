@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Container, Segment, Statistic } from "semantic-ui-react";
+import {
+  Grid,
+  Container,
+  Segment,
+  Statistic,
+  Header,
+  Icon,
+  Dropdown
+} from "semantic-ui-react";
 import firebase from "firebase/app";
 import LineGraph from "./LineGraph";
 import BarGraph from "./BarGraph";
@@ -9,6 +17,30 @@ export default function Dashboard(props) {
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [totalRedeemed, setTotalRedeemed] = useState(0);
+  const [totalHandedOut, setTotalHandedOut] = useState(0);
+  const [totalCreated, setTotalCreated] = useState(0);
+  const [dateView, setDateView] = useState("month");
+
+  const options = [
+    {
+      key: "this month",
+      text: "this month",
+      value: "month",
+      content: "this month"
+    },
+    {
+      key: "this year",
+      text: "this year",
+      value: "year",
+      content: "this year"
+    },
+    {
+      key: "all time",
+      text: "all time",
+      value: "all",
+      content: "all time"
+    }
+  ];
 
   useEffect(() => {
     setRole(props.role);
@@ -201,11 +233,31 @@ export default function Dashboard(props) {
             <Segment raised padded centered>
               <Statistic
                 style={{ margin: "auto" }}
+                label="Dollars Created"
+                value={"$90.00"}
+              />
+            </Segment>
+            <Segment raised padded centered>
+              <Statistic
+                style={{ margin: "auto" }}
                 label="Dollars Redeemed"
                 value={"$" + totalRedeemed + ".00"}
               />
             </Segment>
-            <Segment raised padded centered />
+            <Segment raised padded centered>
+              <Header as="h4">
+                <Icon name="calendar alternate outline" />
+                <Header.Content>
+                  Displaying Data from{" "}
+                  <Dropdown
+                    inline
+                    header="Adjust time span"
+                    options={options}
+                    defaultValue={options[0].value}
+                  />
+                </Header.Content>
+              </Header>
+            </Segment>
           </Grid.Column>
         </Grid.Row>
       </Grid>

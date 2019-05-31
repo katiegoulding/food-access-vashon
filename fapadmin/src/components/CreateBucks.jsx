@@ -13,12 +13,22 @@ import {
   Message,
   Segment
 } from "semantic-ui-react";
-import axios from "axios";
-import bgImg from "../bucktemplateprintpage.jpg";
+import bgImg from "../farmBuckEnglish.jpg";
+import bgImgSP from "../farmBuckSpanish.jpg";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+const orgID = {
+  Foodbank: "A-1",
+  dove: "A-2",
+  vcc: "A-3",
+  seniorcenter: "A-4",
+  interfaith: "A-5",
+  vashonhousehold: "A-6",
+  lacomunidad: "A-7",
+  vyfs: "A-8"
+};
 export default class CreateBucks extends React.Component {
   constructor(props) {
     super(props);
@@ -51,45 +61,133 @@ export default class CreateBucks extends React.Component {
     }
   }
 
-  createPDF(data) {
+  createPDF(data, dataURL, dataURLSP) {
     let ids = data.ids;
-    let year = data.year;
+    let year = data.Year;
 
     var documentDefinition = {
       content: []
     };
 
-    documentDefinition.content.pageSize = "LETTER";
+    documentDefinition.pageSize = "LETTER";
 
     // PDF VARIABLES(in mm):
 
     var count = 1;
 
-    ids.forEach(id => {
-      console.log(id);
-      let pOrg = id.partnerOrg;
+    for (var i = 0; i < ids.length; i++) {
+      let id = ids[i];
+      console.log();
+      let pOrgID = orgID[id.partnerOrg];
       let code = id.id;
       let qr;
-      if (count % 4 == 0 && count !== ids.length) {
+      let exp = {
+        text: "Expires: " + year,
+        absolutePosition: { x: 395, y: 198 * (i % 4) + 141 },
+        fontSize: 7,
+        color: "white",
+        bold: true
+      };
+      let yearText = {
+        text: year.split("-")[0],
+        absolutePosition: { x: 391, y: 198 * (i % 4) + 171 },
+        fontSize: 4,
+        color: "#5f605f",
+        bold: true
+      };
+      let coupon = {
+        image: dataURL,
+        height: 198,
+        width: 455,
+        absolutePosition: { x: 78.5, y: 198 * (i % 4) }
+      };
+      let org = {
+        text: pOrgID,
+        absolutePosition: { x: 386, y: 198 * (i % 4) + 158 },
+        fontSize: 12,
+        color: "#5f605f",
+        bold: true
+      };
+
+      documentDefinition.content.push(coupon);
+      documentDefinition.content.push(exp);
+      documentDefinition.content.push(org);
+      documentDefinition.content.push(yearText);
+
+      if (count % 4 === 0 || count === ids.length) {
         qr = {
           qr: code,
           fit: 50,
-          margin: [381, 0, 0, 137],
+          absolutePosition: { x: 390, y: 198 * (i % 4) + 44 },
           pageBreak: "after"
         };
-      } else if (count % 4 == 1) {
-        qr = { qr: code, fit: 50, margin: [381, 51, 0, 137] };
+        documentDefinition.content.push(qr);
+        if (count % 4 === 0) {
+          if (count === ids.length) {
+            this.generateSpanishPage(documentDefinition, dataURLSP, 4, true);
+          } else {
+            this.generateSpanishPage(documentDefinition, dataURLSP, 4, false);
+          }
+        } else {
+          if (count === ids.length) {
+            this.generateSpanishPage(
+              documentDefinition,
+              dataURLSP,
+              count % 4,
+              true
+            );
+          } else {
+            this.generateSpanishPage(
+              documentDefinition,
+              dataURLSP,
+              count % 4,
+              false
+            );
+          }
+        }
       } else {
-        qr = { qr: code, fit: 50, margin: [381, 0, 0, 137] };
+        qr = {
+          qr: code,
+          fit: 50,
+          absolutePosition: { x: 390, y: 198 * (i % 4) + 44 }
+        };
+        documentDefinition.content.push(qr);
       }
       console.log(JSON.stringify(qr));
-      documentDefinition.content.push(qr);
       count++;
-    });
+    }
 
     documentDefinition.pageMargins = [0, 0, 0, 0];
 
     return documentDefinition;
+  }
+
+  generateSpanishPage(doc, spURL, count, end) {
+    for (let i = 0; i < count - 1; i++) {
+      let coupon = {
+        image: spURL,
+        height: 198,
+        width: 455,
+        absolutePosition: { x: 78.5, y: 198 * (i % 4) }
+      };
+      doc.content.push(coupon);
+    }
+    if (end) {
+      doc.content.push({
+        image: spURL,
+        height: 198,
+        width: 455,
+        absolutePosition: { x: 78.5, y: 198 * (count - 1) }
+      });
+    } else {
+      doc.content.push({
+        image: spURL,
+        height: 198,
+        width: 455,
+        absolutePosition: { x: 78.5, y: 198 * (count - 1) },
+        pageBreak: "after"
+      });
+    }
   }
 
   // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
@@ -233,27 +331,22 @@ export default class CreateBucks extends React.Component {
     // Call Google Cloud Function to generate PDF of vouchers
     Promise.all([promise1, promise2, promise3, promise4])
       .then(doesPass => {
-        let documentDefinition = this.createPDF(data);
-        this.toDataURL(bgImg, dataUrl => {
-          documentDefinition.background = [
-            {
-              image: dataUrl,
-              width: 612.0,
-              height: 792.0
-            }
-          ];
-          console.log(JSON.stringify(documentDefinition));
-          pdfMake
-            .createPdf(documentDefinition)
-            .download(this.props.buckSetName + ".pdf", () => {
-              this.setState({
-                complete: true,
-                loading: false,
-                errorMessage: ""
+        this.toDataURL(bgImgSP, dataUrlSP => {
+          this.toDataURL(bgImg, dataUrl => {
+            let documentDefinition = this.createPDF(data, dataUrl, dataUrlSP);
+            console.log(JSON.stringify(documentDefinition));
+            pdfMake
+              .createPdf(documentDefinition)
+              .download(this.props.buckSetName + ".pdf", () => {
+                this.setState({
+                  complete: true,
+                  loading: false,
+                  errorMessage: ""
+                });
+                const { toggleShowCreateBucks } = this.props;
+                toggleShowCreateBucks();
               });
-              const { toggleShowCreateBucks } = this.props;
-              toggleShowCreateBucks();
-            });
+          });
         });
       })
       .catch(err => {

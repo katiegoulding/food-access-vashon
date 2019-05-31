@@ -6,27 +6,6 @@ export default function LineGraph(props) {
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const options = [
-    {
-      key: "All Time",
-      text: "All Time",
-      value: "all",
-      content: "All Time"
-    },
-    {
-      key: "This Month",
-      text: "This Month",
-      value: "month",
-      content: "This Month"
-    },
-    {
-      key: "This Year",
-      text: "This Year",
-      value: "year",
-      content: "This Year"
-    }
-  ];
-
   useEffect(() => {
     setRole(props.role);
     setCharData(props.charData);
@@ -53,14 +32,14 @@ export default function LineGraph(props) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: "count",
+        legend: "Dollars",
         legendOffset: -40,
         legendPosition: "middle"
       }}
       axisBottom={{
         format: "%b %d",
         tickValues: "every 2 days",
-        legend: "time scale",
+        legend: "Time Scale",
         legendOffset: -12
       }}
       animate={true}
