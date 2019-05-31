@@ -27,8 +27,8 @@ export default class Barrier extends React.Component {
   render() {
     return (
       <Grid centered="true">
-        <Grid.Column width={6} verticalAlign="middle" textAlign="center">
-          <Segment inverted color="olive">
+        <Grid.Column width={8} verticalAlign="middle" textAlign="center">
+          <Segment inverted color="olive" className="barrierContainer">
             <Icon name="hand paper outline" size="huge" />
             <Header
               inverted

@@ -54,10 +54,11 @@ export default class AccountRecovery extends React.Component {
               attached='top'
               header="Account Recovery"
               content="Enter your account email to reset your password."
+              className="messageHeader"
             />
             
             <Form 
-              className="attached fluid segment"
+              className="attached fluid segment messageBody"
               onSubmit={evt => this.handlePasswordReset(evt)}
               warning={successMessage}>
                 

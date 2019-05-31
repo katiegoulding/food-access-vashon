@@ -43,6 +43,7 @@ export default function Dashboard(props) {
   ];
 
   useEffect(() => {
+    console.log(props.org);
     setRole(props.role);
     if (props.role === "farmer") {
       handleFarmer();
@@ -79,7 +80,7 @@ export default function Dashboard(props) {
       } else {
         firebaseDataArray[index].y += 2;
       }
-      if (firebaseDataArray.length > 2) {
+      if (firebaseDataArray.length > 3) {
         setIsLoaded(true);
       }
       setCharData([
@@ -134,15 +135,17 @@ export default function Dashboard(props) {
       .child("vis2/" + props.org)
       .orderByValue();
     ref.on("value", snapshot => {
+      console.log("Organization:" + props.org);
       let array = [];
       var startDay;
       for (var key in snapshot.val()) {
         let firebaseDataArray = [];
         console.log(key);
         let value = snapshot.val();
-        console.log(value[key]);
         let dates = [];
         for (var childKey in value[key]) {
+          console.log("DATE" + JSON.stringify(value[key][childKey]));
+
           dates.push(
             new Date(value[key][childKey]).toISOString().split("T")[0]
           );

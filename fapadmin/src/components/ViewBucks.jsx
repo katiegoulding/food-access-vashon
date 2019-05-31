@@ -19,8 +19,8 @@ export default class ViewBucks extends React.Component {
       const value = snapshot.val();
       // sort by newest
       firebaseBuckSet.push({
-        title: value.name,
-        subtitle: value.createdBy
+        name: value.name,
+        createdBy: value.createdBy
       });
       this.setState({
         firebaseBuckSet
@@ -49,7 +49,7 @@ export default class ViewBucks extends React.Component {
             this.state.firebaseBuckSet.map(element => {
               return (
                 <BuckSetListItem
-                  key={element.title + element.subtitle}
+                  key={element.name + element.createdBy}
                   data={element}
                 />
               );

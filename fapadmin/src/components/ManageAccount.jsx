@@ -21,6 +21,7 @@ export default class ManageAccount extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
   }
+  
   componentDidMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
       this.setState({
@@ -44,23 +45,12 @@ export default class ManageAccount extends React.Component {
     let accountRef = firebase.database().ref("/users/");
 
     return (
-      <Container>
-        <Segment
-          style={{
-            paddingTop: "30px",
-            paddingRight: "40px",
-            paddingLeft: "40px"
-          }}
-          raised
-        >
-          <Container>
+        <Segment raised>
             <AccountList
               user={this.state.currentUser}
               accountRef={accountRef}
             />
-          </Container>
         </Segment>
-      </Container>
     );
   }
 }
