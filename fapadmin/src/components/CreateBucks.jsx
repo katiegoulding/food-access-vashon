@@ -14,22 +14,10 @@ import {
   Segment,
   Container
 } from "semantic-ui-react";
-import bgImg from "../farmBuckEnglish.jpg";
-import bgImgSP from "../farmBuckSpanish.jpg";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const orgID = {
-  Foodbank: "A-1",
-  dove: "A-2",
-  vcc: "A-3",
-  seniorcenter: "A-4",
-  interfaith: "A-5",
-  vashonhousehold: "A-6",
-  lacomunidad: "A-7",
-  vyfs: "A-8"
-};
 export default class CreateBucks extends React.Component {
   constructor(props) {
     super(props);
@@ -41,192 +29,6 @@ export default class CreateBucks extends React.Component {
     };
   }
 
-  //TODO: errorMessage (a string) should be replaced with hasError (a boolean) in the form props.
-
-  toDataURL(src, callback, outputFormat) {
-    var img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.onload = function() {
-      var canvas = document.createElement("CANVAS");
-      var ctx = canvas.getContext("2d");
-      var dataURL;
-      canvas.height = this.naturalHeight;
-      canvas.width = this.naturalWidth;
-      ctx.drawImage(this, 0, 0);
-      dataURL = canvas.toDataURL(outputFormat);
-      callback(dataURL);
-    };
-    img.src = src;
-    if (img.complete || img.complete === undefined) {
-      img.src =
-        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-      img.src = src;
-    }
-  }
-
-  createPDF(data, dataURL, dataURLSP) {
-    let ids = data.ids;
-    let year = data.Year;
-
-    var documentDefinition = {
-      content: []
-    };
-
-    documentDefinition.pageSize = "LETTER";
-
-    // PDF VARIABLES(in mm):
-
-    var count = 1;
-
-    for (var i = 0; i < ids.length; i++) {
-      let id = ids[i];
-      console.log();
-      let pOrgID = orgID[id.partnerOrg];
-      let code = id.id;
-      let qr;
-      let exp = {
-        text: "Expires: " + year,
-        absolutePosition: { x: 395, y: 198 * (i % 4) + 141 },
-        fontSize: 7,
-        color: "white",
-        bold: true
-      };
-      let yearText = {
-        text: year.split("-")[0],
-        absolutePosition: { x: 391, y: 198 * (i % 4) + 171 },
-        fontSize: 4,
-        color: "#5f605f",
-        bold: true
-      };
-      let coupon = {
-        image: dataURL,
-        height: 198,
-        width: 455,
-        absolutePosition: { x: 78.5, y: 198 * (i % 4) }
-      };
-      let org = {
-        text: pOrgID,
-        absolutePosition: { x: 386, y: 198 * (i % 4) + 158 },
-        fontSize: 12,
-        color: "#5f605f",
-        bold: true
-      };
-
-      documentDefinition.content.push(coupon);
-      documentDefinition.content.push(exp);
-      documentDefinition.content.push(org);
-      documentDefinition.content.push(yearText);
-
-      if (count % 4 === 0 || count === ids.length) {
-        qr = {
-          qr: code,
-          fit: 50,
-          absolutePosition: { x: 390, y: 198 * (i % 4) + 44 },
-          pageBreak: "after"
-        };
-        documentDefinition.content.push(qr);
-        if (count % 4 === 0) {
-          if (count === ids.length) {
-            this.generateSpanishPage(documentDefinition, dataURLSP, 4, true);
-          } else {
-            this.generateSpanishPage(documentDefinition, dataURLSP, 4, false);
-          }
-        } else {
-          if (count === ids.length) {
-            this.generateSpanishPage(
-              documentDefinition,
-              dataURLSP,
-              count % 4,
-              true
-            );
-          } else {
-            this.generateSpanishPage(
-              documentDefinition,
-              dataURLSP,
-              count % 4,
-              false
-            );
-          }
-        }
-      } else {
-        qr = {
-          qr: code,
-          fit: 50,
-          absolutePosition: { x: 390, y: 198 * (i % 4) + 44 }
-        };
-        documentDefinition.content.push(qr);
-      }
-      console.log(JSON.stringify(qr));
-      count++;
-    }
-
-    documentDefinition.pageMargins = [0, 0, 0, 0];
-
-    return documentDefinition;
-  }
-
-  generateSpanishPage(doc, spURL, count, end) {
-    for (let i = 0; i < count - 1; i++) {
-      let coupon = {
-        image: spURL,
-        height: 198,
-        width: 455,
-        absolutePosition: { x: 78.5, y: 198 * (i % 4) }
-      };
-      doc.content.push(coupon);
-    }
-    if (end) {
-      doc.content.push({
-        image: spURL,
-        height: 198,
-        width: 455,
-        absolutePosition: { x: 78.5, y: 198 * (count - 1) }
-      });
-    } else {
-      doc.content.push({
-        image: spURL,
-        height: 198,
-        width: 455,
-        absolutePosition: { x: 78.5, y: 198 * (count - 1) },
-        pageBreak: "after"
-      });
-    }
-  }
-
-  // takes organization name, voucher count, and a list of ids and saves them in the Firebase Realtime database
-  postVoucherData(organization, count, ids) {
-    let updates = {};
-
-    for (let i = 0; i < count; i++) {
-      let voucherData = {
-        organization,
-        createdOn: new Date(),
-        expirationDate: this.props.expirationDate
-      };
-
-      let newVoucherKey = firebase
-        .database()
-        .ref()
-        .child("vouchers")
-        .push().key;
-      ids.push({ partnerOrg: organization, id: newVoucherKey });
-
-      firebase
-        .database()
-        .ref()
-        .child("vis2/" + organization + "/created/")
-        .update({
-          [newVoucherKey]: new Date()
-        });
-
-      updates["/vouchers/" + newVoucherKey] = voucherData;
-    }
-
-    return firebase
-      .database()
-      .ref()
-      .update(updates);
-  }
 
   // return true if validated form data is acceptable, false otherwise
   validateFormData = async sum => {
@@ -239,8 +41,7 @@ export default class CreateBucks extends React.Component {
 
     const { buckSetName } = this.props;
     let buckSetsRef = firebase.database().ref("buckSets");
-
-    let isTrue = true;
+    let nameExists = false
     // await the results from firebase, once because this should be done only once the function
     // fires
     await buckSetsRef
@@ -254,123 +55,19 @@ export default class CreateBucks extends React.Component {
             this.setState({
               errorMessage: "The buck set name you used already exists."
             });
-            isTrue = false;
+            nameExists = true
+            // the name exists do nothing
           }
         });
       });
-    return isTrue;
-  };
-
-  // On submit of the Create Voucher form the function saves given data to
-  // Firebase and calls postData to Google Cloud Function to generate pdf
-  handleSubmit = async event => {
-    event.preventDefault();
-    const {
-      doveCount,
-      vyfsCount,
-      lacomunidadCount,
-      vashonhouseholdCount
-    } = this.props;
-
-    this.setState({
-      loading: true
-    });
-
-    let sum = doveCount + vyfsCount + lacomunidadCount + vashonhouseholdCount;
-    // await to do a lookup in firebase if the name they're using has been used already
-    let isValid = await this.validateFormData(sum);
-    if (!isValid) {
-      this.setState({
-        loading: false
-      });
-      return;
-    } else {
-      this.setState({
-        errorMessage: ""
-      });
+    if(!nameExists) {
+      this.props.toggleShowCreateBucks()
     }
-
-    // Add the new buck set to the list of buckSets in Firebase
-    const promiseFromFirebase = firebase
-      .database()
-      .ref()
-      .child("buckSets/" + this.props.buckSetName)
-      .update({
-        name: this.props.buckSetName,
-        createdOn: new Date(),
-        createdBy: this.props.username,
-        expirationDate: this.props.expirationDate,
-        foodbankCount: this.props.foodbankCount,
-        doveCount: this.props.doveCount,
-        communitycareCount: this.props.communitycareCount,
-        seniorcenterCount: this.props.seniorcenterCount,
-        interfaithCount: this.props.interfaithCount,
-        communitymealsCount: this.props.communitymealsCount,
-        vashonhouseholdCount: this.props.vashonhouseholdCount,
-        lacomunidadCount: this.props.lacomunidadCount,
-        vyfsCount: this.props.vyfsCount,
-        vyfslatinxCount: this.props.vyfslatinxCount,
-        vyfsfamilyplaceCount: this.props.vyfsfamilyplaceCount
-      });
-
-    promiseFromFirebase
-      .then(data => {
-        console.log("Buckset upload passed");
-      })
-      .catch(err => {
-        console.log("Buckset upload failed with: ", err);
-      });
-
-    //post the data, wait on each one to resolve
-    let ids = [];
-    let promise1 = this.postVoucherData("dove", doveCount, ids);
-    let promise2 = this.postVoucherData("vyfs", vyfsCount, ids);
-    let promise3 = this.postVoucherData("lacomunidad", lacomunidadCount, ids);
-    let promise4 = this.postVoucherData(
-      "vashonhousehold",
-      vashonhouseholdCount,
-      ids
-    );
-
-    // prepare data for post to Google Cloud Function
-    let data = {
-      expirationDate: this.props.expirationDate,
-      ids
-    };
-
-    // Call Google Cloud Function to generate PDF of vouchers
-    Promise.all([promise1, promise2, promise3, promise4])
-      .then(doesPass => {
-        this.toDataURL(bgImgSP, dataUrlSP => {
-          this.toDataURL(bgImg, dataUrl => {
-            let documentDefinition = this.createPDF(data, dataUrl, dataUrlSP);
-            console.log(JSON.stringify(documentDefinition));
-            pdfMake
-              .createPdf(documentDefinition)
-              .download(this.props.buckSetName + ".pdf", () => {
-                this.setState({
-                  complete: true,
-                  loading: false,
-                  errorMessage: ""
-                });
-                const { toggleShowCreateBucks } = this.props;
-                toggleShowCreateBucks();
-              });
-          });
-        });
-      })
-      .catch(err => {
-        console.log("Error on firebase request", err);
-        this.setState({
-          errorMessage: "Error on firebase request"
-        });
-      });
-    console.log("firebase.functions() = ", firebase.functions());
+    
   };
 
   render() {
     const { loading, errorMessage } = this.state;
-    const { toggleShowCreateBucks } = this.props;
     let sum =
       this.props.foodbankCount +
       this.props.doveCount +
@@ -390,7 +87,7 @@ export default class CreateBucks extends React.Component {
           <Container>
             <Form
               // onSubmit={this.handleSubmit}
-              onSubmit={toggleShowCreateBucks}
+              onSubmit={this.validateFormData}
               loading={loading}
               error={errorMessage}
             >

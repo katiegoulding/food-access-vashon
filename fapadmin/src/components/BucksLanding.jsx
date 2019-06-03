@@ -31,7 +31,7 @@ export default class BucksLanding extends React.Component {
     this.setState(newState);
   }
 
-  toggleShowCreateBucks(_event) {
+  toggleShowCreateBucks(_event) { 
     this.setState({
       showCreateBucks: !this.state.showCreateBucks
     });
