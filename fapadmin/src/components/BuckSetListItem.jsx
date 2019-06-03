@@ -18,10 +18,13 @@ export default class BuckSetListItem extends React.Component {
     close = () => this.setState({ open: false })
 
     deleteBuckSet = () => {
-        let key = this.props.data.title
+        let key = this.props.data.name
+        console.log("buck set title ", this.props.data.name)
         //TODO: make if(!key) {...} and throw an error 
         if(key != '') {
             let buckSetRef = firebase.database().ref('buckSets/' + key)
+            console.log("buckSetRef ", buckSetRef)
+
             buckSetRef.remove()
             .then(() =>{
                 console.log("Remove succeeded.")
@@ -63,7 +66,7 @@ export default class BuckSetListItem extends React.Component {
                             </Modal.Content>
                         </Modal>
 
-                        <Button icon="trash"/>
+                        <Button icon="trash" onClick={this.open}/>
                         <Confirm 
                             size='small' 
                             header={`Are you sure you want to delete ${name} Buck Set?`}
