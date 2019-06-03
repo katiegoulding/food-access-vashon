@@ -6,7 +6,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Scan from "./Scan";
-//import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
 import FarmerPayout from "./FarmerPayout";
 import CreateBucks from "./CreateBucks.jsx";
@@ -74,23 +73,30 @@ export default class MainView extends React.Component {
       if (!user) {
         this.props.history.push(constants.routes.base);
       } else {
-        user.getIdTokenResult().then(idTokenResult => {
-          console.log("role: ", idTokenResult.claims.role);
-          if (idTokenResult.claims.role === "caseworker") {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role,
-              org: this.state.org
+        firebase
+          .database()
+          .ref("users/" + user.uid)
+          .once("value")
+          .then(snapshot => {
+            var org = snapshot.val().org;
+            user.getIdTokenResult(true).then(idTokenResult => {
+              console.log(idTokenResult.claims.role);
+              if (idTokenResult.claims.role === "caseworker") {
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role,
+                  org: org
+                });
+              } else {
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role
+                });
+              }
             });
-          } else {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role
-            });
-          }
-        });
+          });
       }
     });
   }
@@ -181,7 +187,9 @@ export default class MainView extends React.Component {
         name="Farmer Payout"
         as={Link}
         to={constants.routes.dash.farmerPayout}
-        active={this.props.location.pathname === constants.routes.dash.farmerPayout}
+        active={
+          this.props.location.pathname === constants.routes.dash.farmerPayout
+        }
       />
     ];
 
@@ -191,7 +199,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let cworkerUI = [
@@ -200,7 +217,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let adminUI = [
@@ -212,7 +238,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.manageAccount}
         component={ManageAccount}
       />,
-      <Route path={constants.routes.dash.base} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />,
+      <Route
+        path={constants.routes.dash.base}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />,
       <Route
         path={constants.routes.dash.createBucks}
         render={() => <CreateBucks username={this.state.username} />}
@@ -224,7 +259,7 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.farmerPayout}
         render={() => <FarmerPayout username={this.state.username} />}
       />
-    ]
+    ];
 
     let ui;
     let label;
@@ -241,12 +276,12 @@ export default class MainView extends React.Component {
       nav = cworkerNav;
       label = "Partner Organization";
       isAdmin = false;
-    } else if (this.state.role === 'farmer') {
+    } else if (this.state.role === "farmer") {
       ui = farmerUI;
       nav = farmerNav;
       label = "Farmer";
       isAdmin = false;
-    } else if (this.state.role === 'bookkeeper') {
+    } else if (this.state.role === "bookkeeper") {
       ui = bookkeeperUI;
       nav = bookkeeperNav;
       label = "Bookkeeper";
@@ -265,39 +300,63 @@ export default class MainView extends React.Component {
       title = "Farmer Payout";
     } else {
       // TO CHANGE:
-      title = "Visualizations"; 
+      title = "Visualizations";
     }
 
     return (
       <div>
+        {/* Regular Header */}
+        <Responsive
+          as={Segment}
+          clearing
+          minWidth={768}
+          basic
+          color="blue"
+          inverted
+          padded="very"
+        >
+          {/* <Segment basic color="blue" inverted padded="very"> */}
+          <Header
+            padded="very"
+            size="huge"
+            floated="left"
+            inverted
+            color="white"
+          >
+            {title}
+          </Header>
 
-          {/* Regular Header */}
-          <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very">
-            {/* <Segment basic color="blue" inverted padded="very"> */}
-            <Header padded="very" size="huge" floated="left" inverted color='white'>
-              {title}
-            </Header>
+          <Header floated="right" inverted color="white">
+            {this.state.username}
+            <Header.Subheader inverted color="white">
+              <Label>
+                <Icon name="user" /> {label}
+              </Label>
+            </Header.Subheader>
+          </Header>
+          {/* </Segment> */}
+        </Responsive>
 
-            <Header floated="right" inverted color='white'>
+        {/* Mobile Header */}
+        <Responsive
+          as={Segment}
+          maxWidth={767}
+          basic
+          color="blue"
+          inverted
+          padded="very"
+        >
+          <Header padded="very" size="huge" inverted color="white">
+            {title}
+            <Header.Subheader inverted color="white">
               {this.state.username}
-              <Header.Subheader inverted color='white'>
-                <Label><Icon name='user' /> {label}</Label>
-              </Header.Subheader>
-            </Header>
-            {/* </Segment> */}
-          </Responsive>
+            </Header.Subheader>
+          </Header>
 
-          {/* Mobile Header */}
-          <Responsive as={Segment} maxWidth={767} basic color="blue" inverted padded="very">
-            <Header padded="very" size="huge" inverted color='white'>
-              {title}
-              <Header.Subheader inverted color='white'>
-                {this.state.username}
-              </Header.Subheader>
-            </Header>
-
-            <Label><Icon name='user' /> {label}</Label>
-          </Responsive>
+          <Label>
+            <Icon name="user" /> {label}
+          </Label>
+        </Responsive>
 
         <Menu secondary stackable={isAdmin}>
           {nav}
