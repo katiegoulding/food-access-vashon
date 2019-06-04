@@ -18,11 +18,11 @@ export default class BuckSetListItem extends React.Component {
     close = () => this.setState({ open: false })
 
     deleteBuckSet = () => {
-        let key = this.props.data.name
+        let buckSetName = this.props.data.name
         console.log("buck set title ", this.props.data.name)
-        //TODO: make if(!key) {...} and throw an error 
-        if(key != '') {
-            let buckSetRef = firebase.database().ref('buckSets/' + key)
+        // used to be if(key != '')
+        if(buckSetName && buckSetName !== "") {
+            let buckSetRef = firebase.database().ref('buckSets/' + buckSetName)
             console.log("buckSetRef ", buckSetRef)
 
             buckSetRef.remove()
@@ -36,6 +36,34 @@ export default class BuckSetListItem extends React.Component {
                 console.log("Remove failed: " + error.message)
             });
         }
+
+        let capstoneBucks = [
+            "-LgUwC00_cfHr7ATng36",
+            "-LgUwC073TuLVb7GEwbd",
+            "-LgUwC03B1lvd96j4SEk",
+            "-LgUwC02CEocI6-oh70K",
+            "-LgUwC01fmb5evqJck9r",
+            "-LgUwC062cOmWzEKuVCb",
+            "-LgUwC08c93TaO2LbaIC",
+            "-LgUwC05_kbA62CmoJpL",
+            "-LgUwC08c93TaO2LbaIB",
+            "-LgUwC04hqV_WdBArGnR",
+            "-LgUwC073TuLVb7GEwbe",
+            "-LgUwC03B1lvd96j4SEl"
+            ]
+
+        let voucherRef = firebase.database().ref('vouchers/')
+        voucherRef.once("value", snapshot => {
+            let deleteCount = 0
+            snapshot.forEach(function(childSnapshot) {
+                if(childSnapshot.buckSet === buckSetName && capstoneBucks.includes(childSnapshot.key)) {
+                    deleteCount++
+                    
+                }
+            })
+            console.log("deleteCount", deleteCount)
+        })
+
         this.close()
     }
 

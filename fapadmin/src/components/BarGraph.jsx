@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveBar } from "@nivo/bar";
+import { Header } from "semantic-ui-react";
 
 export default function BarGraph(props) {
   const [charData, setCharData] = useState([]);
@@ -11,12 +12,26 @@ export default function BarGraph(props) {
   return (
     <ResponsiveBar
       data={charData}
-      keys={["redeemed", "handedOut", "created"]}
+      keys={
+        Array.isArray(props.curChartKey) ?
+        props.curChartKey : [props.curChartKey]
+      }
       indexBy="organization"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
+      theme={{
+        axis: {
+          ticks: { 
+            text: { fontSize: '18px' },
+          },
+          legend: { 
+            text: { fontSize: '18px' }
+          }
+        },
+        legends: { text: { fontSize: '18px' } }
+      }}
+      margin={{ top: 50, right: 150, bottom: 150, left: 80 }}
+      padding={0.2}
       groupMode="grouped"
-      colors={{ scheme: "nivo" }}
+      colors={[ "#ABDDA4", "#66C2A5", "#3288BD" ]}
       animate={true}
       motionStiffness={90}
       motionDamping={15}
@@ -26,10 +41,10 @@ export default function BarGraph(props) {
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
-        tickRotation: 0,
+        tickRotation: 45,
         legend: "Organization",
         legendPosition: "middle",
-        legendOffset: 32
+        legendOffset: 100,
       }}
       axisLeft={{
         tickSize: 5,
@@ -37,8 +52,31 @@ export default function BarGraph(props) {
         tickRotation: 0,
         legend: "Dollars",
         legendPosition: "middle",
-        legendOffset: -40
+        legendOffset: -55
       }}
+      tooltip={({ data, indexValue }) => (
+        <div style={{ overflow: "auto" }}>
+          {indexValue.toUpperCase()}
+          <div>
+            Created:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["created"]}.00
+            </div>
+          </div>
+          <div>
+            Distributed:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["handedOut"]}.00
+            </div>
+          </div>
+          <div>
+            Redeemed:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["redeemed"]}.00
+            </div>
+          </div>
+        </div>
+      )}
       legends={[
         {
           dataFrom: "keys",
@@ -52,7 +90,7 @@ export default function BarGraph(props) {
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,
-          symbolSize: 20,
+          symbolSize: 15,
           effects: [
             {
               on: "hover",

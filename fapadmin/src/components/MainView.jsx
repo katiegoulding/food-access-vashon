@@ -20,13 +20,6 @@ import {
 } from "semantic-ui-react";
 import Dashboard from "./Dashboard";
 
-// const Title = styled.section`
-//   height: 220px;
-//   background-image: linear-gradient(to bottom right, #505c86, #404e67);
-// `;
-
-//const mql = window.matchMedia(`(min-width: 800px)`);
-
 export default class MainView extends React.Component {
   constructor(props) {
     super(props);
@@ -299,85 +292,70 @@ export default class MainView extends React.Component {
     let title;
 
     if (this.props.location.pathname === "/dash") {
-      title = "Scan";
+      title = "View Data";
     } else if (this.props.location.pathname === "/dash/manage") {
       title = "Manage Accounts";
     } else if (this.props.location.pathname === "/dash/BucksLanding") {
       title = "Create a Buck Set";
     } else if (this.props.location.pathname === "/dash/farmerPayout") {
       title = "Farmer Payout";
-    } else {
-      // TO CHANGE:
-      title = "Visualizations";
-    }
+    } else if (this.props.location.pathname === "/dash/ViewData") {
+      title = "View Data";
+    } 
 
     return (
       <div>
         {/* Regular Header */}
-        <Responsive
-          as={Segment}
-          clearing
-          minWidth={768}
-          basic
-          color="blue"
-          inverted
-          padded="very"
-        >
+        <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very" className="HeaderContainer">
           {/* <Segment basic color="blue" inverted padded="very"> */}
-          <Header
-            padded="very"
-            size="huge"
-            floated="left"
-            inverted
-            color="white"
-          >
+          <Header padded="very" size="huge" floated="left" inverted color='white'>
             {title}
           </Header>
 
-          <Header floated="right" inverted color="white">
+          <Header floated="right" inverted color='white' className="Header_UserInfo">
             {this.state.username}
-            <Header.Subheader inverted color="white">
-              <Label>
-                <Icon name="user" /> {label}
-              </Label>
+            <Header.Subheader inverted color='white'>
+              <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
           </Header>
           {/* </Segment> */}
         </Responsive>
 
         {/* Mobile Header */}
-        <Responsive
-          as={Segment}
-          maxWidth={767}
-          basic
-          color="blue"
-          inverted
-          padded="very"
-        >
-          <Header padded="very" size="huge" inverted color="white">
+        <Responsive as={Segment} maxWidth={767} basic color="blue" inverted padded="very" className="HeaderContainer">
+          <Header padded="very" size="huge" inverted color='white'>
             {title}
-            <Header.Subheader inverted color="white">
+            <Header.Subheader inverted color='white' className="Header_UserInfo mobile">
               {this.state.username}
+              <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
           </Header>
 
-          <Label>
-            <Icon name="user" /> {label}
-          </Label>
+          
         </Responsive>
-
-        <Menu secondary stackable={isAdmin}>
+        <Menu secondary stackable={isAdmin} className="NavMenuContainer">
           {nav}
           <Menu.Menu position="right">
-            <Menu.Item name="logout" onClick={this.handleSignOut} />
+            <Menu.Item className="Logout_btn" name="logout" onClick={this.handleSignOut} />
           </Menu.Menu>
         </Menu>
 
-        <Container>
+        {
+          this.props.location.pathname !== "/dash/ViewData"
+          &&
+          <Container>
+            <Router>
+              <Switch>{ui}</Switch>
+            </Router>
+          </Container>
+        }
+        {
+          this.props.location.pathname === "/dash/ViewData"
+          &&
           <Router>
             <Switch>{ui}</Switch>
           </Router>
-        </Container>
+        }
       </div>
     );
   }
