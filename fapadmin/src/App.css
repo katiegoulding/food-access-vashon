@@ -99,6 +99,12 @@ a.item::before {
     .Header_UserInfo div.sub.header {
       margin-top: 10px !important;
     }
+    
+      .Header_UserInfo div.sub.header .ui.label {
+        background-color: #5E72E4 !important;
+        color: white !important;
+        box-shadow: 0 1.5px 1px rgba(0,0,0,0.1) !important;
+      }
 
     .Header_UserInfo.mobile {
       display: none !important;
@@ -114,6 +120,7 @@ a.item::before {
 .NavMenuContainer {
   padding-left: 42px !important;
   padding-right: 42px !important;
+  margin-bottom: 50px !important;
 }
 
   .NavMenuContainer > .item {
@@ -306,7 +313,7 @@ a.item::before {
 */
 
 .master_modal_container.ui.segment {
-  border-top: 8px solid #95BA65 !important;
+  border-top: 8px solid #3f4e67 !important;
 }
 
 .modal_container {
@@ -386,11 +393,22 @@ a.item::before {
 
 /*
 ========================
-===== ViewBucks.js =====
+===== Dashboard.js =====
 ========================
 */
 
+.ui.raised.segment.graph_container {
+  border-top: 8px solid #3f4e67 !important;
+}
 
+.graph_title {
+  margin-left: 30px !important;
+  margin-top: 30px !important;
+}
+
+.graph_summary_stats_container .ui.raised.padded.segment .value {
+  font-size: 3rem !important;
+}
 
 
 /*  

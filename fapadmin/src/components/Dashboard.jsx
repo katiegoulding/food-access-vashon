@@ -322,9 +322,9 @@ export default function Dashboard(props) {
     <Container fluid>
       <Grid stackable centered>
         <Grid.Row>
-          <Grid.Column width={12}>
-            <Segment raised style={{ height: "700px" }}>
-            <Header size="huge">VIGA Farm Buck Data from </Header>
+          <Grid.Column width={11}>
+            <Segment className="graph_container" raised style={{ height: "700px" }}>
+            <Header className="graph_title" size="huge">VIGA Farm Buck Data from </Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (
@@ -336,7 +336,7 @@ export default function Dashboard(props) {
               )}
             </Segment>
           </Grid.Column>
-          <Grid.Column width={4}>
+          <Grid.Column className="graph_summary_stats_container" width={3}>
             {role === "admin" ? (
               <Segment raised padded centered>
                 <Statistic
