@@ -87,7 +87,7 @@ export default class CreateBucks extends React.Component {
         <Container className="modal_container">
           <Form
             // onSubmit={this.handleSubmit}
-            onSubmit={toggleShowCreateBucks}
+            onSubmit={this.validateFormData}
             loading={loading}
             error={errorMessage}>
 
