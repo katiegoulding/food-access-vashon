@@ -5,20 +5,24 @@ import {
   Segment,
   Statistic,
   Header,
-  Dropdown,
+  Dropdown
 } from "semantic-ui-react";
 import firebase from "firebase/app";
 import LineGraph from "./LineGraph";
 import BarGraph from "./BarGraph";
 
 const orgOptions = [
-  { key: 'all', text: 'All Organizations', value: 'all'},
+  { key: "all", text: "All Organizations", value: "all" },
   { key: "f", text: "Vashon Community Food Bank", value: "foodbank" },
   { key: "d", text: "The Dove Project", value: "dove" },
   { key: "c", text: "Vashon Community Care", value: "vcc" },
   { key: "s", text: "Vashon Senior Center", value: "seniorcenter" },
-  { key: "i", text: "Interfaith Council to Prevent Homelessness", value: "interfaith"},
-  { key: "m", text: "Community Meals", value: "communitymeals"},
+  {
+    key: "i",
+    text: "Interfaith Council to Prevent Homelessness",
+    value: "interfaith"
+  },
+  { key: "m", text: "Community Meals", value: "communitymeals" },
   { key: "h", text: "Vashon Household", value: "vashonhousehold" },
   { key: "l", text: "La Comunidad & ECEAP", value: "lacomunidad" },
   { key: "y", text: "VYFS", value: "vyfs" },
@@ -33,13 +37,30 @@ const keySelection = [
     value: ["created", "handedOut", "redeemed"]
   },
   { key: "created", text: "Bucks Created", value: "created" },
-  { key: 'redeemed', text: 'Bucks Redeemed', value: 'redeemed'},
-  { key: "handedOut", text: "Bucks Handed Out", value: "handedOut" },
+  { key: "redeemed", text: "Bucks Redeemed", value: "redeemed" },
+  { key: "handedOut", text: "Bucks Handed Out", value: "handedOut" }
 ];
 
-
+const options = [
+  {
+    text: "All Time",
+    value: "all"
+  },
+  {
+    text: "This Year",
+    value: "year"
+  },
+  {
+    text: "This Month",
+    value: "month"
+  }
+];
+const title = {
+  all: "All Time",
+  year: "This Year",
+  month: "This Month"
+};
 export default function Dashboard(props) {
-
   // state variable, setter, useState(<default value>)
   const [charData, setCharData] = useState([]);
 
@@ -48,42 +69,18 @@ export default function Dashboard(props) {
 
   // options to filter by buck state
   const [curChartKey, setCurChartKey] = useState(keySelection[0].value);
-  
+
+  // options to filter by organization
+  const [timeFilter, setTimeFilter] = useState(options[0].value);
+
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [totalRedeemed, setTotalRedeemed] = useState(0);
-  const [curTimeline, setCurTimeline] = useState('');
+  const [curTimeline, setCurTimeline] = useState("");
   const [totalHandedOut, setTotalHandedOut] = useState(0);
   const [totalCreated, setTotalCreated] = useState(0);
-  const [yearOpt, setYearOpt] = useState([
-    {
-      text: "all time",
-      value: "all"
-    }
-  ]);
 
   const [year, setYear] = useState();
-
-  const options = [
-    {
-      key: "this month",
-      text: "This month",
-      value: "month",
-      content: "this month"
-    },
-    {
-      key: "this year",
-      text: "This year",
-      value: "year",
-      content: "this year"
-    },
-    {
-      key: "all time",
-      text: "All time",
-      value: "all",
-      content: "all time"
-    }
-  ];
 
   useEffect(() => {
     setRole(props.role);
@@ -95,6 +92,12 @@ export default function Dashboard(props) {
       handleCaseworker();
     }
   }, [props]);
+
+  useEffect(() => {
+    if (role === "admin") {
+      handleAdmin();
+    }
+  }, [timeFilter]);
 
   function handleFarmer() {
     let ref = firebase
@@ -157,7 +160,6 @@ export default function Dashboard(props) {
         for (var scanType in value[org]) {
           let count = 0;
           for (var id in value[org][scanType]) {
-            console.log(value[org][scanType][id]);
             // if (
             //   yearOpt.some(
             //     // eslint-disable-next-line no-loop-func
@@ -170,18 +172,44 @@ export default function Dashboard(props) {
             //     text: new Date(value[org][scanType][id]).getFullYear()
             //   });
             // }
-
-            //filter by time
-            // timeFilter(value[org][scanType])
-            
-            if (scanType === "redeemed") {
-              redCount += 2;
-            } else if (scanType === "created") {
-              createCount += 2;
+            if (timeFilter === options[0].value) {
+              if (scanType === "redeemed") {
+                redCount += 2;
+              } else if (scanType === "created") {
+                createCount += 2;
+              } else {
+                handCount += 2;
+              }
+              count += 2;
+            } else if (timeFilter === options[1].value) {
+              if (
+                new Date(value[org][scanType][id]).getFullYear() ===
+                new Date().getFullYear()
+              ) {
+                if (scanType === "redeemed") {
+                  redCount += 2;
+                } else if (scanType === "created") {
+                  createCount += 2;
+                } else {
+                  handCount += 2;
+                }
+                count += 2;
+              }
             } else {
-              handCount += 2;
+              if (
+                new Date(value[org][scanType][id]).getMonth() ===
+                new Date().getMonth()
+              ) {
+                if (scanType === "redeemed") {
+                  redCount += 2;
+                } else if (scanType === "created") {
+                  createCount += 2;
+                } else {
+                  handCount += 2;
+                }
+                count += 2;
+              }
             }
-            count += 2;
           }
           orgJSON[scanType] = count;
         }
@@ -226,7 +254,6 @@ export default function Dashboard(props) {
             var day = dates[i];
             counts[day] = counts[day] ? counts[day] + 1 : 1;
           }
-          console.log(counts);
 
           let tot = 0;
 
@@ -242,8 +269,6 @@ export default function Dashboard(props) {
               y: tot
             });
           }
-
-          console.log(firebaseDataArray);
 
           let newData = {
             id: key,
@@ -294,11 +319,15 @@ export default function Dashboard(props) {
   }
 
   function onOrgChange(_event, data) {
-    setFilter(data.value)
+    setFilter(data.value);
   }
 
   function onKeyChange(_event, data) {
-    setCurChartKey(data.value)
+    setCurChartKey(data.value);
+  }
+
+  function onDateChange(_event, data) {
+    setTimeFilter(data.value);
   }
 
   // filter for organizations +
@@ -314,23 +343,18 @@ export default function Dashboard(props) {
       dataPoint => ({ organization: dataPoint.organization, [curChartKey[0]]: dataPoint[curChartKey[0]], [curChartKey[1]]: dataPoint[curChartKey[1]], [curChartKey[2]]: dataPoint[curChartKey[2]] })
     )
   } else {
-    console.log(curChartKey)
-    filteredData = charData.filter(
-      dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
-    ).map(
-      dataPoint => ({ organization: dataPoint.organization, [curChartKey]: dataPoint[curChartKey] })
-    )
+    filteredData = charData;
   }
-  
-  console.log('filteredData = ', filteredData)
-  
+
   return (
     <Container fluid>
       <Grid stackable centered>
         <Grid.Row>
           <Grid.Column width={12}>
             <Segment raised style={{ height: "700px" }}>
-            <Header size="huge">VIGA Farm Buck Data from 2019</Header>
+              <Header size="huge">
+                VIGA Farm Buck Data - {title[timeFilter]}
+              </Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (
@@ -343,42 +367,37 @@ export default function Dashboard(props) {
             </Segment>
           </Grid.Column>
           <Grid.Column width={4}>
-            {role === "admin" ? (
-              <Segment raised padded centered>
-                <Statistic
-                  style={{ margin: "auto" }}
-                  label="Dollars Created"
-                  value={"$" + numberWithCommas(totalCreated) + ".00"}
-                />
-              </Segment>
-            ) : null}
-            {role !== "farmer" ? (
-              <Segment raised padded centered>
-                <Statistic
-                  style={{ margin: "auto" }}
-                  label="Dollars Handed Out"
-                  value={"$" + numberWithCommas(totalHandedOut) + ".00"}
-                />
-              </Segment>
-            ) : null}
-            <Segment raised padded centered>
-              <Statistic
-                style={{ margin: "auto" }}
-                label="Dollars Redeemed"
-                value={"$" + numberWithCommas(totalRedeemed) + ".00"}
-              />
+          {role === "admin" ? (
+          <Segment raised padded>
+            <Header as="h2">Totals</Header>
+                <Statistic.Group size="small" horizontal>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalCreated) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Created</Statistic.Label>
+                  </Statistic>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalHandedOut) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Handed Out</Statistic.Label>
+                  </Statistic>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalRedeemed) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Redeemed</Statistic.Label>
+                  </Statistic>
+                </Statistic.Group>
             </Segment>
+          ) : null }
             <Segment raised centered>
-              <Header as="h4" content="Filter by Time Interval"/>
+              <Header as="h4" content="Filter by Time Interval" />
 
               <Dropdown
                 defaultValue={options[0].value}
                 fluid
                 selection
                 options={options}
+                onChange={onDateChange}
               />
 
-              <Header as="h4" content="Filter by Organization"/>
+              <Header as="h4" content="Filter by Organization" />
 
               <Dropdown
                 defaultValue={orgOptions[0].value}
@@ -388,7 +407,7 @@ export default function Dashboard(props) {
                 onChange={onOrgChange}
               />
 
-              <Header as="h4" content="Filter by Buck State"/>
+              <Header as="h4" content="Filter by Buck State" />
 
               <Dropdown
                 defaultValue={keySelection[0].value}
@@ -397,7 +416,6 @@ export default function Dashboard(props) {
                 options={keySelection}
                 onChange={onKeyChange}
               />
-
             </Segment>
           </Grid.Column>
         </Grid.Row>
