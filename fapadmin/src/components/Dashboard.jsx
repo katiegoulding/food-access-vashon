@@ -221,6 +221,9 @@ export default function Dashboard(props) {
       setTotalRedeemed(redCount);
     });
   }
+  function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+  }
 
   function handleCaseworker() {
     let ref = firebase
@@ -275,9 +278,14 @@ export default function Dashboard(props) {
           ];
 
           for (var childKey in value[key]) {
-            dates.push(
-              new Date(value[key][childKey]).toISOString().split("T")[0]
-            );
+            console.log(value[key][childKey]);
+            try {
+              dates.push(
+                new Date(value[key][childKey]).toISOString().split("T")[0]
+              );
+            } catch (error) {
+              console.log(error);
+            }
           }
 
           var counts = {};
