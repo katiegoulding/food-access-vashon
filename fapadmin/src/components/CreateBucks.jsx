@@ -318,12 +318,13 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={8}
+              width={9}
               inline
               required
               fluid
               label="Expiration Date"
               type="date"
+              className="expiration_date_container"
               value={this.props.expirationDate}
               onInput={evt =>
                 this.props.handleChange({ 

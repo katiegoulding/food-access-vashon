@@ -43,7 +43,7 @@ export default class ViewBucks extends React.Component {
             <Grid.Column width={6}>
                 <Container>
                 <Header as='h2'>Existing Buck Sets</Header>
-                <Card.Group>
+                <Card.Group className="existing_buck_set_container">
                     {
                         //for each item in the data provided, map will create a BuckSetListItem
                         //that has the respective title and subtitle

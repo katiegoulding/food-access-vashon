@@ -48,6 +48,13 @@ a.item::before {
   background-image: linear-gradient(to bottom right, #404E67, #505C86) !important;
   display: flex !important;
   align-items: center !important;
+  border-bottom-left-radius:50% !important;
+  border-bottom-right-radius:50% !important;
+  padding-bottom: 80px !important;
+  margin-right: -150px !important;
+  padding-right: 200px !important;
+  margin-left: -150px !important;
+  padding-left: 200px !important;
 }
 
   .Header_UserInfo::before {
@@ -58,7 +65,7 @@ a.item::before {
     background-color: #95BA65;
     position: absolute;
     top: 110px;
-    right: -30px;
+    right: 120px;
 
     animation-name: floating;
     animation-duration: 6s;
@@ -75,7 +82,7 @@ a.item::before {
     background: radial-gradient(at bottom left,#908A76,#696456);
     position: absolute;
     top: 250px;
-    right: -10px;
+    right: 130px;
 
     animation-name: floating;
     animation-duration: 6s;
@@ -321,6 +328,25 @@ a.item::before {
     font-weight: bold !important;
   }
 
+.expiration_date_container {
+  margin-bottom: 50px !important;
+}
+
+  .expiration_date_container > .ui.fluid.input > input {
+    border: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 0 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px;
+    padding-left: 0px !important;
+    transition: all 0.2s ease;
+  }
+
+    .expiration_date_container > .ui.fluid.input > input:focus, .expiration_date_container > .ui.fluid.input > input:hover {
+      border-bottom: 1px solid rgba(0,0,0,0.4) !important;
+    }
+
 
 .inline.sixteen.wide.field {
   display: flex !important;
@@ -356,6 +382,16 @@ a.item::before {
   .statistics_big_numbers .statistic_number {
     color: rgb(59, 59, 59) !important;
   }
+
+
+/*
+========================
+===== ViewBucks.js =====
+========================
+*/
+
+
+
 
 /*  
 || * 
