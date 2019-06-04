@@ -20,7 +20,20 @@ export default class ViewBucks extends React.Component {
       // sort by newest
       firebaseBuckSet.push({
         name: value.name,
-        createdBy: value.createdBy
+        createdBy: value.createdBy,
+        createdOn: value.createdOn,
+        expirationDate: value.expirationDate,
+        communitycareCount: value.communitycareCount,
+        communitymealsCount: value.communitymealsCount,
+        doveCount: value.doveCount,
+        foodbankCount: value.foodbankCount,
+        interfaithCount: value.interfaithCount,
+        lacomunidadCount: value.lacomunidadCount,
+        seniorcenterCount: value.seniorcenterCount,
+        vashonhouseholdCount: value.vashonhouseholdCount,
+        vyfsCount: value.vyfsCount,
+        vyfsfamilyplaceCount: value.vyfsfamilyplaceCount,
+        vyfslatinxCount: value.vyfslatinxCount
       });
       this.setState({
         firebaseBuckSet
@@ -49,7 +62,22 @@ export default class ViewBucks extends React.Component {
             this.state.firebaseBuckSet.map(element => {
               return (
                 <BuckSetListItem
-                  key={element.name + element.createdBy}
+                  key={element.name + 
+                    element.createdBy + 
+                    element.createdOn +
+                    element.expirationDate +
+                    element.communitycareCount +
+                    element.communitymealsCount +
+                    element.doveCount +
+                    element.foodbankCount +
+                    element.interfaithCount +
+                    element.lacomunidadCount +
+                    element.seniorcenterCount +
+                    element.vashonhouseholdCount +
+                    element.vyfsCount +
+                    element.vyfsfamilyplaceCount +
+                    element.vyfslatinxCount
+                  }
                   data={element}
                 />
               );
