@@ -200,7 +200,8 @@ export default class FormSuccess extends React.Component {
       let voucherData = {
         organization,
         createdOn: new Date(),
-        expirationDate: this.props.expirationDate
+        expirationDate: this.props.expirationDate,
+        buckSet: this.props.buckSetName
       };
 
       let newVoucherKey = firebase

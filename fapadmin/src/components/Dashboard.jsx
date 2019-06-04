@@ -5,18 +5,49 @@ import {
   Segment,
   Statistic,
   Header,
-  Icon,
-  Dropdown
+  Dropdown,
 } from "semantic-ui-react";
 import firebase from "firebase/app";
 import LineGraph from "./LineGraph";
 import BarGraph from "./BarGraph";
 
+const orgOptions = [
+  { key: 'all', text: 'All Organizations', value: 'all'},
+  { key: "f", text: "Vashon Community Food Bank", value: "foodbank" },
+  { key: "d", text: "The Dove Project", value: "dove" },
+  { key: "c", text: "Vashon Community Care", value: "vcc" },
+  { key: "s", text: "Vashon Senior Center", value: "seniorcenter" },
+  { key: "i", text: "Interfaith Council to Prevent Homelessness", value: "interfaith"},
+  { key: "m", text: "Community Meals", value: "communitymeals"},
+  { key: "h", text: "Vashon Household", value: "vashonhousehold" },
+  { key: "l", text: "La Comunidad & ECEAP", value: "lacomunidad" },
+  { key: "y", text: "VYFS", value: "vyfs" },
+  { key: "x", text: "VYFS: Latinx", value: "vyfslatinx" },
+  { key: "p", text: "VYFS: Family Place", value: "vyfsfamily" }
+];
+
+const keySelection = [
+  { key: "created", text: "Bucks Created", value: "created" },
+  { key: 'redeemed', text: 'Bucks Redeemed', value: 'redeemed'},
+  { key: "handedOut", text: "Bucks Handed Out", value: "handedOut" },
+  { key: "allbucks", text: "All Bucks", value: "allbucks" },
+];
+
+
 export default function Dashboard(props) {
+
+  // state variable, setter, useState(<default value>)
   const [charData, setCharData] = useState([]);
+
+  // options to filter by organization
+  const [curFilter, setFilter] = useState(orgOptions[0].value);
+
+  // optiosn to filter by buck state
+  const [curChartKey, setCurChartKey] = useState(keySelection[0].value);
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [totalRedeemed, setTotalRedeemed] = useState(0);
+  const [curTimeline, setCurTimeline] = useState('');
   const [totalHandedOut, setTotalHandedOut] = useState(0);
   const [totalCreated, setTotalCreated] = useState(0);
   const [dateView, setDateView] = useState("month");
@@ -24,19 +55,19 @@ export default function Dashboard(props) {
   const options = [
     {
       key: "this month",
-      text: "this month",
+      text: "This month",
       value: "month",
       content: "this month"
     },
     {
       key: "this year",
-      text: "this year",
+      text: "This year",
       value: "year",
       content: "this year"
     },
     {
       key: "all time",
-      text: "all time",
+      text: "All time",
       value: "all",
       content: "all time"
     }
@@ -215,17 +246,32 @@ export default function Dashboard(props) {
     return true;
   }
 
+  function onOrgChange(_event, data) {
+    setFilter(data.value)
+  }
+
+  function onKeyChange(_event, data) {
+    setCurChartKey(data.value)
+  }
+
+  let filteredData = charData.filter(
+    dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
+  ).map(
+    dataPoint => ({ organization: dataPoint.organization, [curChartKey]: dataPoint[curChartKey] } )
+  )
+  console.log('filteredData = ', filteredData)
   return (
-    <Container>
+    //fluid
+    <Container> 
       <Grid stackable centered>
         <Grid.Row>
           <Grid.Column width={12}>
             <Segment raised style={{ height: "700px" }}>
               {role === "admin" ? (
-                <BarGraph charData={charData} />
+                <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (
                 <LineGraph
-                  charData={charData}
+                  charData={filteredData}
                   role={role}
                   isLoaded={isLoaded}
                 />
@@ -247,19 +293,36 @@ export default function Dashboard(props) {
                 value={"$" + totalRedeemed + ".00"}
               />
             </Segment>
-            <Segment raised padded centered>
-              <Header as="h4">
-                <Icon name="calendar alternate outline" />
-                <Header.Content>
-                  Displaying Data from{" "}
-                  <Dropdown
-                    inline
-                    header="Adjust time span"
-                    options={options}
-                    defaultValue={options[0].value}
-                  />
-                </Header.Content>
-              </Header>
+            <Segment raised centered>
+              <Header as="h4" content="Filter by Time Interval"/>
+
+              <Dropdown
+                defaultValue={options[0].value}
+                fluid
+                selection
+                options={options}
+              />
+
+              <Header as="h4" content="Filter by Organization"/>
+
+              <Dropdown
+                defaultValue={orgOptions[0].value}
+                fluid
+                selection
+                options={orgOptions}
+                onChange={onOrgChange}
+              />
+
+              <Header as="h4" content="Filter by Buck State"/>
+
+              <Dropdown
+                defaultValue={keySelection[0].value}
+                fluid
+                selection
+                options={keySelection}
+                onChange={onKeyChange}
+              />
+
             </Segment>
           </Grid.Column>
         </Grid.Row>
