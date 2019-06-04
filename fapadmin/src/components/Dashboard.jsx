@@ -242,10 +242,15 @@ export default function Dashboard(props) {
             new Date().getFullYear()
           );
 
+          
           for (var childKey in value[key]) {
-            dates.push(
-              new Date(value[key][childKey]).toISOString().split("T")[0]
-            );
+            try {
+              dates.push(
+                new Date(value[key][childKey]).toISOString().split("T")[0]
+              );
+            } catch(err) {
+              console.log("error: ", err)
+            } 
           }
 
           var counts = {};
@@ -368,6 +373,7 @@ export default function Dashboard(props) {
           </Grid.Column>
           <Grid.Column width={4}>
           {role === "admin" ? (
+            <div>
           <Segment raised padded>
             <Header as="h2">Totals</Header>
                 <Statistic.Group size="small" horizontal>
@@ -385,38 +391,41 @@ export default function Dashboard(props) {
                   </Statistic>
                 </Statistic.Group>
             </Segment>
-          ) : null }
-            <Segment raised centered>
-              <Header as="h4" content="Filter by Time Interval" />
 
-              <Dropdown
-                defaultValue={options[0].value}
-                fluid
-                selection
-                options={options}
-                onChange={onDateChange}
-              />
+          <Segment raised centered>
+            <Header as="h4" content="Filter by Time Interval" />
 
-              <Header as="h4" content="Filter by Organization" />
+            <Dropdown
+              defaultValue={options[0].value}
+              fluid
+              selection
+              options={options}
+              onChange={onDateChange}
+            />
 
-              <Dropdown
-                defaultValue={orgOptions[0].value}
-                fluid
-                selection
-                options={orgOptions}
-                onChange={onOrgChange}
-              />
+            <Header as="h4" content="Filter by Organization" />
 
-              <Header as="h4" content="Filter by Buck State" />
+            <Dropdown
+              defaultValue={orgOptions[0].value}
+              fluid
+              selection
+              options={orgOptions}
+              onChange={onOrgChange}
+            />
 
-              <Dropdown
-                defaultValue={keySelection[0].value}
-                fluid
-                selection
-                options={keySelection}
-                onChange={onKeyChange}
-              />
+            <Header as="h4" content="Filter by Buck State" />
+
+            <Dropdown
+              defaultValue={keySelection[0].value}
+              fluid
+              selection
+              options={keySelection}
+              onChange={onKeyChange}
+            />
             </Segment>
+            </div>
+          ) : null }
+            
           </Grid.Column>
         </Grid.Row>
       </Grid>
