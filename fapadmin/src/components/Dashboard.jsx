@@ -30,7 +30,7 @@ const keySelection = [
   {
     key: "allbucks",
     text: "All Bucks",
-    value: ["redeemed", "handedOut", "created"]
+    value: ["created", "handedOut", "redeemed"]
   },
   { key: "created", text: "Bucks Created", value: "created" },
   { key: 'redeemed', text: 'Bucks Redeemed', value: 'redeemed'},
@@ -170,6 +170,10 @@ export default function Dashboard(props) {
             //     text: new Date(value[org][scanType][id]).getFullYear()
             //   });
             // }
+
+            //filter by time
+            // timeFilter(value[org][scanType])
+            
             if (scanType === "redeemed") {
               redCount += 2;
             } else if (scanType === "created") {
@@ -183,6 +187,8 @@ export default function Dashboard(props) {
         }
         firebaseDataArray.push(orgJSON);
       }
+
+
       setCharData(firebaseDataArray);
       setTotalCreated(createCount);
       setTotalHandedOut(handCount);
@@ -305,7 +311,7 @@ export default function Dashboard(props) {
     filteredData = charData.filter(
       dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
     ).map(
-      dataPoint => ({ organization: dataPoint.organization, "redeemed": dataPoint[curChartKey[0]], "handedOut": dataPoint[curChartKey[1]], "created": dataPoint[curChartKey[2]] })
+      dataPoint => ({ organization: dataPoint.organization, [curChartKey[0]]: dataPoint[curChartKey[0]], [curChartKey[1]]: dataPoint[curChartKey[1]], [curChartKey[2]]: dataPoint[curChartKey[2]] })
     )
   } else {
     console.log(curChartKey)
@@ -324,7 +330,7 @@ export default function Dashboard(props) {
         <Grid.Row>
           <Grid.Column width={12}>
             <Segment raised style={{ height: "700px" }}>
-            <Header size="huge">VIGA Farm Buck Data from </Header>
+            <Header size="huge">VIGA Farm Buck Data from 2019</Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (
