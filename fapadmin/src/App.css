@@ -30,6 +30,113 @@ a.item::before {
 || *
 */
 
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Poppins:600&display=swap');
+
+.ui.segment, div.content, div.extra.content {
+  border: none !important;
+}
+
+
+/*
+============================
+===== MainView.jsx ====
+============================ 
+*/
+
+.HeaderContainer {
+  background-image: linear-gradient(to bottom right, #404E67, #505C86) !important;
+  display: flex !important;
+  align-items: center !important;
+  border-bottom-left-radius:50% !important;
+  border-bottom-right-radius:50% !important;
+  padding-bottom: 80px !important;
+  margin-right: -150px !important;
+  padding-right: 200px !important;
+  margin-left: -150px !important;
+  padding-left: 200px !important;
+}
+
+  .Header_UserInfo::before {
+    content: '';
+    width: 180px;
+    height: 180px;
+    border-radius: 100%;
+    background-color: #95BA65;
+    position: absolute;
+    top: 110px;
+    right: 120px;
+
+    animation-name: floating;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  .Header_UserInfo::after {
+    content: '';
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    background: -webkit-radial-gradient(bottom left,#908A76,#696456);
+    background: radial-gradient(at bottom left,#908A76,#696456);
+    position: absolute;
+    top: 250px;
+    right: 130px;
+
+    animation-name: floating;
+    animation-duration: 6s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  .Header_UserInfo {
+    text-align: right !important;
+    margin-left: auto !important;
+  }
+
+    .Header_UserInfo div.sub.header {
+      margin-top: 10px !important;
+    }
+
+    .Header_UserInfo.mobile {
+      display: none !important;
+    }
+
+  .HeaderContainer .header {
+    font-family: 'Noto Sans', sans-serif !important;
+    font-weight: 600 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+.NavMenuContainer {
+  padding-left: 42px !important;
+  padding-right: 42px !important;
+}
+
+  .NavMenuContainer > .item {
+    font-weight: bold !important;
+    color: rgb(68, 68, 68) !important;
+  }
+
+  .NavMenuContainer > .active.item {
+    font-weight: bold !important;
+    
+  }
+
+.Logout_btn {
+  font-weight: bold !important;
+  /* color: #e74c3c !important; */
+  color: white !important;
+  transition: all 0.2s ease !important; 
+}
+
+  .Logout_btn:hover {
+    background-color: #e74c3c !important;
+    color: white !important;
+  }
 
 /*
 ============================
@@ -190,6 +297,99 @@ a.item::before {
 .mb100 {
   margin-bottom: 100px !important;
 }
+
+
+/*
+==========================
+===== CreateBucks.js =====
+==========================
+*/
+
+.master_modal_container.ui.segment {
+  border-top: 8px solid #95BA65 !important;
+}
+
+.modal_container {
+  padding: 20px !important;
+}
+
+.buck_set_name_input {
+  border-bottom: 1.5px solid rgba(0,0,0,0.2) !important;
+  padding-bottom: 5px !important;
+  transition: all 0.2s ease !important;
+  margin-bottom: 50px !important;
+}
+
+  .buck_set_name_input:hover {
+    border-bottom: 1.5px solid rgba(0,0,0,0.5) !important;
+  }
+
+  .buck_set_name_input input {
+    font-weight: bold !important;
+  }
+
+.expiration_date_container {
+  margin-bottom: 50px !important;
+}
+
+  .expiration_date_container > .ui.fluid.input > input {
+    border: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    border-radius: 0 !important;
+    font-size: 16px !important;
+    letter-spacing: 1px;
+    padding-left: 0px !important;
+    transition: all 0.2s ease;
+  }
+
+    .expiration_date_container > .ui.fluid.input > input:focus, .expiration_date_container > .ui.fluid.input > input:hover {
+      border-bottom: 1px solid rgba(0,0,0,0.4) !important;
+    }
+
+
+.inline.sixteen.wide.field {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.inline.sixteen.wide.field > label, .inline.sixteen.wide.field > .ui.mini.fluid.input {
+  display: inline-block !important;
+}
+
+.inline.sixteen.wide.field > label {
+  width: 250% !important;
+  background-color: #F7FAFC !important;
+  height: 45px !important;
+  line-height: 45px !important;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.inline.sixteen.wide.field > .ui.mini.fluid.input > input {
+  width: 100% !important;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 9px !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px !important;
+}
+
+.statistics_big_numbers * {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 900 !important;
+}
+
+  .statistics_big_numbers .statistic_number {
+    color: rgb(59, 59, 59) !important;
+  }
+
+
+/*
+========================
+===== ViewBucks.js =====
+========================
+*/
+
 
 
 
