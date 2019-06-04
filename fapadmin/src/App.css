@@ -424,3 +424,7 @@ END OF CEDRIC'S CSS */
   color: green;
   cursor: pointer;
 }
+
+.ui.container.body {
+  min-height: 100vh !important;
+}

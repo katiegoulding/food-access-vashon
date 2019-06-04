@@ -6,7 +6,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import Scan from "./Scan";
-//import ViewData from "./ViewData";
 import ManageAccount from "./ManageAccount";
 import FarmerPayout from "./FarmerPayout";
 import CreateBucks from "./CreateBucks.jsx";
@@ -20,13 +19,6 @@ import {
   Responsive
 } from "semantic-ui-react";
 import Dashboard from "./Dashboard";
-
-// const Title = styled.section`
-//   height: 220px;
-//   background-image: linear-gradient(to bottom right, #505c86, #404e67);
-// `;
-
-//const mql = window.matchMedia(`(min-width: 800px)`);
 
 export default class MainView extends React.Component {
   constructor(props) {
@@ -69,56 +61,71 @@ export default class MainView extends React.Component {
   }
 
   // anton componentDidMount() -> useful for testing because you can still work if not approved
-  componentDidMount() {
-    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        this.props.history.push(constants.routes.base);
-      } else {
-        user.getIdTokenResult().then(idTokenResult => {
-          console.log("role: ", idTokenResult.claims.role);
-          if (idTokenResult.claims.role === "caseworker") {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role,
-              org: this.state.org
-            });
-          } else {
-            this.setState({
-              username: user.email,
-              uid: user.uid,
-              role: idTokenResult.claims.role
-            });
-          }
-        });
-      }
-    });
-  }
-
-  // august componentDidMount() -> does not allow people to route around
   // componentDidMount() {
   //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-  //     if(!user) {
+  //     if (!user) {
   //       this.props.history.push(constants.routes.base);
-  //     } else { //they are authenticated
-  //       user.getIdTokenResult().then(idTokenResult => {
-  //         console.log(idTokenResult.claims.role)
-  //         if(!idTokenResult.claims.role) {
-  //           //their role is null
-  //           //push them to the barrier page
-  //           this.props.history.push(constants.routes.barrier);
-  //         } else {
-  //           //their role has been approved
-  //           this.setState({
-  //             username: user.email,
-  //             uid: user.uid,
-  //             role: idTokenResult.claims.role
+  //     } else {
+  //       firebase
+  //         .database()
+  //         .ref("users/" + user.uid)
+  //         .once("value")
+  //         .then(snapshot => {
+  //           var org = snapshot.val().org;
+  //           user.getIdTokenResult(true).then(idTokenResult => {
+  //             console.log(idTokenResult.claims.role);
+  //             if (idTokenResult.claims.role === "caseworker") {
+  //               this.setState({
+                  // username: user.email,
+                  // uid: user.uid,
+                  // role: idTokenResult.claims.role,
+                  // org: org
+  //               });
+  //             } else {
+  //               this.setState({
+  //                 username: user.email,
+  //                 uid: user.uid,
+  //                 role: idTokenResult.claims.role
+  //               });
+  //             }
   //           });
-  //         }
-  //       })
+  //         });
   //     }
-  //   })
+  //   });
   // }
+
+  // august componentDidMount() -> does not allow people to route around
+  componentDidMount() {
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+      if(!user) {
+        this.props.history.push(constants.routes.base);
+      } else { //they are authenticated
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role)
+          if(!idTokenResult.claims.role) {
+            //their role is null
+            //push them to the barrier page
+            this.props.history.push(constants.routes.barrier);
+          } else {
+            //their role has been approved
+            firebase
+              .database()
+              .ref("users/" + user.uid)
+              .once("value")
+              .then(snapshot => {
+                var org = snapshot.val().org;
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role,
+                  org: org
+                });
+              })
+          }
+        })
+      }
+    })
+  }
 
   render() {
     let farmerNav = [
@@ -181,7 +188,9 @@ export default class MainView extends React.Component {
         name="Farmer Payout"
         as={Link}
         to={constants.routes.dash.farmerPayout}
-        active={this.props.location.pathname === constants.routes.dash.farmerPayout}
+        active={
+          this.props.location.pathname === constants.routes.dash.farmerPayout
+        }
       />
     ];
 
@@ -191,7 +200,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let cworkerUI = [
@@ -200,7 +218,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.base}
         render={() => <Scan role={this.state.role} userId={this.state.uid} />}
       />,
-      <Route path={constants.routes.dash.viewData} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />
+      <Route
+        path={constants.routes.dash.viewData}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />
     ];
 
     let adminUI = [
@@ -212,7 +239,16 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.manageAccount}
         component={ManageAccount}
       />,
-      <Route path={constants.routes.dash.base} render={() => <Dashboard role={this.state.role} uid={this.state.uid} org={this.state.org}/>} />,
+      <Route
+        path={constants.routes.dash.base}
+        render={() => (
+          <Dashboard
+            role={this.state.role}
+            uid={this.state.uid}
+            org={this.state.org}
+          />
+        )}
+      />,
       <Route
         path={constants.routes.dash.createBucks}
         render={() => <CreateBucks username={this.state.username} />}
@@ -224,7 +260,7 @@ export default class MainView extends React.Component {
         path={constants.routes.dash.farmerPayout}
         render={() => <FarmerPayout username={this.state.username} />}
       />
-    ]
+    ];
 
     let ui;
     let label;
@@ -241,12 +277,12 @@ export default class MainView extends React.Component {
       nav = cworkerNav;
       label = "Partner Organization";
       isAdmin = false;
-    } else if (this.state.role === 'farmer') {
+    } else if (this.state.role === "farmer") {
       ui = farmerUI;
       nav = farmerNav;
       label = "Farmer";
       isAdmin = false;
-    } else if (this.state.role === 'bookkeeper') {
+    } else if (this.state.role === "bookkeeper") {
       ui = bookkeeperUI;
       nav = bookkeeperNav;
       label = "Bookkeeper";
@@ -256,20 +292,39 @@ export default class MainView extends React.Component {
     let title;
 
     if (this.props.location.pathname === "/dash") {
-      title = "Scan";
+      title = "View Data";
     } else if (this.props.location.pathname === "/dash/manage") {
       title = "Manage Accounts";
     } else if (this.props.location.pathname === "/dash/BucksLanding") {
       title = "Create a Buck Set";
     } else if (this.props.location.pathname === "/dash/farmerPayout") {
       title = "Farmer Payout";
-    } else {
-      // TO CHANGE:
-      title = "Visualizations"; 
-    }
+    } else if (this.props.location.pathname === "/dash/ViewData") {
+      title = "View Data";
+    } 
 
     return (
       <div>
+        {/* Regular Header */}
+        <Responsive
+          as={Segment}
+          clearing
+          minWidth={768}
+          basic
+          color="blue"
+          inverted
+          padded="very"
+        >
+          {/* <Segment basic color="blue" inverted padded="very"> */}
+          <Header
+            padded="very"
+            size="huge"
+            floated="left"
+            inverted
+            color="white"
+          >
+            {title}
+          </Header>
 
           {/* Regular Header */}
           <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very" className="HeaderContainer">
@@ -299,7 +354,7 @@ export default class MainView extends React.Component {
 
             
           </Responsive>
-
+        </Responsive>
         <Menu secondary stackable={isAdmin} className="NavMenuContainer">
           {nav}
           <Menu.Menu position="right">
@@ -307,11 +362,22 @@ export default class MainView extends React.Component {
           </Menu.Menu>
         </Menu>
 
-        <Container>
+        {
+          this.props.location.pathname !== "/dash/ViewData"
+          &&
+          <Container>
+            <Router>
+              <Switch>{ui}</Switch>
+            </Router>
+          </Container>
+        }
+        {
+          this.props.location.pathname === "/dash/ViewData"
+          &&
           <Router>
             <Switch>{ui}</Switch>
           </Router>
-        </Container>
+        }
       </div>
     );
   }

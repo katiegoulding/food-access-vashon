@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Modal } from 'semantic-ui-react';
+import { Button, Card, Modal, Confirm } from 'semantic-ui-react';
 import firebase from 'firebase/app';
 
 export default class BuckSetListItem extends React.Component {
@@ -14,15 +14,17 @@ export default class BuckSetListItem extends React.Component {
 
     showView = () => this.setState({ viewModalOpen: true })
 
-    showDelete = () => this.setState({ deleteModalOpen: true })
-
-    close = () => this.setState({ deleteModalOpen: false, viewModalOpen: false })
+    open = () => this.setState({ open: true })
+    close = () => this.setState({ open: false })
 
     deleteBuckSet = () => {
-        let key = this.props.data.title
-        //TODO: make if(!key) {...} and throw an error 
-        if(key != '') {
+        let key = this.props.data.name
+        console.log("buck set title ", this.props.data.name)
+        // used to be if(key != '')
+        if(key && key !== "") {
             let buckSetRef = firebase.database().ref('buckSets/' + key)
+            console.log("buckSetRef ", buckSetRef)
+
             buckSetRef.remove()
             .then(() =>{
                 console.log("Remove succeeded.")
@@ -34,14 +36,23 @@ export default class BuckSetListItem extends React.Component {
                 console.log("Remove failed: " + error.message)
             });
         }
+
+        let voucherRef = firebase.database().ref('vouchers/')
+        // voucherRef.once("value", snapshot => {
+        //     snapshot.forEach(function(childSnapshot) {
+        //         if(childData)
+        //     })
+        // })
+
+        this.close()
     }
 
     viewBuckSet = () => {
     }
 
     render () { 
-        const { name, createdBy, data } = this.props.data
-        const { open } = this.state
+        const { name, createdBy } = this.props.data
+        // const { open } = this.state
 
         return(
                 <Card fluid>
@@ -63,7 +74,18 @@ export default class BuckSetListItem extends React.Component {
                             </Modal.Content>
                         </Modal>
 
-                        <Modal trigger={<Button icon='trash'/>} 
+                        <Button icon="trash" onClick={this.open}/>
+                        <Confirm 
+                            size='small' 
+                            header={`Are you sure you want to delete ${name} Buck Set?`}
+                            content="Doing so will mark all VIGA bucks generated for this set as inactive"
+                            cancelButton="Cancel"
+                            confirmButton="Delete"
+                            open={this.state.open} 
+                            onCancel={this.close} 
+                            onConfirm={() => this.deleteBuckSet()} />
+
+                        {/* <Modal trigger={<Button icon='trash'/>} 
                                 size="mini" 
                                 open={this.deleteModalOpen} 
                                 onClose={this.close}
@@ -74,9 +96,11 @@ export default class BuckSetListItem extends React.Component {
                                 
                             </Modal.Content>
                             <Modal.Actions>
+
                                 <Button color="red" onClick={() => this.deleteBuckSet()}  content='Delete' />
+
                             </Modal.Actions>
-                        </Modal>
+                        </Modal> */}
                     </Card.Content>
                 </Card>
         )

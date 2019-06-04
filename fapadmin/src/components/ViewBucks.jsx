@@ -11,32 +11,34 @@ export default class ViewBucks extends React.Component {
     };
   }
 
+  componentDidMount() {
+    let firebaseBuckSet = [];
 
-    componentDidMount() {
-        let firebaseBuckSet = []
+    let buckSetsRef = firebase.database().ref("buckSets");
+    buckSetsRef.orderByChild("createdOn").on("child_added", snapshot => {
+      const value = snapshot.val();
+      // sort by newest
+      firebaseBuckSet.push({
+        name: value.name,
+        createdBy: value.createdBy
+      });
+      this.setState({
+        firebaseBuckSet
+      });
+    });
 
-        let buckSetsRef = firebase.database().ref('buckSets')
-        buckSetsRef.orderByChild('createdOn').on('child_added', (snapshot) => {
-            const value = snapshot.val()
-            // sort by newest
-            firebaseBuckSet.push({
-                name: value.name,
-                createdBy: value.createdBy
-            })
-            this.setState({
-                firebaseBuckSet
-            })
-        });
-        buckSetsRef.orderByChild('createdOn').on('child_removed', (snapshot) => {
-            const value = snapshot.val()
-            // filter out the removed item and force another render
-            firebaseBuckSet = firebaseBuckSet.filter(el => !(el.title === value.name && el.subtitle === value.createdBy))
-            this.setState({
-                firebaseBuckSet
-            })
-        });
-
-    }
+    console.log("in componnent did mount in ViewBucks")
+    buckSetsRef.orderByChild("createdOn").on("child_removed", snapshot => {
+      const value = snapshot.val();
+      // filter out the removed item and force another render
+      firebaseBuckSet = firebaseBuckSet.filter(
+        el => !(el.title === value.name && el.subtitle === value.createdBy)
+      );
+      this.setState({
+        firebaseBuckSet
+      });
+    });
+  }
 
     render () {
             return (
