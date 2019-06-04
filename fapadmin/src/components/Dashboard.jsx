@@ -103,6 +103,8 @@ export default function Dashboard(props) {
       // loop through each org
       let firebaseDataArray = [];
       let redCount = 0;
+      let handCount = 0;
+      let createCount = 0;
       for (var org in snapshot.val()) {
         let orgJSON = {};
         orgJSON["organization"] = org;
@@ -115,6 +117,10 @@ export default function Dashboard(props) {
           for (var id in value[org][scanType]) {
             if (scanType == "redeemed") {
               redCount += 2;
+            } else if (scanType == "created") {
+              createCount += 2;
+            } else {
+              handCount += 2;
             }
             count++;
           }
@@ -123,6 +129,8 @@ export default function Dashboard(props) {
         firebaseDataArray.push(orgJSON);
       }
       setCharData(firebaseDataArray);
+      setTotalCreated(createCount);
+      setTotalHandedOut(handCount);
       setTotalRedeemed(redCount);
       console.log(charData);
     });
@@ -139,63 +147,72 @@ export default function Dashboard(props) {
       let array = [];
       var startDay;
       for (var key in snapshot.val()) {
-        let firebaseDataArray = [];
-        console.log(key);
-        let value = snapshot.val();
-        let dates = [];
-        for (var childKey in value[key]) {
-          console.log("DATE" + JSON.stringify(value[key][childKey]));
+        if (key !== "created") {
+          let firebaseDataArray = [];
+          console.log(key);
+          let value = snapshot.val();
+          let dates = [];
+          for (var childKey in value[key]) {
+            console.log("DATE" + JSON.stringify(value[key][childKey]));
 
-          dates.push(
-            new Date(value[key][childKey]).toISOString().split("T")[0]
-          );
-        }
-        dates.sort(function(a, b) {
-          return new Date(a) - new Date(b);
-        });
-
-        if (key !== "created" && new Date(dates[0]) - new Date(startDay) > 0) {
-          firebaseDataArray.push({
-            x: startDay,
-            y: 0
+            dates.push(
+              new Date(value[key][childKey]).toISOString().split("T")[0]
+            );
+          }
+          dates.sort(function(a, b) {
+            return new Date(a) - new Date(b);
           });
-        }
 
-        for (var time in dates) {
-          let scanDay = dates[time];
-          if (key === "created" && time == 0) {
-            startDay = scanDay;
-            console.log("startDay:" + startDay);
+          if (
+            key !== "created" &&
+            new Date(dates[0]) - new Date(startDay) > 0
+          ) {
+            firebaseDataArray.push({
+              x: startDay,
+              y: 0
+            });
           }
 
-          var index = firebaseDataArray.findIndex(function(item, i) {
-            return item.x === scanDay;
-          });
-          if (firebaseDataArray.length === 0) {
-            firebaseDataArray.push({
-              x: scanDay,
-              y: 2
-            });
-          } else if (firebaseDataArray.length !== 0 && index === -1) {
-            firebaseDataArray.push({
-              x: scanDay,
-              y: firebaseDataArray[firebaseDataArray.length - 1]["y"] + 2
-            });
-          } else {
-            firebaseDataArray[index].y += 2;
-          }
-        }
+          for (var time in dates) {
+            let scanDay = dates[time];
+            if (key === "created" && time == 0) {
+              startDay = scanDay;
+              console.log("startDay:" + startDay);
+            }
 
-        let newData = {
-          id: key,
-          data: firebaseDataArray
-        };
-        if (key === "redeemed") {
-          setTotalRedeemed(
-            firebaseDataArray[firebaseDataArray.length - 1]["y"]
-          );
+            var index = firebaseDataArray.findIndex(function(item, i) {
+              return item.x === scanDay;
+            });
+            if (firebaseDataArray.length === 0) {
+              firebaseDataArray.push({
+                x: scanDay,
+                y: 2
+              });
+            } else if (firebaseDataArray.length !== 0 && index === -1) {
+              firebaseDataArray.push({
+                x: scanDay,
+                y: firebaseDataArray[firebaseDataArray.length - 1]["y"] + 2
+              });
+            } else {
+              firebaseDataArray[index].y += 2;
+            }
+          }
+
+          let newData = {
+            id: key,
+            data: firebaseDataArray
+          };
+          if (key === "redeemed") {
+            setTotalRedeemed(
+              firebaseDataArray[firebaseDataArray.length - 1]["y"]
+            );
+          } else if (key === "handedOut") {
+            setTotalHandedOut(
+              firebaseDataArray[firebaseDataArray.length - 1]["y"]
+            );
+          }
+          array = [...array, newData];
         }
-        array = [...array, newData];
       }
       console.log(array);
       if (enoughData(array)) {
@@ -213,6 +230,12 @@ export default function Dashboard(props) {
       }
     }
     return true;
+  }
+
+  function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
   }
 
   return (
@@ -233,18 +256,29 @@ export default function Dashboard(props) {
             </Segment>
           </Grid.Column>
           <Grid.Column width={4}>
-            <Segment raised padded centered>
-              <Statistic
-                style={{ margin: "auto" }}
-                label="Dollars Created"
-                value={"$90.00"}
-              />
-            </Segment>
+            {role === "admin" ? (
+              <Segment raised padded centered>
+                <Statistic
+                  style={{ margin: "auto" }}
+                  label="Dollars Created"
+                  value={"$" + numberWithCommas(totalCreated) + ".00"}
+                />
+              </Segment>
+            ) : null}
+            {role !== "farmer" ? (
+              <Segment raised padded centered>
+                <Statistic
+                  style={{ margin: "auto" }}
+                  label="Dollars Handed Out"
+                  value={"$" + numberWithCommas(totalHandedOut) + ".00"}
+                />
+              </Segment>
+            ) : null}
             <Segment raised padded centered>
               <Statistic
                 style={{ margin: "auto" }}
                 label="Dollars Redeemed"
-                value={"$" + totalRedeemed + ".00"}
+                value={"$" + numberWithCommas(totalRedeemed) + ".00"}
               />
             </Segment>
             <Segment raised padded centered>
