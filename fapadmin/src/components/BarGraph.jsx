@@ -23,29 +23,28 @@ export default function BarGraph(props) {
             text: { fontSize: '18px' },
           },
           legend: { 
-            text: { fontSize: '18px' },
-          },
+            text: { fontSize: '18px' }
+          }
         },
         legends: { text: { fontSize: '18px' } }
       }}
-      margin={{ top: 50, right: 150, bottom: 125, left: 80 }}
+      margin={{ top: 50, right: 150, bottom: 150, left: 80 }}
       padding={0.2}
       groupMode="grouped"
-      colors={{ scheme: "nivo" }}
+      colors={[ "#ABDDA4", "#66C2A5", "#3288BD" ]}
       animate={true}
       motionStiffness={90}
       motionDamping={15}
       borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
       axisTop={null}
       axisRight={null}
-      // axisBottom={null}
       axisBottom={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 45,
         legend: "Organization",
         legendPosition: "middle",
-        legendOffset: 45,
+        legendOffset: 100,
       }}
       axisLeft={{
         tickSize: 5,
