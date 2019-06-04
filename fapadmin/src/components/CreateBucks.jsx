@@ -80,246 +80,250 @@ export default class CreateBucks extends React.Component {
       this.props.vyfsfamilyplaceCount;
 
     return (
-      <Grid.Column width={10}>
-        <Segment raised>
-          <Container>
-            <Form
-              // onSubmit={this.handleSubmit}
-              onSubmit={this.validateFormData}
-              loading={loading}
-              error={errorMessage}
-            >
-              <Form.Input
-                inline
-                required
-                fluid
-                transparent
-                size="massive"
-                placeholder="Buck Set Name"
-                value={this.props.buckSetName}
-                onInput={evt =>
-                  this.props.handleChange({ buckSetName: evt.target.value })
-                }
-              />
+      <Grid.Column width={10} >
 
-              <Form.Input
-                width={8}
-                inline
-                required
-                fluid
-                label="Expiration Date"
-                type="date"
-                value={this.props.expirationDate}
-                onInput={evt =>
-                  this.props.handleChange({
-                    expirationDate: evt.target.value
-                  })
-                }
-              />
+        <Segment className="master_modal_container">
 
-              <Header as="h5" color="grey" textAlign="left">
-                BUCK ALLOCATION
-              </Header>
+        <Container className="modal_container">
+          <Form
+            // onSubmit={this.handleSubmit}
+            onSubmit={this.validateFormData}
+            loading={loading}
+            error={errorMessage}>
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Vashon Community Food Bank"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    foodbankCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              inline
+              required
+              fluid
+              transparent
+              size="massive"
+              placeholder="Buck Set Name"
+              value={this.props.buckSetName}
+              onInput={evt =>
+                this.props.handleChange({ buckSetName: evt.target.value })
+              }
+              className="buck_set_name_input"
+            />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="DoVE"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    doveCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={9}
+              inline
+              required
+              fluid
+              label="Expiration Date"
+              type="date"
+              className="expiration_date_container"
+              value={this.props.expirationDate}
+              onInput={evt =>
+                this.props.handleChange({ 
+                  expirationDate: evt.target.value 
+                })
+              }
+            />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Vashon Community Care"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    communitycareCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Header as="h5" color="grey" textAlign="left">
+              BUCK ALLOCATION
+            </Header>
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Vashon Senior Center"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    seniorcenterCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Statistic.Group widths="two" className="statistics_big_numbers">
+              <Statistic>
+                <Statistic.Value className="statistic_number">{sum * 1}</Statistic.Value>
+                <Statistic.Label>VIGA Bucks</Statistic.Label>
+              </Statistic>
+              <Statistic>
+                <Statistic.Value className="statistic_number">${2 * sum}.00</Statistic.Value>
+                <Statistic.Label>Dollars</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Interfaith Council to Prevent Homelessness"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    interfaithCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Divider hidden />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Community Meals"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    communitymealsCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Community Food Bank"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  foodbankCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />  
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="Vashon Household"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    vashonhouseholdCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="DoVE"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  doveCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="La Communidad \ ECEAP"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    lacomunidadCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Community Care"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  communitycareCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />     
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="VYFS"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    vyfsCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Senior Center"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  seniorcenterCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="VYFS: Latinx"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    vyfslatinxCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Interfaith Council to Prevent Homelessness"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  interfaithCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
 
-              <Form.Input
-                width={6}
-                inline
-                size="mini"
-                fluid
-                label="VYFS: Family Place"
-                placeholder={0}
-                type="number"
-                onInput={evt =>
-                  this.props.handleChange({
-                    vyfsfamilyplaceCount: Number(evt.target.value)
-                  })
-                }
-                min={0}
-              />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Community Meals"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  communitymealsCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
 
-              <Divider hidden />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="Vashon Household"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({
+                  vashonhouseholdCount: Number(evt.target.value)
+                })
+              }
+              min={0}
+            />
 
-              <Statistic.Group widths="two">
-                <Statistic>
-                  <Statistic.Value>{sum * 1}</Statistic.Value>
-                  <Statistic.Label>VIGA Bucks</Statistic.Label>
-                </Statistic>
-                <Statistic>
-                  <Statistic.Value>${2 * sum}.00</Statistic.Value>
-                  <Statistic.Label>Dollars</Statistic.Label>
-                </Statistic>
-              </Statistic.Group>
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="La Communidad \ ECEAP"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  lacomunidadCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
 
-              <Divider hidden />
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="VYFS"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfsCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
 
-              {<Button color="blue">Next Step</Button>}
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="VYFS: Latinx"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfslatinxCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />
 
-              <Message
-                error
-                header={errorMessage}
-                content={"form not submitted"}
-              />
-            </Form>
+            <Form.Input
+              width={16}
+              inline
+              size="mini"
+              fluid
+              label="VYFS: Family Place"
+              placeholder={0}
+              type="number"
+              onInput={evt =>
+                this.props.handleChange({ 
+                  vyfsfamilyplaceCount: Number(evt.target.value) 
+                })
+              }
+              min={0}
+            />      
+
+            <Divider hidden />
+
+            {<Button color="blue">Next Step</Button>}
+
+            <Message
+              error
+              header={errorMessage}
+              content={"form not submitted"}
+            />
+          </Form>
           </Container>
         </Segment>
       </Grid.Column>

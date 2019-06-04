@@ -34,7 +34,7 @@ const keySelection = [
   {
     key: "allbucks",
     text: "All Bucks",
-    value: ["redeemed", "handedOut", "created"]
+    value: ["created", "handedOut", "redeemed"]
   },
   { key: "created", text: "Bucks Created", value: "created" },
   { key: "redeemed", text: "Bucks Redeemed", value: "redeemed" },
@@ -215,6 +215,8 @@ export default function Dashboard(props) {
         }
         firebaseDataArray.push(orgJSON);
       }
+
+
       setCharData(firebaseDataArray);
       setTotalCreated(createCount);
       setTotalHandedOut(handCount);
@@ -370,34 +372,18 @@ export default function Dashboard(props) {
     setTimeFilter(data.value);
   }
 
-  let filteredData;
+  // filter for organizations +
+  let filteredData 
+  console.log("curChartKey", curChartKey)
+  console.log("keySelection[0].value", keySelection[0].value)
 
-  if (role === "admin") {
-    if (curChartKey === keySelection[0].value) {
-      filteredData = charData
-        .filter(
-          dataPoint =>
-            dataPoint.organization === curFilter ||
-            curFilter === orgOptions[0].value
-        )
-        .map(dataPoint => ({
-          organization: dataPoint.organization,
-          redeemed: dataPoint[curChartKey[0]],
-          handedOut: dataPoint[curChartKey[1]],
-          created: dataPoint[curChartKey[2]]
-        }));
-    } else {
-      filteredData = charData
-        .filter(
-          dataPoint =>
-            dataPoint.organization === curFilter ||
-            curFilter === orgOptions[0].value
-        )
-        .map(dataPoint => ({
-          organization: dataPoint.organization,
-          [curChartKey]: dataPoint[curChartKey]
-        }));
-    }
+  if(curChartKey === keySelection[0].value) {
+    console.log("all" + curChartKey)
+    filteredData = charData.filter(
+      dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
+    ).map(
+      dataPoint => ({ organization: dataPoint.organization, [curChartKey[0]]: dataPoint[curChartKey[0]], [curChartKey[1]]: dataPoint[curChartKey[1]], [curChartKey[2]]: dataPoint[curChartKey[2]] })
+    )
   } else {
     filteredData = charData;
   }
@@ -406,11 +392,9 @@ export default function Dashboard(props) {
     <Container fluid>
       <Grid stackable centered>
         <Grid.Row>
-          <Grid.Column width={12}>
-            <Segment raised style={{ height: "700px" }}>
-              <Header size="huge">
-                VIGA Farm Buck Data - {title[timeFilter]}
-              </Header>
+          <Grid.Column width={11}>
+            <Segment className="graph_container" raised style={{ height: "700px" }}>
+            <Header className="graph_title" size="huge">VIGA Farm Buck Data - {title[timeFilter]} </Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (
@@ -422,32 +406,26 @@ export default function Dashboard(props) {
               )}
             </Segment>
           </Grid.Column>
-          <Grid.Column width={4}>
-            {role === "admin" ? (
-              <Segment raised padded centered>
-                <Statistic
-                  style={{ margin: "auto" }}
-                  label="Dollars Created"
-                  value={"$" + numberWithCommas(totalCreated) + ".00"}
-                />
-              </Segment>
-            ) : null}
-            {role !== "farmer" ? (
-              <Segment raised padded centered>
-                <Statistic
-                  style={{ margin: "auto" }}
-                  label="Dollars Handed Out"
-                  value={"$" + numberWithCommas(totalHandedOut) + ".00"}
-                />
-              </Segment>
-            ) : null}
-            <Segment raised padded centered>
-              <Statistic
-                style={{ margin: "auto" }}
-                label="Dollars Redeemed"
-                value={"$" + numberWithCommas(totalRedeemed) + ".00"}
-              />
+          <Grid.Column className="graph_summary_stats_container" width={3}>
+          {role === "admin" ? (
+          <Segment raised padded>
+            <Header as="h2">Totals</Header>
+                <Statistic.Group size="small" horizontal>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalCreated) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Created</Statistic.Label>
+                  </Statistic>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalHandedOut) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Handed Out</Statistic.Label>
+                  </Statistic>
+                  <Statistic>
+                    <Statistic.Value>{"$" + numberWithCommas(totalRedeemed) + ".00"}</Statistic.Value>
+                    <Statistic.Label>Dollars Redeemed</Statistic.Label>
+                  </Statistic>
+                </Statistic.Group>
             </Segment>
+          ) : null }
             <Segment raised centered>
               <Header as="h4" content="Filter by Time Interval" />
 

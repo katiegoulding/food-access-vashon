@@ -306,62 +306,37 @@ export default class MainView extends React.Component {
     return (
       <div>
         {/* Regular Header */}
-        <Responsive
-          as={Segment}
-          clearing
-          minWidth={768}
-          basic
-          color="blue"
-          inverted
-          padded="very"
-        >
+        <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very" className="HeaderContainer">
           {/* <Segment basic color="blue" inverted padded="very"> */}
-          <Header
-            padded="very"
-            size="huge"
-            floated="left"
-            inverted
-            color="white"
-          >
+          <Header padded="very" size="huge" floated="left" inverted color='white'>
             {title}
           </Header>
 
-          <Header floated="right" inverted color="white">
+          <Header floated="right" inverted color='white' className="Header_UserInfo">
             {this.state.username}
-            <Header.Subheader inverted color="white">
-              <Label>
-                <Icon name="user" /> {label}
-              </Label>
+            <Header.Subheader inverted color='white'>
+              <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
           </Header>
           {/* </Segment> */}
         </Responsive>
 
         {/* Mobile Header */}
-        <Responsive
-          as={Segment}
-          maxWidth={767}
-          basic
-          color="blue"
-          inverted
-          padded="very"
-        >
-          <Header padded="very" size="huge" inverted color="white">
+        <Responsive as={Segment} maxWidth={767} basic color="blue" inverted padded="very" className="HeaderContainer">
+          <Header padded="very" size="huge" inverted color='white'>
             {title}
-            <Header.Subheader inverted color="white">
+            <Header.Subheader inverted color='white' className="Header_UserInfo mobile">
               {this.state.username}
+              <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
           </Header>
 
-          <Label>
-            <Icon name="user" /> {label}
-          </Label>
+          
         </Responsive>
-
-        <Menu secondary stackable={isAdmin}>
+        <Menu secondary stackable={isAdmin} className="NavMenuContainer">
           {nav}
           <Menu.Menu position="right">
-            <Menu.Item name="logout" onClick={this.handleSignOut} />
+            <Menu.Item className="Logout_btn" name="logout" onClick={this.handleSignOut} />
           </Menu.Menu>
         </Menu>
 
