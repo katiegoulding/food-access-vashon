@@ -12,21 +12,12 @@ export default function BarGraph(props) {
   return (
     <ResponsiveBar
       data={charData}
-      keys={[props.curChartKey]}
+      keys={
+        Array.isArray(props.curChartKey) ?
+        props.curChartKey : [props.curChartKey]
+      }
       indexBy="organization"
-      tooltip={({ id, value, color, data }) => {
-        return (
-          <strong style={{ color }}>
-            {id} - {data.organization} : {value}
-          </strong>
-        )
-      }}
       theme={{
-        tooltip: {
-          container: {
-            background: '#333',
-          },
-        },
         axis: {
           ticks: { 
             text: { fontSize: '18px' },
@@ -37,7 +28,7 @@ export default function BarGraph(props) {
         },
         legends: { text: { fontSize: '18px' } }
       }}
-      margin={{ top: 50, right: 150, bottom: 60, left: 80 }}
+      margin={{ top: 50, right: 150, bottom: 125, left: 80 }}
       padding={0.2}
       groupMode="grouped"
       colors={{ scheme: "nivo" }}
@@ -47,15 +38,15 @@ export default function BarGraph(props) {
       borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
       axisTop={null}
       axisRight={null}
-      axisBottom={null}
-      // axisBottom={{
-      //   tickSize: 5,
-      //   tickPadding: 5,
-      //   tickRotation: 0,
-      //   legend: "Organization",
-      //   legendPosition: "middle",
-      //   legendOffset: 45,
-      // }}
+      // axisBottom={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 45,
+        legend: "Organization",
+        legendPosition: "middle",
+        legendOffset: 45,
+      }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,

@@ -27,10 +27,14 @@ const orgOptions = [
 ];
 
 const keySelection = [
+  {
+    key: "allbucks",
+    text: "All Bucks",
+    value: ["redeemed", "handedOut", "created"]
+  },
   { key: "created", text: "Bucks Created", value: "created" },
   { key: 'redeemed', text: 'Bucks Redeemed', value: 'redeemed'},
   { key: "handedOut", text: "Bucks Handed Out", value: "handedOut" },
-  { key: "allbucks", text: "All Bucks", value: "allbucks" },
 ];
 
 
@@ -42,8 +46,9 @@ export default function Dashboard(props) {
   // options to filter by organization
   const [curFilter, setFilter] = useState(orgOptions[0].value);
 
-  // optiosn to filter by buck state
+  // options to filter by buck state
   const [curChartKey, setCurChartKey] = useState(keySelection[0].value);
+  
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [totalRedeemed, setTotalRedeemed] = useState(0);
@@ -290,21 +295,36 @@ export default function Dashboard(props) {
     setCurChartKey(data.value)
   }
 
-  let filteredData = charData.filter(
-    dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
-  ).map(
-    dataPoint => ({ organization: dataPoint.organization, [curChartKey]: dataPoint[curChartKey] } )
-  )
+  // filter for organizations +
+  let filteredData 
+  console.log("curChartKey", curChartKey)
+  console.log("keySelection[0].value", keySelection[0].value)
+
+  if(curChartKey === keySelection[0].value) {
+    console.log("all" + curChartKey)
+    filteredData = charData.filter(
+      dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
+    ).map(
+      dataPoint => ({ organization: dataPoint.organization, "redeemed": dataPoint[curChartKey[0]], "handedOut": dataPoint[curChartKey[1]], "created": dataPoint[curChartKey[2]] })
+    )
+  } else {
+    console.log(curChartKey)
+    filteredData = charData.filter(
+      dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
+    ).map(
+      dataPoint => ({ organization: dataPoint.organization, [curChartKey]: dataPoint[curChartKey] })
+    )
+  }
+  
   console.log('filteredData = ', filteredData)
   
   return (
-    <Container>
-      <Header size="huge">VIGA Farm Buck Data from </Header>
-
+    <Container fluid>
       <Grid stackable centered>
         <Grid.Row>
           <Grid.Column width={12}>
             <Segment raised style={{ height: "700px" }}>
+            <Header size="huge">VIGA Farm Buck Data from </Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
               ) : (

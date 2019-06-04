@@ -299,8 +299,10 @@ export default class MainView extends React.Component {
       title = "Create a Buck Set";
     } else if (this.props.location.pathname === "/dash/farmerPayout") {
       title = "Farmer Payout";
+    } else if (this.props.location.pathname === "/dash/ViewData") {
+      title = "View Data";
     } 
-    
+
     return (
       <div>
         {/* Regular Header */}
