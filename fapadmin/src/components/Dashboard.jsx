@@ -235,10 +235,44 @@ export default function Dashboard(props) {
           let firebaseDataArray = [];
           let value = snapshot.val();
           let dates = [];
-          let datesInMonth = getDaysInMonth(
-            new Date().getMonth() - 1,
-            new Date().getFullYear()
-          );
+          // let datesInMonth = getDaysInMonth(
+          //   new Date().getMonth() - 1,
+          //   new Date().getFullYear()
+          // );
+
+          let datesInMonth = [
+            "2019-05-04T07:00:00.000Z",
+            "2019-05-05T07:00:00.000Z",
+            "2019-05-06T07:00:00.000Z",
+            "2019-05-07T07:00:00.000Z",
+            "2019-05-08T07:00:00.000Z",
+            "2019-05-09T07:00:00.000Z",
+            "2019-05-10T07:00:00.000Z",
+            "2019-05-11T07:00:00.000Z",
+            "2019-05-12T07:00:00.000Z",
+            "2019-05-13T07:00:00.000Z",
+            "2019-05-14T07:00:00.000Z",
+            "2019-05-15T07:00:00.000Z",
+            "2019-05-16T07:00:00.000Z",
+            "2019-05-17T07:00:00.000Z",
+            "2019-05-18T07:00:00.000Z",
+            "2019-05-19T07:00:00.000Z",
+            "2019-05-20T07:00:00.000Z",
+            "2019-05-21T07:00:00.000Z",
+            "2019-05-22T07:00:00.000Z",
+            "2019-05-23T07:00:00.000Z",
+            "2019-05-24T07:00:00.000Z",
+            "2019-05-25T07:00:00.000Z",
+            "2019-05-26T07:00:00.000Z",
+            "2019-05-27T07:00:00.000Z",
+            "2019-05-28T07:00:00.000Z",
+            "2019-05-29T07:00:00.000Z",
+            "2019-05-30T07:00:00.000Z",
+            "2019-06-01T07:00:00.000Z",
+            "2019-06-02T07:00:00.000Z",
+            "2019-06-03T07:00:00.000Z",
+            "2019-06-04T07:00:00.000Z"
+          ];
 
           for (var childKey in value[key]) {
             dates.push(
@@ -256,7 +290,7 @@ export default function Dashboard(props) {
           let tot = 0;
 
           for (let i in datesInMonth) {
-            let date = datesInMonth[i].toISOString().split("T")[0];
+            let date = new Date(datesInMonth[i]).toISOString().split("T")[0];
 
             if (counts[date]) {
               tot += 2 * counts[date];
