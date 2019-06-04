@@ -61,71 +61,71 @@ export default class MainView extends React.Component {
   }
 
   // anton componentDidMount() -> useful for testing because you can still work if not approved
-  // componentDidMount() {
-  //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-  //     if (!user) {
-  //       this.props.history.push(constants.routes.base);
-  //     } else {
-  //       firebase
-  //         .database()
-  //         .ref("users/" + user.uid)
-  //         .once("value")
-  //         .then(snapshot => {
-  //           var org = snapshot.val().org;
-  //           user.getIdTokenResult(true).then(idTokenResult => {
-  //             console.log(idTokenResult.claims.role);
-  //             if (idTokenResult.claims.role === "caseworker") {
-  //               this.setState({
-                  // username: user.email,
-                  // uid: user.uid,
-                  // role: idTokenResult.claims.role,
-                  // org: org
-  //               });
-  //             } else {
-  //               this.setState({
-  //                 username: user.email,
-  //                 uid: user.uid,
-  //                 role: idTokenResult.claims.role
-  //               });
-  //             }
-  //           });
-  //         });
-  //     }
-  //   });
-  // }
-
-  // august componentDidMount() -> does not allow people to route around
   componentDidMount() {
     this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-      if(!user) {
+      if (!user) {
         this.props.history.push(constants.routes.base);
-      } else { //they are authenticated
-        user.getIdTokenResult().then(idTokenResult => {
-          console.log(idTokenResult.claims.role)
-          if(!idTokenResult.claims.role) {
-            //their role is null
-            //push them to the barrier page
-            this.props.history.push(constants.routes.barrier);
-          } else {
-            //their role has been approved
-            firebase
-              .database()
-              .ref("users/" + user.uid)
-              .once("value")
-              .then(snapshot => {
-                var org = snapshot.val().org;
+      } else {
+        firebase
+          .database()
+          .ref("users/" + user.uid)
+          .once("value")
+          .then(snapshot => {
+            var org = snapshot.val().org;
+            user.getIdTokenResult(true).then(idTokenResult => {
+              console.log(idTokenResult.claims.role);
+              if (idTokenResult.claims.role === "caseworker") {
                 this.setState({
                   username: user.email,
                   uid: user.uid,
                   role: idTokenResult.claims.role,
                   org: org
                 });
-              })
-          }
-        })
+              } else {
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role
+                });
+              }
+            });
+          });
       }
-    })
+    });
   }
+
+  // august componentDidMount() -> does not allow people to route around
+  // componentDidMount() {
+  //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+  //     if(!user) {
+  //       this.props.history.push(constants.routes.base);
+  //     } else { //they are authenticated
+  //       user.getIdTokenResult().then(idTokenResult => {
+  //         console.log(idTokenResult.claims.role)
+  //         if(!idTokenResult.claims.role) {
+  //           //their role is null
+  //           //push them to the barrier page
+  //           this.props.history.push(constants.routes.barrier);
+  //         } else {
+  //           //their role has been approved
+  //           firebase
+  //             .database()
+  //             .ref("users/" + user.uid)
+  //             .once("value")
+  //             .then(snapshot => {
+  //               var org = snapshot.val().org;
+  //               this.setState({
+  //                 username: user.email,
+  //                 uid: user.uid,
+  //                 role: idTokenResult.claims.role,
+  //                 org: org
+  //               });
+  //             })
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
 
   render() {
     let farmerNav = [
