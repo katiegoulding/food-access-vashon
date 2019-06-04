@@ -292,11 +292,11 @@ export default class CreateBucks extends React.Component {
       this.props.vyfsfamilyplaceCount
 
     return (
-      <Grid.Column width={8} >
+      <Grid.Column width={10} >
 
-        <Segment raised>
+        <Segment className="master_modal_container">
 
-        <Container>
+        <Container className="modal_container">
           <Form
             // onSubmit={this.handleSubmit}
             onSubmit={toggleShowCreateBucks}
@@ -314,6 +314,7 @@ export default class CreateBucks extends React.Component {
               onInput={evt =>
                 this.props.handleChange({ buckSetName: evt.target.value })
               }
+              className="buck_set_name_input"
             />
 
             <Form.Input
@@ -335,8 +336,21 @@ export default class CreateBucks extends React.Component {
               BUCK ALLOCATION
             </Header>
 
+            <Statistic.Group widths="two" className="statistics_big_numbers">
+              <Statistic>
+                <Statistic.Value className="statistic_number">{sum * 1}</Statistic.Value>
+                <Statistic.Label>VIGA Bucks</Statistic.Label>
+              </Statistic>
+              <Statistic>
+                <Statistic.Value className="statistic_number">${2 * sum}.00</Statistic.Value>
+                <Statistic.Label>Dollars</Statistic.Label>
+              </Statistic>
+            </Statistic.Group>
+
+            <Divider hidden />
+
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -352,7 +366,7 @@ export default class CreateBucks extends React.Component {
             />  
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -368,7 +382,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -384,7 +398,7 @@ export default class CreateBucks extends React.Component {
             />     
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -400,7 +414,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -416,7 +430,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -432,7 +446,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -448,7 +462,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -464,7 +478,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -480,7 +494,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -496,7 +510,7 @@ export default class CreateBucks extends React.Component {
             />
 
             <Form.Input
-              width={6}
+              width={16}
               inline
               size="mini"
               fluid
@@ -510,19 +524,6 @@ export default class CreateBucks extends React.Component {
               }
               min={0}
             />      
-
-            <Divider hidden />
-
-            <Statistic.Group widths="two">
-              <Statistic>
-                <Statistic.Value>{sum * 1}</Statistic.Value>
-                <Statistic.Label>VIGA Bucks</Statistic.Label>
-              </Statistic>
-              <Statistic>
-                <Statistic.Value>${2 * sum}.00</Statistic.Value>
-                <Statistic.Label>Dollars</Statistic.Label>
-              </Statistic>
-            </Statistic.Group>
 
             <Divider hidden />
 
