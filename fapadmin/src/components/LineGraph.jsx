@@ -6,10 +6,11 @@ export default function LineGraph(props) {
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Only called after props update
   useEffect(() => {
     setRole(props.role);
-    setCharData(props.charData);
     setIsLoaded(props.isLoaded);
+    setCharData(props.charData);
   }, [props]);
 
   return (
@@ -38,7 +39,7 @@ export default function LineGraph(props) {
       }}
       axisBottom={{
         format: "%b %d",
-        tickValues: "every 2 days",
+        tickValues: "every 5 days",
         legend: "Time Scale",
         legendOffset: -12
       }}
@@ -48,15 +49,32 @@ export default function LineGraph(props) {
           ? { top: 10, right: 20, bottom: 50, left: 60 }
           : { top: 10, right: 90, bottom: 50, left: 60 }
       }
-      enableSlices={isLoaded ? false : "x"}
+      enableSlices={"x"}
       lineWidth={3}
-      pointSize={12}
-      pointColor={"#ffffff"}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabel="y"
-      pointLabelYOffset={-12}
-      useMesh={isLoaded}
+      enableArea={true}
+      sliceTooltip={({ slice }) => {
+        return (
+          <div
+            style={{
+              background: "white",
+              padding: "9px 12px",
+              border: "1px solid #ccc"
+            }}
+          >
+            <strong>Date:</strong> {slice.points[0].data.xFormatted}
+            {slice.points.map(point => (
+              <div
+                key={point.id}
+                style={{
+                  color: point.serieColor
+                }}
+              >
+                <strong>{point.serieId}:</strong> ${point.data.yFormatted}.00
+              </div>
+            ))}
+          </div>
+        );
+      }}
       legends={
         role === "caseworker"
           ? [
@@ -64,7 +82,7 @@ export default function LineGraph(props) {
                 anchor: "bottom-right",
                 direction: "column",
                 justify: false,
-                translateX: 100,
+                translateX: 90,
                 translateY: 0,
                 itemsSpacing: 0,
                 itemDirection: "left-to-right",

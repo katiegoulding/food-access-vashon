@@ -19,31 +19,15 @@ export default function Dashboard(props) {
   const [totalRedeemed, setTotalRedeemed] = useState(0);
   const [totalHandedOut, setTotalHandedOut] = useState(0);
   const [totalCreated, setTotalCreated] = useState(0);
-  const [dateView, setDateView] = useState("month");
-
-  const options = [
+  const [yearOpt, setYearOpt] = useState([
     {
-      key: "this month",
-      text: "this month",
-      value: "month",
-      content: "this month"
-    },
-    {
-      key: "this year",
-      text: "this year",
-      value: "year",
-      content: "this year"
-    },
-    {
-      key: "all time",
       text: "all time",
-      value: "all",
-      content: "all time"
+      value: "all"
     }
-  ];
+  ]);
+  const [year, setYear] = useState();
 
   useEffect(() => {
-    console.log(props.org);
     setRole(props.role);
     if (props.role === "farmer") {
       handleFarmer();
@@ -63,11 +47,14 @@ export default function Dashboard(props) {
     ref.on("child_added", snapshot => {
       let value = snapshot.val();
       let scanDay = new Date(value).toISOString().split("T")[0];
-      console.log(scanDay);
       var index = firebaseDataArray.findIndex(function(item, i) {
         return item.x === scanDay;
       });
       if (firebaseDataArray.length === 0) {
+        firebaseDataArray.push({
+          x: new Date(new Date(scanDay) - 1).toISOString().split("T")[0],
+          y: 0
+        });
         firebaseDataArray.push({
           x: scanDay,
           y: 2
@@ -106,23 +93,33 @@ export default function Dashboard(props) {
       let handCount = 0;
       let createCount = 0;
       for (var org in snapshot.val()) {
-        let orgJSON = {};
+        let orgJSON = { created: 0, handedOut: 0, redeemed: 0 };
         orgJSON["organization"] = org;
-        console.log(org);
         let value = snapshot.val();
-        console.log(value[org]);
         for (var scanType in value[org]) {
-          console.log(scanType);
           let count = 0;
           for (var id in value[org][scanType]) {
-            if (scanType == "redeemed") {
+            console.log(value[org][scanType][id]);
+            // if (
+            //   yearOpt.some(
+            //     // eslint-disable-next-line no-loop-func
+            //     e =>
+            //       e.value !== new Date(value[org][scanType][id]).getFullYear()
+            //   )
+            // ) {
+            //   setYearOpt(...yearOpt, {
+            //     value: new Date(value[org][scanType][id]).getFullYear(),
+            //     text: new Date(value[org][scanType][id]).getFullYear()
+            //   });
+            // }
+            if (scanType === "redeemed") {
               redCount += 2;
-            } else if (scanType == "created") {
+            } else if (scanType === "created") {
               createCount += 2;
             } else {
               handCount += 2;
             }
-            count++;
+            count += 2;
           }
           orgJSON[scanType] = count;
         }
@@ -132,7 +129,6 @@ export default function Dashboard(props) {
       setTotalCreated(createCount);
       setTotalHandedOut(handCount);
       setTotalRedeemed(redCount);
-      console.log(charData);
     });
   }
 
@@ -143,60 +139,47 @@ export default function Dashboard(props) {
       .child("vis2/" + props.org)
       .orderByValue();
     ref.on("value", snapshot => {
-      console.log("Organization:" + props.org);
       let array = [];
-      var startDay;
       for (var key in snapshot.val()) {
         if (key !== "created") {
           let firebaseDataArray = [];
-          console.log(key);
           let value = snapshot.val();
           let dates = [];
-          for (var childKey in value[key]) {
-            console.log("DATE" + JSON.stringify(value[key][childKey]));
+          let datesInMonth = getDaysInMonth(
+            new Date().getMonth() - 1,
+            new Date().getFullYear()
+          );
 
+          for (var childKey in value[key]) {
             dates.push(
               new Date(value[key][childKey]).toISOString().split("T")[0]
             );
           }
-          dates.sort(function(a, b) {
-            return new Date(a) - new Date(b);
-          });
 
-          if (
-            key !== "created" &&
-            new Date(dates[0]) - new Date(startDay) > 0
-          ) {
+          var counts = {};
+
+          for (var i = 0; i < dates.length; i++) {
+            var day = dates[i];
+            counts[day] = counts[day] ? counts[day] + 1 : 1;
+          }
+          console.log(counts);
+
+          let tot = 0;
+
+          for (let i in datesInMonth) {
+            let date = datesInMonth[i].toISOString().split("T")[0];
+
+            if (counts[date]) {
+              tot += 2 * counts[date];
+            }
+
             firebaseDataArray.push({
-              x: startDay,
-              y: 0
+              x: date,
+              y: tot
             });
           }
 
-          for (var time in dates) {
-            let scanDay = dates[time];
-            if (key === "created" && time == 0) {
-              startDay = scanDay;
-              console.log("startDay:" + startDay);
-            }
-
-            var index = firebaseDataArray.findIndex(function(item, i) {
-              return item.x === scanDay;
-            });
-            if (firebaseDataArray.length === 0) {
-              firebaseDataArray.push({
-                x: scanDay,
-                y: 2
-              });
-            } else if (firebaseDataArray.length !== 0 && index === -1) {
-              firebaseDataArray.push({
-                x: scanDay,
-                y: firebaseDataArray[firebaseDataArray.length - 1]["y"] + 2
-              });
-            } else {
-              firebaseDataArray[index].y += 2;
-            }
-          }
+          console.log(firebaseDataArray);
 
           let newData = {
             id: key,
@@ -214,13 +197,21 @@ export default function Dashboard(props) {
           array = [...array, newData];
         }
       }
-      console.log(array);
       if (enoughData(array)) {
         setIsLoaded(true);
       }
       setCharData(array);
     });
-    console.log(charData);
+  }
+
+  function getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    var days = [];
+    while (date.getMonth() === month) {
+      days.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
   }
 
   function enoughData(arr) {
@@ -240,6 +231,8 @@ export default function Dashboard(props) {
 
   return (
     <Container>
+      <Header size="huge">VIGA Farm Buck Data from </Header>
+
       <Grid stackable centered>
         <Grid.Row>
           <Grid.Column width={12}>
@@ -289,8 +282,8 @@ export default function Dashboard(props) {
                   <Dropdown
                     inline
                     header="Adjust time span"
-                    options={options}
-                    defaultValue={options[0].value}
+                    options={yearOpt}
+                    defaultValue={yearOpt[0].value}
                   />
                 </Header.Content>
               </Header>

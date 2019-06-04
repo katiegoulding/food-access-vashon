@@ -17,6 +17,7 @@ import {
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 export default class CreateBucks extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +80,7 @@ export default class CreateBucks extends React.Component {
       this.props.vyfsfamilyplaceCount;
 
     return (
-      <Grid.Column width={8}>
+      <Grid.Column width={10}>
         <Segment raised>
           <Container>
             <Form
