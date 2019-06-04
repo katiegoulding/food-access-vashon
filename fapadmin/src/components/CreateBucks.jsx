@@ -29,7 +29,6 @@ export default class CreateBucks extends React.Component {
     };
   }
 
-
   // return true if validated form data is acceptable, false otherwise
   validateFormData = async sum => {
     if (sum <= 0) {
@@ -41,7 +40,7 @@ export default class CreateBucks extends React.Component {
 
     const { buckSetName } = this.props;
     let buckSetsRef = firebase.database().ref("buckSets");
-    let nameExists = false
+    let nameExists = false;
     // await the results from firebase, once because this should be done only once the function
     // fires
     await buckSetsRef
@@ -55,15 +54,14 @@ export default class CreateBucks extends React.Component {
             this.setState({
               errorMessage: "The buck set name you used already exists."
             });
-            nameExists = true
+            nameExists = true;
             // the name exists do nothing
           }
         });
       });
-    if(!nameExists) {
-      this.props.toggleShowCreateBucks()
+    if (!nameExists) {
+      this.props.toggleShowCreateBucks();
     }
-    
   };
 
   render() {
@@ -82,7 +80,7 @@ export default class CreateBucks extends React.Component {
       this.props.vyfsfamilyplaceCount;
 
     return (
-      <Grid.Column width={8}>
+      <Grid.Column width={10}>
         <Segment raised>
           <Container>
             <Form

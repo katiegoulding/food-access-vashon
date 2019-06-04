@@ -37,7 +37,13 @@ export default class BuckSetListItem extends React.Component {
             });
         }
 
-        
+        let voucherRef = firebase.database().ref('vouchers/')
+        // voucherRef.once("value", snapshot => {
+        //     snapshot.forEach(function(childSnapshot) {
+        //         if(childData)
+        //     })
+        // })
+
         this.close()
     }
 

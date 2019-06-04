@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveBar } from "@nivo/bar";
+import { Header } from "semantic-ui-react";
 
 export default function BarGraph(props) {
   const [charData, setCharData] = useState([]);
@@ -63,6 +64,29 @@ export default function BarGraph(props) {
         legendPosition: "middle",
         legendOffset: -55
       }}
+      tooltip={({ data, indexValue }) => (
+        <div style={{ overflow: "auto" }}>
+          {indexValue.toUpperCase()}
+          <div>
+            Created:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["created"]}.00
+            </div>
+          </div>
+          <div>
+            Distributed:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["handedOut"]}.00
+            </div>
+          </div>
+          <div>
+            Redeemed:
+            <div style={{ marginLeft: "5px", float: "right" }}>
+              ${data["redeemed"]}.00
+            </div>
+          </div>
+        </div>
+      )}
       legends={[
         {
           dataFrom: "keys",
@@ -76,7 +100,7 @@ export default function BarGraph(props) {
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,
-          symbolSize: 20,
+          symbolSize: 15,
           effects: [
             {
               on: "hover",
