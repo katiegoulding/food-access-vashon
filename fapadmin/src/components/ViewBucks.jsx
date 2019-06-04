@@ -26,6 +26,8 @@ export default class ViewBucks extends React.Component {
         firebaseBuckSet
       });
     });
+
+    console.log("in componnent did mount in ViewBucks")
     buckSetsRef.orderByChild("createdOn").on("child_removed", snapshot => {
       const value = snapshot.val();
       // filter out the removed item and force another render
