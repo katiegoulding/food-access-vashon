@@ -28,7 +28,7 @@ export default function BarGraph(props) {
         },
         legends: { text: { fontSize: '18px' } }
       }}
-      margin={{ top: 50, right: 150, bottom: 150, left: 80 }}
+      margin={{ top: 50, right: 150, bottom: 200, left: 80 }}
       padding={0.2}
       groupMode="grouped"
       colors={[ "#ABDDA4", "#66C2A5", "#3288BD" ]}

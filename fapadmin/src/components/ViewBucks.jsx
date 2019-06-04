@@ -20,7 +20,20 @@ export default class ViewBucks extends React.Component {
       // sort by newest
       firebaseBuckSet.push({
         name: value.name,
-        createdBy: value.createdBy
+        createdBy: value.createdBy,
+        createdOn: value.createdOn,
+        expirationDate: value.expirationDate,
+        communitycareCount: value.communitycareCount,
+        communitymealsCount: value.communitymealsCount,
+        doveCount: value.doveCount,
+        foodbankCount: value.foodbankCount,
+        interfaithCount: value.interfaithCount,
+        lacomunidadCount: value.lacomunidadCount,
+        seniorcenterCount: value.seniorcenterCount,
+        vashonhouseholdCount: value.vashonhouseholdCount,
+        vyfsCount: value.vyfsCount,
+        vyfsfamilyplaceCount: value.vyfsfamilyplaceCount,
+        vyfslatinxCount: value.vyfslatinxCount
       });
       this.setState({
         firebaseBuckSet
@@ -40,26 +53,40 @@ export default class ViewBucks extends React.Component {
     });
   }
 
-    render () {
-            return (
-            <Grid.Column width={6}>
-                <Container>
-                <Header as='h2'>Existing Buck Sets</Header>
-                <Card.Group className="existing_buck_set_container">
-                    {
-                        //for each item in the data provided, map will create a BuckSetListItem
-                        //that has the respective title and subtitle
-                        this.state.firebaseBuckSet.map(
-                            (element) => {
-                                return (
-                                    <BuckSetListItem key={element.name + element.createdBy} data={element}/>
-                                )
-                            }
-                        )
-                    }
-                </Card.Group>
-                </Container>
-            </Grid.Column>
-        )
-    }
+  render() {
+    return (
+      <Grid.Column width={6}>
+        <Container>
+          <Header as="h2">Existing Buck Sets</Header>
+          <Card.Group>
+            {//for each item in the data provided, map will create a BuckSetListItem
+            //that has the respective title and subtitle
+            this.state.firebaseBuckSet.map(element => {
+              return (
+                <BuckSetListItem
+                  key={element.name + 
+                    element.createdBy + 
+                    element.createdOn +
+                    element.expirationDate +
+                    element.communitycareCount +
+                    element.communitymealsCount +
+                    element.doveCount +
+                    element.foodbankCount +
+                    element.interfaithCount +
+                    element.lacomunidadCount +
+                    element.seniorcenterCount +
+                    element.vashonhouseholdCount +
+                    element.vyfsCount +
+                    element.vyfsfamilyplaceCount +
+                    element.vyfslatinxCount
+                  }
+                  data={element}
+                />
+              );
+            })}
+          </Card.Group>
+        </Container>
+      </Grid.Column>
+    );
+  }
 }

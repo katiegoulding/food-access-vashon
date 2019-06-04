@@ -68,11 +68,33 @@ export default class BuckSetListItem extends React.Component {
     }
 
     viewBuckSet = () => {
+    
     }
 
+
+
     render () { 
-        const { name, createdBy } = this.props.data
-        // const { open } = this.state
+        const { name, 
+                createdBy, 
+                data, 
+                createdOn, 
+                expirationDate,
+                communitycareCount,
+                communitymealsCount,
+                doveCount,
+                foodbankCount,
+                interfaithCount,
+                lacomunidadCount,
+                seniorcenterCount,
+                vashonhouseholdCount,
+                vyfsCount,
+                vyfsfamilyplaceCount,
+                vyfslatinxCount
+             } = this.props.data
+        const { open } = this.state
+
+        let dateObj = new Date(createdOn)
+        let prettyDate = (dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear()
 
         return(
                 <Card fluid>
@@ -89,8 +111,22 @@ export default class BuckSetListItem extends React.Component {
                             closeIcon >
                             <Modal.Header>"{name}" Buck Set</Modal.Header>
                             <Modal.Content>
-                                <p>Created by {createdBy}</p>
-                                <p>More information about the selected buck set</p>
+                                <p><b>Created by</b> {createdBy}</p>
+                                <p><b>Created on</b> {prettyDate}</p>
+                                <p><b>Expires</b> {expirationDate}</p>
+                                <h4>Counts</h4>
+                                <p>Community Care: {communitycareCount}</p>
+                                <p>Community Meals: {communitymealsCount}</p>
+                                <p>DOVE: {doveCount}</p>
+                                <p>Food Bank: {foodbankCount}</p>
+                                <p>Interfaith Council: {interfaithCount}</p>
+                                <p>La Comunidad: {lacomunidadCount}</p>
+                                <p>Senior Center: {seniorcenterCount}</p>
+                                <p>Vashon Household: {vashonhouseholdCount}</p>
+                                <p>VYFS: {vyfsCount}</p>
+                                <p>VYFS Family Place: {vyfsfamilyplaceCount}</p>
+                                <p>VYFS Latinx Count: {vyfslatinxCount}</p>
+
                             </Modal.Content>
                         </Modal>
 

@@ -216,12 +216,14 @@ export default function Dashboard(props) {
         firebaseDataArray.push(orgJSON);
       }
 
-
       setCharData(firebaseDataArray);
       setTotalCreated(createCount);
       setTotalHandedOut(handCount);
       setTotalRedeemed(redCount);
     });
+  }
+  function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
   }
 
   function handleCaseworker() {
@@ -237,20 +239,55 @@ export default function Dashboard(props) {
           let firebaseDataArray = [];
           let value = snapshot.val();
           let dates = [];
-          let datesInMonth = getDaysInMonth(
-            new Date().getMonth() - 1,
-            new Date().getFullYear()
-          );
+          // let datesInMonth = getDaysInMonth(
+          //   new Date().getMonth() - 1,
+          //   new Date().getFullYear()
+          // );
+
+          let datesInMonth = [
+            "2019-05-04T07:00:00.000Z",
+            "2019-05-05T07:00:00.000Z",
+            "2019-05-06T07:00:00.000Z",
+            "2019-05-07T07:00:00.000Z",
+            "2019-05-08T07:00:00.000Z",
+            "2019-05-09T07:00:00.000Z",
+            "2019-05-10T07:00:00.000Z",
+            "2019-05-11T07:00:00.000Z",
+            "2019-05-12T07:00:00.000Z",
+            "2019-05-13T07:00:00.000Z",
+            "2019-05-14T07:00:00.000Z",
+            "2019-05-15T07:00:00.000Z",
+            "2019-05-16T07:00:00.000Z",
+            "2019-05-17T07:00:00.000Z",
+            "2019-05-18T07:00:00.000Z",
+            "2019-05-19T07:00:00.000Z",
+            "2019-05-20T07:00:00.000Z",
+            "2019-05-21T07:00:00.000Z",
+            "2019-05-22T07:00:00.000Z",
+            "2019-05-23T07:00:00.000Z",
+            "2019-05-24T07:00:00.000Z",
+            "2019-05-25T07:00:00.000Z",
+            "2019-05-26T07:00:00.000Z",
+            "2019-05-27T07:00:00.000Z",
+            "2019-05-28T07:00:00.000Z",
+            "2019-05-29T07:00:00.000Z",
+            "2019-05-30T07:00:00.000Z",
+            "2019-06-01T07:00:00.000Z",
+            "2019-06-02T07:00:00.000Z",
+            "2019-06-03T07:00:00.000Z",
+            "2019-06-04T07:00:00.000Z"
+          ];
 
           
           for (var childKey in value[key]) {
+            console.log(value[key][childKey]);
             try {
               dates.push(
                 new Date(value[key][childKey]).toISOString().split("T")[0]
               );
-            } catch(err) {
-              console.log("error: ", err)
-            } 
+            } catch (error) {
+              console.log(error);
+            }
           }
 
           var counts = {};
@@ -263,7 +300,7 @@ export default function Dashboard(props) {
           let tot = 0;
 
           for (let i in datesInMonth) {
-            let date = datesInMonth[i].toISOString().split("T")[0];
+            let date = new Date(datesInMonth[i]).toISOString().split("T")[0];
 
             if (counts[date]) {
               tot += 2 * counts[date];
@@ -336,17 +373,37 @@ export default function Dashboard(props) {
   }
 
   // filter for organizations +
-  let filteredData 
-  console.log("curChartKey", curChartKey)
-  console.log("keySelection[0].value", keySelection[0].value)
+  let filteredData;
+  console.log("curChartKey", curChartKey);
+  console.log("keySelection[0].value", keySelection[0].value);
 
-  if(curChartKey === keySelection[0].value) {
-    console.log("all" + curChartKey)
-    filteredData = charData.filter(
-      dataPoint => dataPoint.organization === curFilter || curFilter === orgOptions[0].value
-    ).map(
-      dataPoint => ({ organization: dataPoint.organization, [curChartKey[0]]: dataPoint[curChartKey[0]], [curChartKey[1]]: dataPoint[curChartKey[1]], [curChartKey[2]]: dataPoint[curChartKey[2]] })
-    )
+  if (role === "admin") {
+    if (curChartKey === keySelection[0].value) {
+      console.log("all" + curChartKey);
+      filteredData = charData
+        .filter(
+          dataPoint =>
+            dataPoint.organization === curFilter ||
+            curFilter === orgOptions[0].value
+        )
+        .map(dataPoint => ({
+          organization: dataPoint.organization,
+          [curChartKey[0]]: dataPoint[curChartKey[0]],
+          [curChartKey[1]]: dataPoint[curChartKey[1]],
+          [curChartKey[2]]: dataPoint[curChartKey[2]]
+        }));
+    } else {
+      filteredData = charData
+        .filter(
+          dataPoint =>
+            dataPoint.organization === curFilter ||
+            curFilter === orgOptions[0].value
+        )
+        .map(dataPoint => ({
+          organization: dataPoint.organization,
+          [curChartKey]: dataPoint[curChartKey]
+        }));
+    }
   } else {
     filteredData = charData;
   }
@@ -355,10 +412,14 @@ export default function Dashboard(props) {
     <Container fluid>
       <Grid stackable centered>
         <Grid.Row>
-          <Grid.Column width={12}>
-            <Segment raised style={{ height: "700px" }}>
-              <Header size="huge">
-                VIGA Farm Buck Data - {title[timeFilter]}
+          <Grid.Column width={11}>
+            <Segment
+              className="graph_container"
+              raised
+              style={{ height: "700px" }}
+            >
+              <Header className="graph_title" size="huge">
+                VIGA Farm Buck Data - {title[timeFilter]}{" "}
               </Header>
               {role === "admin" ? (
                 <BarGraph curChartKey={curChartKey} charData={filteredData} />
@@ -378,15 +439,21 @@ export default function Dashboard(props) {
             <Header as="h2">Totals</Header>
                 <Statistic.Group size="small" horizontal>
                   <Statistic>
-                    <Statistic.Value>{"$" + numberWithCommas(totalCreated) + ".00"}</Statistic.Value>
+                    <Statistic.Value>
+                      {"$" + numberWithCommas(totalCreated) + ".00"}
+                    </Statistic.Value>
                     <Statistic.Label>Dollars Created</Statistic.Label>
                   </Statistic>
                   <Statistic>
-                    <Statistic.Value>{"$" + numberWithCommas(totalHandedOut) + ".00"}</Statistic.Value>
+                    <Statistic.Value>
+                      {"$" + numberWithCommas(totalHandedOut) + ".00"}
+                    </Statistic.Value>
                     <Statistic.Label>Dollars Handed Out</Statistic.Label>
                   </Statistic>
                   <Statistic>
-                    <Statistic.Value>{"$" + numberWithCommas(totalRedeemed) + ".00"}</Statistic.Value>
+                    <Statistic.Value>
+                      {"$" + numberWithCommas(totalRedeemed) + ".00"}
+                    </Statistic.Value>
                     <Statistic.Label>Dollars Redeemed</Statistic.Label>
                   </Statistic>
                 </Statistic.Group>
