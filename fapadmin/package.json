@@ -2,7 +2,7 @@
   "name": "fapadmin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://katiegoulding.github.io/food-access-vashon/",
+  "homepage": "http://bucks.vigavashon.org/",
   "dependencies": {
     "@nivo/bar": "^0.58.0",
     "@nivo/line": "^0.58.0",
