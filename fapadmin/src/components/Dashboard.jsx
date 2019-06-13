@@ -278,6 +278,7 @@ export default function Dashboard(props) {
             "2019-06-04T07:00:00.000Z"
           ];
 
+          
           for (var childKey in value[key]) {
             console.log(value[key][childKey]);
             try {
@@ -431,10 +432,11 @@ export default function Dashboard(props) {
               )}
             </Segment>
           </Grid.Column>
-          <Grid.Column className="graph_summary_stats_container" width={3}>
-            {role === "admin" ? (
-              <Segment raised padded>
-                <Header as="h2">Totals</Header>
+          <Grid.Column width={4}>
+          {role === "admin" ? (
+            <div>
+          <Segment raised padded>
+            <Header as="h2">Totals</Header>
                 <Statistic.Group size="small" horizontal>
                   <Statistic>
                     <Statistic.Value>
@@ -455,39 +457,42 @@ export default function Dashboard(props) {
                     <Statistic.Label>Dollars Redeemed</Statistic.Label>
                   </Statistic>
                 </Statistic.Group>
-              </Segment>
-            ) : null}
-            <Segment raised centered>
-              <Header as="h4" content="Filter by Time Interval" />
-
-              <Dropdown
-                defaultValue={options[0].value}
-                fluid
-                selection
-                options={options}
-                onChange={onDateChange}
-              />
-
-              <Header as="h4" content="Filter by Organization" />
-
-              <Dropdown
-                defaultValue={orgOptions[0].value}
-                fluid
-                selection
-                options={orgOptions}
-                onChange={onOrgChange}
-              />
-
-              <Header as="h4" content="Filter by Buck State" />
-
-              <Dropdown
-                defaultValue={keySelection[0].value}
-                fluid
-                selection
-                options={keySelection}
-                onChange={onKeyChange}
-              />
             </Segment>
+
+          <Segment raised centered>
+            <Header as="h4" content="Filter by Time Interval" />
+
+            <Dropdown
+              defaultValue={options[0].value}
+              fluid
+              selection
+              options={options}
+              onChange={onDateChange}
+            />
+
+            <Header as="h4" content="Filter by Organization" />
+
+            <Dropdown
+              defaultValue={orgOptions[0].value}
+              fluid
+              selection
+              options={orgOptions}
+              onChange={onOrgChange}
+            />
+
+            <Header as="h4" content="Filter by Buck State" />
+
+            <Dropdown
+              defaultValue={keySelection[0].value}
+              fluid
+              selection
+              options={keySelection}
+              onChange={onKeyChange}
+            />
+            </Segment>
+            </div>
+          ) : null }
+            
           </Grid.Column>
         </Grid.Row>
       </Grid>
