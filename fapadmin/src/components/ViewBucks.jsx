@@ -40,7 +40,7 @@ export default class ViewBucks extends React.Component {
       });
     });
 
-    console.log("in componnent did mount in ViewBucks")
+    console.log("in componnent did mount in ViewBucks");
     buckSetsRef.orderByChild("createdOn").on("child_removed", snapshot => {
       const value = snapshot.val();
       // filter out the removed item and force another render
@@ -64,8 +64,9 @@ export default class ViewBucks extends React.Component {
             this.state.firebaseBuckSet.map(element => {
               return (
                 <BuckSetListItem
-                  key={element.name + 
-                    element.createdBy + 
+                  key={
+                    element.name +
+                    element.createdBy +
                     element.createdOn +
                     element.expirationDate +
                     element.communitycareCount +
