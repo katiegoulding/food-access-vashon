@@ -223,7 +223,7 @@ export default class Scan extends React.Component {
 
   showResponseMessage = scanState => {
     switch (scanState) {
-      case "success":
+      case "successFarmer":
         return (
           <Message
             positive
@@ -231,6 +231,16 @@ export default class Scan extends React.Component {
             icon="thumbs up"
             header="Success!"
             content="This buck has been submitted! Feel free to recycle or keep for your records."
+          />
+        );
+      case "successCaseworker":
+        return (
+          <Message
+            positive
+            attached="bottom"
+            icon="thumbs up"
+            header="Success!"
+            content="This buck has been submitted!"
           />
         );
       case "expiredFarmer":
