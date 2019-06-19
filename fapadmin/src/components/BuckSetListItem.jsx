@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Modal, Confirm } from 'semantic-ui-react';
+import { Button, Card, Modal, Confirm, List } from 'semantic-ui-react';
 import firebase from 'firebase/app';
 
 export default class BuckSetListItem extends React.Component {
@@ -7,8 +7,6 @@ export default class BuckSetListItem extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            viewModalOpen: false,
-            deleteModalOpen: false
         }
     }
 
@@ -18,65 +16,55 @@ export default class BuckSetListItem extends React.Component {
     close = () => this.setState({ open: false })
 
     deleteBuckSet = () => {
+
+        //delete under buckSets node
         let buckSetName = this.props.data.name
         console.log("buck set title ", this.props.data.name)
-        // used to be if(key != '')
         if(buckSetName && buckSetName !== "") {
             let buckSetRef = firebase.database().ref('buckSets/' + buckSetName)
             console.log("buckSetRef ", buckSetRef)
-
             buckSetRef.remove()
             .then(() =>{
                 console.log("Remove succeeded.")
-                this.setState({
-                    deleteModalOpen: false
-                })
+
             })
             .catch((error) => {
                 console.log("Remove failed: " + error.message)
             });
         }
 
-        let capstoneBucks = [
-            "-LgUwC00_cfHr7ATng36",
-            "-LgUwC073TuLVb7GEwbd",
-            "-LgUwC03B1lvd96j4SEk",
-            "-LgUwC02CEocI6-oh70K",
-            "-LgUwC01fmb5evqJck9r",
-            "-LgUwC062cOmWzEKuVCb",
-            "-LgUwC08c93TaO2LbaIC",
-            "-LgUwC05_kbA62CmoJpL",
-            "-LgUwC08c93TaO2LbaIB",
-            "-LgUwC04hqV_WdBArGnR",
-            "-LgUwC073TuLVb7GEwbe",
-            "-LgUwC03B1lvd96j4SEl"
-            ]
-
+        //delete under vouchers node
         let voucherRef = firebase.database().ref('vouchers/')
         voucherRef.once("value", snapshot => {
             let deleteCount = 0
             snapshot.forEach(function(childSnapshot) {
-                if(childSnapshot.buckSet === buckSetName && capstoneBucks.includes(childSnapshot.key)) {
+                let deleteRef = firebase.database().ref('vouchers/' + childSnapshot.key)
+                if(childSnapshot.val().buckSet === buckSetName) {
                     deleteCount++
-                    
+                    deleteRef.remove()
+                    .then(() =>{
+                        console.log("Remove succeeded.")
+                    })
+                    .catch((error) => {
+                        console.log("Remove failed: " + error.message)
+                    });
                 }
             })
             console.log("deleteCount", deleteCount)
         })
 
+        // only delete from vis nodes if there is no data under the other nodes besides Created
+        
+        //delete under vis1 node
+
+        //delete under vis2 node
+
         this.close()
     }
-
-    viewBuckSet = () => {
-    
-    }
-
-
 
     render () { 
         const { name, 
                 createdBy, 
-                data, 
                 createdOn, 
                 expirationDate,
                 communitycareCount,
@@ -91,9 +79,9 @@ export default class BuckSetListItem extends React.Component {
                 vyfsfamilyplaceCount,
                 vyfslatinxCount
              } = this.props.data
-        const { open } = this.state
-
+        
         let dateObj = new Date(createdOn)
+        console.log("createdOn", createdOn)
         let prettyDate = (dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear()
 
         return(
@@ -111,21 +99,42 @@ export default class BuckSetListItem extends React.Component {
                             closeIcon >
                             <Modal.Header>"{name}" Buck Set</Modal.Header>
                             <Modal.Content>
-                                <p><b>Created by</b> {createdBy}</p>
-                                <p><b>Created on</b> {prettyDate}</p>
-                                <p><b>Expires</b> {expirationDate}</p>
-                                <h4>Counts</h4>
-                                <p>Community Care: {communitycareCount}</p>
-                                <p>Community Meals: {communitymealsCount}</p>
-                                <p>DOVE: {doveCount}</p>
-                                <p>Food Bank: {foodbankCount}</p>
-                                <p>Interfaith Council: {interfaithCount}</p>
-                                <p>La Comunidad: {lacomunidadCount}</p>
-                                <p>Senior Center: {seniorcenterCount}</p>
-                                <p>Vashon Household: {vashonhouseholdCount}</p>
-                                <p>VYFS: {vyfsCount}</p>
-                                <p>VYFS Family Place: {vyfsfamilyplaceCount}</p>
-                                <p>VYFS Latinx Count: {vyfslatinxCount}</p>
+                                <List size="large">
+                                    <List.Item>
+                                        <List.Header>Created by: </List.Header>
+                                        <List.List>
+                                            <List.Item>{createdBy}</List.Item>
+                                        </List.List>
+                                    </List.Item>
+                                    <List.Item>
+                                    <List.Header>Created on: </List.Header>
+                                        <List.List>
+                                            <List.Item>{prettyDate}</List.Item>
+                                        </List.List>
+                                    </List.Item>
+                                    <List.Item>
+                                        <List.Header>Expires on: </List.Header>
+                                        <List.List>
+                                            <List.Item>{expirationDate}</List.Item>
+                                        </List.List>
+                                    </List.Item>
+                                    <List.Item>
+                                        <List.Header>Counts Per Partner Org:</List.Header>
+                                        <List.List>
+                                            <List.Item>{communitycareCount} - Community Care</List.Item>
+                                            <List.Item>{communitymealsCount} - Community Meals</List.Item>
+                                            <List.Item>{doveCount} - DOVE</List.Item>
+                                            <List.Item>{foodbankCount} - Food Bank</List.Item>
+                                            <List.Item>{interfaithCount} - Interfaith Council</List.Item>
+                                            <List.Item>{lacomunidadCount} - La Comunidad</List.Item>
+                                            <List.Item>{seniorcenterCount} - Senior Center</List.Item>
+                                            <List.Item>{vashonhouseholdCount} - Vashon Household</List.Item>
+                                            <List.Item>{vyfsCount} - VYFS</List.Item>
+                                            <List.Item>{vyfsfamilyplaceCount} - VYFS Family Place</List.Item>
+                                            <List.Item>{vyfslatinxCount} - VYFS Latinx Count</List.Item>
+                                        </List.List>
+                                    </List.Item>
+                                </List>
 
                             </Modal.Content>
                         </Modal>
@@ -140,23 +149,6 @@ export default class BuckSetListItem extends React.Component {
                             open={this.state.open} 
                             onCancel={this.close} 
                             onConfirm={() => this.deleteBuckSet()} />
-
-                        {/* <Modal trigger={<Button icon='trash'/>} 
-                                size="mini" 
-                                open={this.deleteModalOpen} 
-                                onClose={this.close}
-                                closeIcon >
-                            <Modal.Header>Are you sure you want to delete "{name}" Buck Set?</Modal.Header>
-                            <Modal.Content>
-                                <p>Doing so will mark all VIGA bucks generated for this set as inactive</p>
-                                
-                            </Modal.Content>
-                            <Modal.Actions>
-
-                                <Button color="red" onClick={() => this.deleteBuckSet()}  content='Delete' />
-
-                            </Modal.Actions>
-                        </Modal> */}
                     </Card.Content>
                 </Card>
         )

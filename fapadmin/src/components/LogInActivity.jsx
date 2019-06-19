@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import {
+  Image,
   Message,
   Form,
   Button,
@@ -13,6 +14,7 @@ import {
   Divider,
   Responsive
 } from "semantic-ui-react";
+import logo from '../FAPLogo.png' // relative path to image 
 
 export default class LogInActivity extends React.Component {
   constructor(props) {
@@ -82,10 +84,14 @@ export default class LogInActivity extends React.Component {
         middle
         columns={1}
       >
+
         <Grid.Column width={colWidth} verticalAlign="middle" textAlign="left" >
+ 
+        <Image src={logo} size='small' />
+
           <Message
             attached="top"
-            header="Welcome to our site!"
+            header="Welcome to the VIGA Farm Bucks dashboard"
             content="Sign in to access your account"
             className="messageHeader loginIllustrations"
           />

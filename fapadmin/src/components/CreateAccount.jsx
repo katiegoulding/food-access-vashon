@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import {
+  Image,
   Message,
   Form,
   Button,
@@ -12,6 +13,8 @@ import {
   Grid,
   Responsive
 } from "semantic-ui-react";
+import logo from '../FAPLogo.png' // relative path to image 
+
 
 export default class CreateAccount extends React.Component {
   constructor(props) {
@@ -164,16 +167,20 @@ export default class CreateAccount extends React.Component {
         middle
         columns={1}
       >
+
         <Grid.Column
           width={colWidth}
           verticalAlign="middle"
           textAlign="left"
           className="mt100 mb100"
         >
+
+          <Image src={logo} size='small' />
+
           <Message
             attached
-            header="Create an Account"
-            content="Provide some basic information to get started!"
+            header="Create an account"
+            content="Provide some basic information to start managing bucks!"
             className="messageHeader loginIllustrations"
           />
 

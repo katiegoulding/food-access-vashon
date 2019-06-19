@@ -136,7 +136,7 @@ a.item::before {
 .Logout_btn {
   font-weight: bold !important;
   /* color: #e74c3c !important; */
-  color: white !important;
+  color: rgb(68, 68, 68) !important;
   transition: all 0.2s ease !important; 
 }
 

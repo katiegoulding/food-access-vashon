@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
+  Responsive,
+  Message,
   Grid,
   Container,
   Segment,
@@ -410,7 +412,7 @@ export default function Dashboard(props) {
 
   return (
     <Container fluid>
-      <Grid stackable centered>
+      <Responsive as={Grid} stackable centered minWidth={768}> 
         <Grid.Row>
           <Grid.Column width={11}>
             <Segment
@@ -495,7 +497,12 @@ export default function Dashboard(props) {
             
           </Grid.Column>
         </Grid.Row>
-      </Grid>
+      </Responsive>
+      <Responsive as={Message} warning maxWidth={767}> 
+            <Message.Header>
+            Visualizations not supported on mobile, please use a tablet or desktop computer.
+            </Message.Header>
+      </Responsive>
     </Container>
   );
 }

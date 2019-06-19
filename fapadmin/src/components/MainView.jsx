@@ -10,6 +10,7 @@ import ManageAccount from "./ManageAccount";
 import FarmerPayout from "./FarmerPayout";
 import CreateBucks from "./CreateBucks.jsx";
 import {
+  Image,
   Container,
   Header,
   Icon,
@@ -19,6 +20,8 @@ import {
   Responsive
 } from "semantic-ui-react";
 import Dashboard from "./Dashboard";
+import Faq from "./Faq";
+import logo from '../FAPLogo.png' // relative path to image 
 
 export default class MainView extends React.Component {
   constructor(props) {
@@ -61,71 +64,71 @@ export default class MainView extends React.Component {
   }
 
   // anton componentDidMount() -> useful for testing because you can still work if not approved
-  componentDidMount() {
-    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        this.props.history.push(constants.routes.base);
-      } else {
-        firebase
-          .database()
-          .ref("users/" + user.uid)
-          .once("value")
-          .then(snapshot => {
-            var org = snapshot.val().org;
-            user.getIdTokenResult(true).then(idTokenResult => {
-              console.log(idTokenResult.claims.role);
-              if (idTokenResult.claims.role === "caseworker") {
-                this.setState({
-                  username: user.email,
-                  uid: user.uid,
-                  role: idTokenResult.claims.role,
-                  org: org
-                });
-              } else {
-                this.setState({
-                  username: user.email,
-                  uid: user.uid,
-                  role: idTokenResult.claims.role
-                });
-              }
-            });
-          });
-      }
-    });
-  }
-
-  // august componentDidMount() -> does not allow people to route around
   // componentDidMount() {
   //   this.authUnsub = firebase.auth().onAuthStateChanged(user => {
-  //     if(!user) {
+  //     if (!user) {
   //       this.props.history.push(constants.routes.base);
-  //     } else { //they are authenticated
-  //       user.getIdTokenResult().then(idTokenResult => {
-  //         console.log(idTokenResult.claims.role)
-  //         if(!idTokenResult.claims.role) {
-  //           //their role is null
-  //           //push them to the barrier page
-  //           this.props.history.push(constants.routes.barrier);
-  //         } else {
-  //           //their role has been approved
-  //           firebase
-  //             .database()
-  //             .ref("users/" + user.uid)
-  //             .once("value")
-  //             .then(snapshot => {
-  //               var org = snapshot.val().org;
+  //     } else {
+  //       firebase
+  //         .database()
+  //         .ref("users/" + user.uid)
+  //         .once("value")
+  //         .then(snapshot => {
+  //           var org = snapshot.val().org;
+  //           user.getIdTokenResult(true).then(idTokenResult => {
+  //             console.log(idTokenResult.claims.role);
+  //             if (idTokenResult.claims.role === "caseworker") {
   //               this.setState({
   //                 username: user.email,
   //                 uid: user.uid,
   //                 role: idTokenResult.claims.role,
   //                 org: org
   //               });
-  //             })
-  //         }
-  //       })
+  //             } else {
+  //               this.setState({
+  //                 username: user.email,
+  //                 uid: user.uid,
+  //                 role: idTokenResult.claims.role
+  //               });
+  //             }
+  //           });
+  //         });
   //     }
-  //   })
+  //   });
   // }
+
+  // august componentDidMount() -> does not allow people to route around
+  componentDidMount() {
+    this.authUnsub = firebase.auth().onAuthStateChanged(user => {
+      if(!user) {
+        this.props.history.push(constants.routes.base);
+      } else { //they are authenticated
+        user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult.claims.role)
+          if(!idTokenResult.claims.role) {
+            //their role is null
+            //push them to the barrier page
+            this.props.history.push(constants.routes.barrier);
+          } else {
+            //their role has been approved
+            firebase
+              .database()
+              .ref("users/" + user.uid)
+              .once("value")
+              .then(snapshot => {
+                var org = snapshot.val().org;
+                this.setState({
+                  username: user.email,
+                  uid: user.uid,
+                  role: idTokenResult.claims.role,
+                  org: org
+                });
+              })
+          }
+        })
+      }
+    })
+  }
 
   render() {
     let farmerNav = [
@@ -140,6 +143,12 @@ export default class MainView extends React.Component {
         as={Link}
         to={constants.routes.dash.viewData}
         active={this.props.location.pathname === constants.routes.dash.viewData}
+      />,
+      <Menu.Item
+        name="FAQ"
+        as={Link}
+        to={constants.routes.dash.faq}
+        active={this.props.location.pathname === constants.routes.dash.faq}
       />
     ];
 
@@ -155,6 +164,12 @@ export default class MainView extends React.Component {
         as={Link}
         to={constants.routes.dash.viewData}
         active={this.props.location.pathname === constants.routes.dash.viewData}
+      />,
+      <Menu.Item
+        name="FAQ"
+        as={Link}
+        to={constants.routes.dash.faq}
+        active={this.props.location.pathname === constants.routes.dash.faq}
       />
     ];
 
@@ -180,6 +195,12 @@ export default class MainView extends React.Component {
         as={Link}
         to={constants.routes.dash.viewData}
         active={this.props.location.pathname === constants.routes.dash.viewData}
+      />,
+      <Menu.Item
+        name="FAQ"
+        as={Link}
+        to={constants.routes.dash.faq}
+        active={this.props.location.pathname === constants.routes.dash.faq}
       />
     ];
 
@@ -191,7 +212,13 @@ export default class MainView extends React.Component {
         active={
           this.props.location.pathname === constants.routes.dash.farmerPayout
         }
-      />
+      />,
+      <Menu.Item
+        name="FAQ"
+        as={Link}
+        to={constants.routes.dash.faq}
+        active={this.props.location.pathname === constants.routes.dash.faq}
+    />
     ];
 
     let farmerUI = [
@@ -207,6 +234,14 @@ export default class MainView extends React.Component {
             role={this.state.role}
             uid={this.state.uid}
             org={this.state.org}
+          />
+        )}
+      />,
+      <Route
+        path={constants.routes.dash.faq}
+        render={() => (
+          <Faq
+            role={this.state.role}
           />
         )}
       />
@@ -227,6 +262,14 @@ export default class MainView extends React.Component {
             org={this.state.org}
           />
         )}
+      />,
+      <Route
+        path={constants.routes.dash.faq}
+        render={() => (
+          <Faq
+            role={this.state.role}
+          />
+        )}
       />
     ];
 
@@ -240,7 +283,7 @@ export default class MainView extends React.Component {
         component={ManageAccount}
       />,
       <Route
-        path={constants.routes.dash.base}
+        path={constants.routes.dash.viewData}
         render={() => (
           <Dashboard
             role={this.state.role}
@@ -252,6 +295,14 @@ export default class MainView extends React.Component {
       <Route
         path={constants.routes.dash.createBucks}
         render={() => <CreateBucks username={this.state.username} />}
+      />,
+      <Route
+        path={constants.routes.dash.faq}
+        render={() => (
+          <Faq
+            role={this.state.role}
+          />
+        )}
       />
     ];
 
@@ -259,6 +310,14 @@ export default class MainView extends React.Component {
       <Route
         path={constants.routes.dash.farmerPayout}
         render={() => <FarmerPayout username={this.state.username} />}
+      />,
+      <Route
+        path={constants.routes.dash.faq}
+        render={() => (
+          <Faq
+            role={this.state.role}
+          />
+        )}
       />
     ];
 
@@ -289,27 +348,29 @@ export default class MainView extends React.Component {
       isAdmin = false;
     }
 
-    let title;
+    // let title;
 
-    if (this.props.location.pathname === "/dash") {
-      title = "View Data";
-    } else if (this.props.location.pathname === "/dash/manage") {
-      title = "Manage Accounts";
-    } else if (this.props.location.pathname === "/dash/BucksLanding") {
-      title = "Create a Buck Set";
-    } else if (this.props.location.pathname === "/dash/farmerPayout") {
-      title = "Farmer Payout";
-    } else if (this.props.location.pathname === "/dash/ViewData") {
-      title = "View Data";
-    } 
+    // if (this.props.location.pathname === "/dash") {
+    //   title = "View Data";
+    // } else if (this.props.location.pathname === "/dash/manage") {
+    //   title = "Manage Accounts";
+    // } else if (this.props.location.pathname === "/dash/BucksLanding") {
+    //   title = "Create a Buck Set";
+    // } else if (this.props.location.pathname === "/dash/farmerPayout") {
+    //   title = "Farmer Payout";
+    // } else if (this.props.location.pathname === "/dash/ViewData") {
+    //   title = "View Data";
+    // } 
 
     return (
       <div>
         {/* Regular Header */}
+
         <Responsive as={Segment} clearing minWidth={768} basic color="blue" inverted padded="very" className="HeaderContainer">
-          {/* <Segment basic color="blue" inverted padded="very"> */}
-          <Header padded="very" size="huge" floated="left" inverted color='white'>
-            {title}
+          <Image src={logo} size='small' verticalAlign='bottom' />
+
+          <Header padded="very" size="huge" inverted color='white'>
+            VIGA Farm Bucks Dashboard
           </Header>
 
           <Header floated="right" inverted color='white' className="Header_UserInfo">
@@ -318,17 +379,18 @@ export default class MainView extends React.Component {
               <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
           </Header>
-          {/* </Segment> */}
         </Responsive>
 
         {/* Mobile Header */}
         <Responsive as={Segment} maxWidth={767} basic color="blue" inverted padded="very" className="HeaderContainer">
+          <Image src={logo} size='small' verticalAlign='bottom' />
           <Header padded="very" size="huge" inverted color='white'>
-            {title}
+            VIGA Farm Bucks Dashboard
             <Header.Subheader inverted color='white' className="Header_UserInfo mobile">
               {this.state.username}
               <Label><Icon name='user' /> {label}</Label>
             </Header.Subheader>
+
           </Header>
 
           

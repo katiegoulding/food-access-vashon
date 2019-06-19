@@ -14,6 +14,7 @@ import {
   SegmentGroup,
   Grid
 } from "semantic-ui-react";
+
 export default class Scan extends React.Component {
   constructor(props) {
     super(props);
@@ -154,7 +155,7 @@ export default class Scan extends React.Component {
                 [data]: "notPaid"
               });
               console.log("in the success statement");
-              scanState = "success";
+              scanState = "successFarmer";
             } else {
               //expired - calls for farmer to redeem in person
               console.log("in the expired statement");
@@ -194,7 +195,7 @@ export default class Scan extends React.Component {
                 [data]: "true"
               });
               console.log("in the success statement");
-              scanState = "success";
+              scanState = "successCaseworker";
             } else {
               //the voucher is expired, do not add to database
               console.log("in the expired statement");
@@ -280,7 +281,7 @@ export default class Scan extends React.Component {
             attached="bottom"
             icon="x"
             header="Previously handed out"
-            content='This buck has been "handed out" before, no need to scan again.'
+            content='This buck has been distributed before, no need to scan again.'
           />
         );
       case "accountIssue":

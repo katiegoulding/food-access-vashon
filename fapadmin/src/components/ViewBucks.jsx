@@ -47,9 +47,13 @@ export default class ViewBucks extends React.Component {
       firebaseBuckSet = firebaseBuckSet.filter(
         el => !(el.title === value.name && el.subtitle === value.createdBy)
       );
-      this.setState({
-        firebaseBuckSet
-      });
+
+      //added b/c I think this became undefined
+      if(firebaseBuckSet) {
+        this.setState({
+          firebaseBuckSet
+        });
+      }
     });
   }
 
@@ -58,8 +62,16 @@ export default class ViewBucks extends React.Component {
       <Grid.Column width={6}>
         <Container>
           <Header as="h2">Existing Buck Sets</Header>
+
           <Card.Group>
-            {//for each item in the data provided, map will create a BuckSetListItem
+            { this.state.firebaseBuckSet.length === 0 ?
+            <Card fluid>
+              <Card.Content>
+                  <Card.Meta>Nothing to show here!</Card.Meta>
+              </Card.Content>
+            </Card>
+            :
+            //for each item in the data provided, map will create a BuckSetListItem
             //that has the respective title and subtitle
             this.state.firebaseBuckSet.map(element => {
               return (

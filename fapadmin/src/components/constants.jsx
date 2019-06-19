@@ -14,7 +14,8 @@ export default {
       manageAccount: "/dash/manage",
       editAccount: "/dash/manage/edit",
       formSuccess: "/dash/formSuccess",
-      farmerPayout: "/dash/farmerPayout"
+      farmerPayout: "/dash/farmerPayout",
+      faq: "/dash/faq"
     }
   },
   variables: {
